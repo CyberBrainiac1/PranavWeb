@@ -20,7 +20,7 @@
 
 body {
     height: 100vh;
-    overflow: hidden;
+    overflow: auto;
     background-color: var(--bg);
     background-image:
         radial-gradient(circle at 15% 20%, rgba(92, 242, 214, 0.12), transparent 45%),
@@ -39,7 +39,7 @@ body {
     grid-template-rows: 1fr auto;
     gap: 32px 48px;
     max-width: 1200px;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0 auto;
     padding: 40px 6vw 28px;
 }
@@ -124,7 +124,9 @@ body {
 
 .content {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
 }
 
 .section {
@@ -140,6 +142,11 @@ body {
     font-family: "Instrument Serif", "Times New Roman", serif;
     font-size: clamp(1.8rem, 2.6vw, 2.3rem);
     margin-bottom: 14px;
+}
+
+.section-intro {
+    color: var(--muted);
+    margin-bottom: 18px;
 }
 
 .eyebrow {
@@ -173,6 +180,49 @@ body {
     background: var(--accent);
     box-shadow: 0 0 0 0 rgba(92, 242, 214, 0.7);
     animation: pulse 2s infinite;
+}
+
+.experience-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.experience-card {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    display: grid;
+    gap: 10px;
+}
+
+.experience-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.experience-card h3 {
+    font-size: 1.12rem;
+}
+
+.experience-tag {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(92, 242, 214, 0.4);
+    color: var(--accent);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.experience-list {
+    display: grid;
+    gap: 6px;
+    padding-left: 18px;
+    color: var(--muted);
 }
 
 @keyframes pulse {
