@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pranav Emmadi | Pinout Guide</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page">
+        <aside class="sidebar">
+            <div class="identity">
+                <h1>Pranav Emmadi</h1>
+                <div class="dots" aria-hidden="true">
+                    <span class="dot dot-orange"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="dot dot-magenta"></span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a class="nav-link" href="index.html">About</a>
+                <a class="nav-link" href="experiences.html">Experiences</a>
+                <a class="nav-link" href="projects.html">Projects</a>
+                <a class="nav-link" href="bucket.html">Bucket List</a>
+                <a class="nav-link active" href="pinout.html">Pranav's Pinout Guide</a>
+            </nav>
+
+            <div class="social">
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+                <a href="mailto:emmadipranav@gmail.com">Email</a>
+            </div>
+
+            <div class="photo-card">
+                <img src="PFP.jpg" alt="Pranav Emmadi" class="photo-img">
+            </div>
+        </aside>
+
+        <main class="content">
+            <section class="section">
+                <h2>Pranav's Pinout Guide</h2>
+                <p class="section-intro">Pick a board, then click a pin to see its main function and notes.</p>
+
+                <div class="pinout-shell">
+                    <div class="board-selector" role="tablist" aria-label="Pinout board selector">
+                        <button class="board-tab is-active" type="button" role="tab" aria-selected="true" data-board="pi4">Raspberry Pi 4B</button>
+                        <button class="board-tab" type="button" role="tab" aria-selected="false" data-board="uno">Arduino Uno</button>
+                        <button class="board-tab" type="button" role="tab" aria-selected="false" data-board="xiao">Seeed Studio XIAO RP2040</button>
+                    </div>
+
+                    <div class="pinout-layout">
+                        <div class="pinout-board">
+                            <div class="pinout-board-header">
+                                <h3 data-board-title>Raspberry Pi 4B</h3>
+                                <p class="pinout-board-desc" data-board-desc></p>
+                            </div>
+                            <div class="pin-columns" data-pin-columns></div>
+                        </div>
+
+                        <aside class="pinout-info">
+                            <div class="pin-detail" data-pin-detail>
+                                <p class="pin-detail-placeholder">Select a pin to view details.</p>
+                            </div>
+
+                            <div class="pinout-notes">
+                                <h4>Board notes</h4>
+                                <ul data-board-notes></ul>
+                            </div>
+
+                            <div class="pinout-legend">
+                                <h4>Legend</h4>
+                                <div class="legend-grid">
+                                    <span class="legend-item" data-type="power">Power</span>
+                                    <span class="legend-item" data-type="ground">Ground</span>
+                                    <span class="legend-item" data-type="analog">Analog</span>
+                                    <span class="legend-item" data-type="i2c">I2C</span>
+                                    <span class="legend-item" data-type="uart">UART</span>
+                                    <span class="legend-item" data-type="spi">SPI</span>
+                                    <span class="legend-item" data-type="pwm">PWM</span>
+                                    <span class="legend-item" data-type="gpio">GPIO</span>
+                                    <span class="legend-item" data-type="special">Special</span>
+                                    <span class="legend-item" data-type="onboard">On-board</span>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-title">Get in Touch</div>
+            <form class="footer-form" action="https://formspree.io/f/your-id" method="POST">
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="message" placeholder="Message" required>
+                <button type="submit">Send</button>
+            </form>
+        </footer>
+    </div>
+
+    <script src="pinout.js"></script>
+</body>
+</html>

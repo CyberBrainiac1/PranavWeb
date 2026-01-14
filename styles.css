@@ -225,6 +225,256 @@ body {
     color: var(--muted);
 }
 
+.pinout-shell {
+    display: grid;
+    gap: 20px;
+}
+
+.board-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.board-tab {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(8, 26, 44, 0.55);
+    color: var(--muted);
+    padding: 8px 14px;
+    cursor: pointer;
+    font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+    font-size: 0.92rem;
+    letter-spacing: 0.02em;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.board-tab:hover {
+    color: var(--accent);
+    border-color: rgba(92, 242, 214, 0.35);
+}
+
+.board-tab.is-active {
+    background: var(--accent);
+    color: #05121f;
+    border-color: transparent;
+}
+
+.board-tab:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+}
+
+.pinout-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 20px;
+}
+
+.pinout-board {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(10, 30, 52, 0.45);
+    padding: 18px;
+    display: grid;
+    gap: 16px;
+}
+
+.pinout-board-header h3 {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+}
+
+.pinout-board-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.pin-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+}
+
+.pin-column {
+    display: grid;
+    gap: 8px;
+}
+
+.pin-column-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.pin-list {
+    display: grid;
+    gap: 8px;
+}
+
+.pin-item {
+    border: 1px solid rgba(143, 188, 255, 0.16);
+    border-left: 4px solid rgba(143, 188, 255, 0.2);
+    background: rgba(7, 21, 37, 0.55);
+    border-radius: 12px;
+    padding: 8px 10px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 8px;
+    align-items: center;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.pin-item:hover {
+    border-color: rgba(92, 242, 214, 0.4);
+}
+
+.pin-item.is-active {
+    border-color: rgba(92, 242, 214, 0.7);
+    box-shadow: 0 10px 20px rgba(6, 20, 34, 0.35);
+    transform: translateY(-1px);
+}
+
+.pin-num {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.pin-label {
+    font-weight: 600;
+    display: block;
+}
+
+.pin-text {
+    display: grid;
+    gap: 2px;
+}
+
+.pin-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: block;
+}
+
+.pin-item[data-type="power"] { border-left-color: #ff9e2c; }
+.pin-item[data-type="ground"] { border-left-color: #8a93a6; }
+.pin-item[data-type="analog"] { border-left-color: #ff7ab6; }
+.pin-item[data-type="i2c"] { border-left-color: #4fb3ff; }
+.pin-item[data-type="uart"] { border-left-color: #32d296; }
+.pin-item[data-type="spi"] { border-left-color: #ffd166; }
+.pin-item[data-type="pwm"] { border-left-color: #b8f27a; }
+.pin-item[data-type="gpio"] { border-left-color: #5cf2d6; }
+.pin-item[data-type="special"] { border-left-color: #d94cff; }
+.pin-item[data-type="onboard"] { border-left-color: #a6b1ff; }
+
+.pinout-info {
+    display: grid;
+    gap: 16px;
+}
+
+.pin-detail,
+.pinout-notes,
+.pinout-legend {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    background: rgba(7, 21, 37, 0.65);
+}
+
+.pin-detail-placeholder {
+    color: var(--muted);
+}
+
+.pin-detail-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.pin-pill {
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(92, 242, 214, 0.4);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+}
+
+.pin-detail-title {
+    font-weight: 600;
+}
+
+.pin-detail-list {
+    display: grid;
+    gap: 6px;
+    padding-left: 18px;
+    color: var(--muted);
+}
+
+.pinout-notes h4,
+.pinout-legend h4 {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.pinout-notes ul {
+    display: grid;
+    gap: 6px;
+    padding-left: 18px;
+    color: var(--muted);
+}
+
+.legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.legend-item::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(143, 188, 255, 0.25);
+}
+
+.legend-item[data-type="power"]::before { background: #ff9e2c; }
+.legend-item[data-type="ground"]::before { background: #8a93a6; }
+.legend-item[data-type="analog"]::before { background: #ff7ab6; }
+.legend-item[data-type="i2c"]::before { background: #4fb3ff; }
+.legend-item[data-type="uart"]::before { background: #32d296; }
+.legend-item[data-type="spi"]::before { background: #ffd166; }
+.legend-item[data-type="pwm"]::before { background: #b8f27a; }
+.legend-item[data-type="gpio"]::before { background: #5cf2d6; }
+.legend-item[data-type="special"]::before { background: #d94cff; }
+.legend-item[data-type="onboard"]::before { background: #a6b1ff; }
+
+.pin-pill[data-type="power"] { border-color: rgba(255, 158, 44, 0.4); color: #ff9e2c; }
+.pin-pill[data-type="ground"] { border-color: rgba(138, 147, 166, 0.4); color: #8a93a6; }
+.pin-pill[data-type="analog"] { border-color: rgba(255, 122, 182, 0.4); color: #ff7ab6; }
+.pin-pill[data-type="i2c"] { border-color: rgba(79, 179, 255, 0.4); color: #4fb3ff; }
+.pin-pill[data-type="uart"] { border-color: rgba(50, 210, 150, 0.4); color: #32d296; }
+.pin-pill[data-type="spi"] { border-color: rgba(255, 209, 102, 0.4); color: #ffd166; }
+.pin-pill[data-type="pwm"] { border-color: rgba(184, 242, 122, 0.4); color: #b8f27a; }
+.pin-pill[data-type="gpio"] { border-color: rgba(92, 242, 214, 0.4); color: #5cf2d6; }
+.pin-pill[data-type="special"] { border-color: rgba(217, 76, 255, 0.4); color: #d94cff; }
+.pin-pill[data-type="onboard"] { border-color: rgba(166, 177, 255, 0.4); color: #a6b1ff; }
+
 @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(92, 242, 214, 0.7); }
     70% { box-shadow: 0 0 0 10px rgba(92, 242, 214, 0); }
@@ -355,6 +605,14 @@ body {
     }
 
     .footer-form {
+        grid-template-columns: 1fr;
+    }
+
+    .pinout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .pin-columns {
         grid-template-columns: 1fr;
     }
 }
