@@ -47,13 +47,24 @@
                         <button class="board-tab is-active" type="button" role="tab" aria-selected="true" data-board="pi4">Raspberry Pi 4B</button>
                         <button class="board-tab" type="button" role="tab" aria-selected="false" data-board="uno">Arduino Uno</button>
                         <button class="board-tab" type="button" role="tab" aria-selected="false" data-board="xiao">Seeed Studio XIAO RP2040</button>
+                        <button class="board-tab" type="button" role="tab" aria-selected="false" data-board="esp32">ESP32 Dev Board</button>
                     </div>
 
                     <div class="pinout-layout">
                         <div class="pinout-board">
-                            <div class="pinout-board-header">
-                                <h3 data-board-title>Raspberry Pi 4B</h3>
-                                <p class="pinout-board-desc" data-board-desc></p>
+                            <div class="pinout-board-hero">
+                                <div class="pinout-board-header">
+                                    <h3 data-board-title>Raspberry Pi 4B</h3>
+                                    <p class="pinout-board-desc" data-board-desc></p>
+                                </div>
+                                <div class="pinout-visual">
+                                    <div class="pinout-rail pinout-rail-left" data-pin-rail="left"></div>
+                                    <div class="pinout-image-wrap">
+                                        <img class="pinout-board-image" data-board-image src="images/raspberry-pi-4b.jpg" alt="Raspberry Pi 4B board" loading="lazy" decoding="async">
+                                        <p class="pinout-image-credit" data-board-credit></p>
+                                    </div>
+                                    <div class="pinout-rail pinout-rail-right" data-pin-rail="right"></div>
+                                </div>
                             </div>
                             <div class="pin-columns" data-pin-columns></div>
                         </div>
@@ -69,18 +80,19 @@
                             </div>
 
                             <div class="pinout-legend">
-                                <h4>Legend</h4>
+                                <h4>Pin filters</h4>
                                 <div class="legend-grid">
-                                    <span class="legend-item" data-type="power">Power</span>
-                                    <span class="legend-item" data-type="ground">Ground</span>
-                                    <span class="legend-item" data-type="analog">Analog</span>
-                                    <span class="legend-item" data-type="i2c">I2C</span>
-                                    <span class="legend-item" data-type="uart">UART</span>
-                                    <span class="legend-item" data-type="spi">SPI</span>
-                                    <span class="legend-item" data-type="pwm">PWM</span>
-                                    <span class="legend-item" data-type="gpio">GPIO</span>
-                                    <span class="legend-item" data-type="special">Special</span>
-                                    <span class="legend-item" data-type="onboard">On-board</span>
+                                    <button class="legend-chip is-active" type="button" data-filter="all">All pins</button>
+                                    <button class="legend-chip" type="button" data-filter="power" data-type="power">Power</button>
+                                    <button class="legend-chip" type="button" data-filter="ground" data-type="ground">Ground</button>
+                                    <button class="legend-chip" type="button" data-filter="analog" data-type="analog">Analog</button>
+                                    <button class="legend-chip" type="button" data-filter="i2c" data-type="i2c">I2C</button>
+                                    <button class="legend-chip" type="button" data-filter="uart" data-type="uart">UART</button>
+                                    <button class="legend-chip" type="button" data-filter="spi" data-type="spi">SPI</button>
+                                    <button class="legend-chip" type="button" data-filter="pwm" data-type="pwm">PWM</button>
+                                    <button class="legend-chip" type="button" data-filter="gpio" data-type="gpio">GPIO</button>
+                                    <button class="legend-chip" type="button" data-filter="special" data-type="special">Special</button>
+                                    <button class="legend-chip" type="button" data-filter="onboard" data-type="onboard">On-board</button>
                                 </div>
                             </div>
                         </aside>

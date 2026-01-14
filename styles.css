@@ -280,6 +280,11 @@ body {
     gap: 16px;
 }
 
+.pinout-board-hero {
+    display: grid;
+    gap: 16px;
+}
+
 .pinout-board-header h3 {
     font-size: 1.2rem;
     margin-bottom: 6px;
@@ -290,9 +295,93 @@ body {
     font-size: 0.92rem;
 }
 
+.pinout-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 0.32fr) minmax(0, 1fr) minmax(0, 0.32fr);
+    align-items: stretch;
+    gap: 14px;
+}
+
+.pinout-rail {
+    display: grid;
+    gap: 6px;
+    align-content: space-between;
+    height: 100%;
+}
+
+.pinout-rail.is-hidden {
+    display: none;
+}
+
+.pin-rail-button {
+    border: 1px solid rgba(143, 188, 255, 0.16);
+    border-left: 4px solid rgba(143, 188, 255, 0.2);
+    background: rgba(7, 21, 37, 0.55);
+    border-radius: 10px;
+    padding: 6px 8px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 6px;
+    align-items: center;
+    font-size: 0.78rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.pin-rail-button:hover {
+    border-color: rgba(92, 242, 214, 0.4);
+}
+
+.pin-rail-button.is-active {
+    border-color: rgba(92, 242, 214, 0.7);
+    box-shadow: 0 8px 18px rgba(6, 20, 34, 0.35);
+    transform: translateY(-1px);
+}
+
+.pin-rail-number {
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
+.pin-rail-label {
+    font-weight: 600;
+}
+
+.pinout-image-wrap {
+    display: grid;
+    gap: 8px;
+    justify-items: center;
+}
+
+.pinout-board-image {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(8, 26, 44, 0.6);
+    box-shadow: 0 16px 30px rgba(2, 8, 20, 0.35);
+    object-fit: cover;
+}
+
+.pinout-image-credit {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.pinout-image-credit a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.pinout-image-credit a:hover {
+    text-decoration: underline;
+}
+
 .pin-columns {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     gap: 14px;
 }
 
@@ -323,7 +412,7 @@ body {
     cursor: pointer;
     text-align: left;
     display: grid;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 52px 1fr;
     gap: 8px;
     align-items: center;
     transition: border-color 0.2s ease, transform 0.2s ease;
@@ -370,6 +459,17 @@ body {
 .pin-item[data-type="gpio"] { border-left-color: #5cf2d6; }
 .pin-item[data-type="special"] { border-left-color: #d94cff; }
 .pin-item[data-type="onboard"] { border-left-color: #a6b1ff; }
+
+.pin-rail-button[data-type="power"] { border-left-color: #ff9e2c; }
+.pin-rail-button[data-type="ground"] { border-left-color: #8a93a6; }
+.pin-rail-button[data-type="analog"] { border-left-color: #ff7ab6; }
+.pin-rail-button[data-type="i2c"] { border-left-color: #4fb3ff; }
+.pin-rail-button[data-type="uart"] { border-left-color: #32d296; }
+.pin-rail-button[data-type="spi"] { border-left-color: #ffd166; }
+.pin-rail-button[data-type="pwm"] { border-left-color: #b8f27a; }
+.pin-rail-button[data-type="gpio"] { border-left-color: #5cf2d6; }
+.pin-rail-button[data-type="special"] { border-left-color: #d94cff; }
+.pin-rail-button[data-type="onboard"] { border-left-color: #a6b1ff; }
 
 .pinout-info {
     display: grid;
@@ -433,19 +533,26 @@ body {
 
 .legend-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 8px;
 }
 
-.legend-item {
+.legend-chip {
+    border-radius: 999px;
+    border: 1px solid rgba(143, 188, 255, 0.16);
+    background: rgba(8, 26, 44, 0.45);
     display: flex;
     align-items: center;
     gap: 8px;
     color: var(--muted);
     font-size: 0.82rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-.legend-item::before {
+.legend-chip::before {
     content: "";
     width: 10px;
     height: 10px;
@@ -453,16 +560,91 @@ body {
     background: rgba(143, 188, 255, 0.25);
 }
 
-.legend-item[data-type="power"]::before { background: #ff9e2c; }
-.legend-item[data-type="ground"]::before { background: #8a93a6; }
-.legend-item[data-type="analog"]::before { background: #ff7ab6; }
-.legend-item[data-type="i2c"]::before { background: #4fb3ff; }
-.legend-item[data-type="uart"]::before { background: #32d296; }
-.legend-item[data-type="spi"]::before { background: #ffd166; }
-.legend-item[data-type="pwm"]::before { background: #b8f27a; }
-.legend-item[data-type="gpio"]::before { background: #5cf2d6; }
-.legend-item[data-type="special"]::before { background: #d94cff; }
-.legend-item[data-type="onboard"]::before { background: #a6b1ff; }
+.legend-chip[data-type="power"]::before { background: #ff9e2c; }
+.legend-chip[data-type="ground"]::before { background: #8a93a6; }
+.legend-chip[data-type="analog"]::before { background: #ff7ab6; }
+.legend-chip[data-type="i2c"]::before { background: #4fb3ff; }
+.legend-chip[data-type="uart"]::before { background: #32d296; }
+.legend-chip[data-type="spi"]::before { background: #ffd166; }
+.legend-chip[data-type="pwm"]::before { background: #b8f27a; }
+.legend-chip[data-type="gpio"]::before { background: #5cf2d6; }
+.legend-chip[data-type="special"]::before { background: #d94cff; }
+.legend-chip[data-type="onboard"]::before { background: #a6b1ff; }
+
+.legend-chip:hover {
+    border-color: rgba(92, 242, 214, 0.4);
+    color: var(--accent);
+}
+
+.legend-chip.is-active {
+    background: var(--accent);
+    color: #05121f;
+    border-color: transparent;
+}
+
+.legend-chip.is-active::before {
+    background: #05121f;
+}
+
+.pinout-shell[data-filter] .pin-item,
+.pinout-shell[data-filter] .pin-rail-button {
+    opacity: 0.3;
+}
+
+.pinout-shell[data-filter] .pin-item.is-active,
+.pinout-shell[data-filter] .pin-rail-button.is-active {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="power"] .pin-item[data-type="power"],
+.pinout-shell[data-filter="power"] .pin-rail-button[data-type="power"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="ground"] .pin-item[data-type="ground"],
+.pinout-shell[data-filter="ground"] .pin-rail-button[data-type="ground"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="analog"] .pin-item[data-type="analog"],
+.pinout-shell[data-filter="analog"] .pin-rail-button[data-type="analog"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="i2c"] .pin-item[data-type="i2c"],
+.pinout-shell[data-filter="i2c"] .pin-rail-button[data-type="i2c"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="uart"] .pin-item[data-type="uart"],
+.pinout-shell[data-filter="uart"] .pin-rail-button[data-type="uart"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="spi"] .pin-item[data-type="spi"],
+.pinout-shell[data-filter="spi"] .pin-rail-button[data-type="spi"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="pwm"] .pin-item[data-type="pwm"],
+.pinout-shell[data-filter="pwm"] .pin-rail-button[data-type="pwm"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="gpio"] .pin-item[data-type="gpio"],
+.pinout-shell[data-filter="gpio"] .pin-rail-button[data-type="gpio"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="special"] .pin-item[data-type="special"],
+.pinout-shell[data-filter="special"] .pin-rail-button[data-type="special"] {
+    opacity: 1;
+}
+
+.pinout-shell[data-filter="onboard"] .pin-item[data-type="onboard"],
+.pinout-shell[data-filter="onboard"] .pin-rail-button[data-type="onboard"] {
+    opacity: 1;
+}
 
 .pin-pill[data-type="power"] { border-color: rgba(255, 158, 44, 0.4); color: #ff9e2c; }
 .pin-pill[data-type="ground"] { border-color: rgba(138, 147, 166, 0.4); color: #8a93a6; }
@@ -614,6 +796,19 @@ body {
 
     .pin-columns {
         grid-template-columns: 1fr;
+    }
+
+    .pinout-visual {
+        grid-template-columns: 1fr;
+    }
+
+    .pinout-rail {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(110px, 1fr);
+        overflow-x: auto;
+        padding-bottom: 6px;
+        height: auto;
+        align-content: start;
     }
 }
 
