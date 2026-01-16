@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Budget DIY Sim Racing Rig | Pranav Emmadi</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <div class="page">
+        <aside class="sidebar">
+            <div class="identity">
+                <h1>Pranav Emmadi</h1>
+                <div class="dots" aria-hidden="true">
+                    <span class="dot dot-orange"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="dot dot-magenta"></span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a class="nav-link" href="../../index.html">About</a>
+                <a class="nav-link" href="../../experiences.html">Experiences</a>
+                <a class="nav-link" href="../../projects.html">Projects</a>
+                <a class="nav-link" href="../../bucket.html">Bucket List</a>
+                <a class="nav-link" href="../../pinout.html">Pranav's Pinout Guide</a>
+                <a class="nav-link active" href="../index.html">Blog</a>
+            </nav>
+
+            <div class="social">
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+                <a href="mailto:emmadipranav@gmail.com">Email</a>
+            </div>
+
+            <div class="photo-card">
+                <img src="../../PFP.jpg" alt="Pranav Emmadi" class="photo-img">
+            </div>
+        </aside>
+
+        <main class="content blog-post">
+            <article>
+                <header class="post-header">
+                    <time class="post-date">January 16, 2026</time>
+                    <h1>Budget DIY Sim Racing Rig: Steering Wheel + Pedals with XIAO RP2040</h1>
+                    <div class="post-tags">
+                        <span class="post-tag">robotics</span>
+                        <span class="post-tag">diy</span>
+                        <span class="post-tag">simracing</span>
+                        <span class="post-tag">rp2040</span>
+                        <span class="post-tag">budget</span>
+                    </div>
+                </header>
+
+                <section class="section">
+                    <h2>Why I Built This (and Why It's Budget)</h2>
+                    <p>I love racing games—especially BeamNG, which has incredibly realistic driving dynamics. But quality sim racing hardware—wheels, pedals, force feedback—costs hundreds or thousands of dollars. That's not happening for me anytime soon.</p>
+                    <p>So I asked myself: can I build something that works as a real controller without the price tag? The answer is yes, using cheap microcontroller boards, some sensors, and smart software.</p>
+                    <p>The whole philosophy here is <strong>cheap parts + intelligent signal processing</strong>. You start with basics that cost $15–20, get something functional, and then upgrade piece by piece. A spring here, a better sensor there, cleaner mounts later. No huge upfront investment, just rapid iteration.</p>
+                    <p>This is my first blog post about it, and I want to share exactly what I've learned so far: what works, what doesn't, and why.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Hero desk shot]
+                        </div>
+                        <figcaption>Full rig on desk, laptop running BeamNG, USB cable visible. This is the finished setup—steering wheel on the left, throttle pedal on the right, all talking to the XIAO over USB.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>What I Have Working Right Now</h2>
+                    <p>Let me be clear: this isn't a finished product. It's a prototype that <strong>works</strong>, and I'm actively improving it. But right now:</p>
+                    <ul class="post-list">
+                        <li><strong>Windows sees it as a Game Controller</strong> — plug it in, and it shows up in Windows' joy.cpl (joystick control panel)</li>
+                        <li><strong>Steering maps to the X axis</strong> — turn the wheel left, X goes toward -32768; turn right, X goes toward 32767</li>
+                        <li><strong>Throttle maps to the Y axis</strong> — press the pedal down, Y increases</li>
+                        <li><strong>Serial debugging still works</strong> — I can watch raw sensor values over USB while the controller is running</li>
+                        <li><strong>It's recognized by games</strong> — BeamNG reads both axes and I can drive around</li>
+                    </ul>
+                    <p>The big limitation right now? No brake pedal yet. Just throttle. I'm planning to add that soon using a second EC11 encoder on a separate pedal.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Windows joy.cpl axis test]
+                        </div>
+                        <figcaption>The Windows joystick test screen. Both axes are moving smoothly. Steering (X) goes left/right, throttle (Y) goes up/down. The display confirms Windows recognizes it as a proper gamepad.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>The Parts (Simple List, Budget-Friendly Tone)</h2>
+                    <p>Here's everything I used, in approximate cost order:</p>
+                    <ul class="post-list">
+                        <li><strong>Seeed Studio XIAO RP2040</strong> — the brain, $5–8. Tiny, fast, USB HID support built-in</li>
+                        <li><strong>4-pin magnetic encoder on steering shaft</strong> — $2–5. Contactless, no wear, simple signal</li>
+                        <li><strong>EC11 rotary encoder</strong> — $1–3 per unit. Mechanical, but reliable. I use one for throttle now</li>
+                        <li><strong>Springs</strong> — $0–2. Basic tension springs to help pedals return to zero</li>
+                        <li><strong>Wiring</strong> — jumberwire, solid core wire. Dirt cheap</li>
+                        <li><strong>Small enclosure or 3D-printed bracket</strong> — free if you have a printer, $5–10 otherwise</li>
+                        <li><strong>Breadboard or perfboard</strong> — $1–3. Optional if you want to solder</li>
+                        <li><strong>Assorted screws, standoffs, brackets</strong> — $2–5 from the hardware store</li>
+                    </ul>
+                    <p><strong>Total: roughly $15–40 depending on what you already have lying around.</strong> Compare that to a $300 racing wheel and you start to see the appeal.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Parts laid out]
+                        </div>
+                        <figcaption>Everything spread out neatly: XIAO board, magnetic encoder, EC11, springs, wire, and mounting brackets. It doesn't look like much, but it's all you need.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>Wiring (My Pin Map)</h2>
+                    <p>The XIAO RP2040 runs at 3.3V logic, so I use the 3V3 rail and common ground throughout. This keeps things simple and prevents level-shifting headaches.</p>
+                    
+                    <h3>Throttle (EC11 Encoder Direct)</h3>
+                    <ul class="post-list">
+                        <li>GND pin → XIAO GND</li>
+                        <li>A pin → XIAO D4</li>
+                        <li>B pin → XIAO D5</li>
+                    </ul>
+
+                    <h3>Steering (Magnetic Encoder)</h3>
+                    <ul class="post-list">
+                        <li>VCC → XIAO 3V3</li>
+                        <li>GND → XIAO GND</li>
+                        <li>Signal 1 → XIAO D0</li>
+                        <li>Signal 2 → XIAO D1</li>
+                    </ul>
+
+                    <h3>Wiring Sanity Checklist</h3>
+                    <ul class="post-list">
+                        <li><strong>Common ground:</strong> all GND pins connected to XIAO GND. No isolated grounds.</li>
+                        <li><strong>Short signal wires:</strong> keep encoder wires under 50cm if possible. Longer runs pick up noise.</li>
+                        <li><strong>Avoid routing next to motor power wires:</strong> if you add haptics later, don't let power cables cross your signal lines.</li>
+                        <li><strong>If throttle reads backward:</strong> either swap A/B pins or flip a software flag. Your choice.</li>
+                    </ul>
+
+                    <figure class="post-figure">
+                        <img src="../../public/blog/diy-sim-rig/wiring_diagram.png" alt="Wiring Map High Level" class="post-image">
+                        <figcaption><strong>Wiring Map (High Level)</strong> — XIAO at the center, throttle encoder on D4/D5, steering encoder on D0/D1. All grounds tied together. Simple and clean.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>The Story of the Signals (Make It Easy + Accurate)</h2>
+                    <p>Let me tell you the journey a signal takes from your hand to the game:</p>
+                    <ol class="post-list" style="list-style-type: decimal;">
+                        <li><strong>Your hand turns the wheel.</strong> The steering shaft rotates, and the magnetic encoder sees the change in magnetic field.</li>
+                        <li><strong>Sensors output electrical signals.</strong> The encoders output pulses (or in this case, directional square waves) to the XIAO.</li>
+                        <li><strong>XIAO reads signals and converts to numbers.</strong> Each pulse is counted; direction is tracked. Raw sensor data → angle or position value.</li>
+                        <li><strong>XIAO sends USB HID joystick reports.</strong> Every ~10ms (or faster), the XIAO packages the current steering angle and throttle position into a HID report and sends it over USB.</li>
+                        <li><strong>Windows exposes it as a controller.</strong> The operating system sees a game controller with X and Y axes.</li>
+                        <li><strong>BeamNG reads X/Y axes.</strong> The game polls the controller and maps those axes to steering and throttle in-game.</li>
+                    </ol>
+                    <p>The beauty of this is that once the XIAO sends proper HID reports, everything else is handled by the OS and the game. I don't need to write custom drivers or do any weird USB hacking.</p>
+
+                    <figure class="post-figure">
+                        <img src="../../public/blog/diy-sim-rig/signal_flowchart.png" alt="Signal Flow End to End" class="post-image">
+                        <figcaption><strong>Signal Flow (End to End)</strong> — From physical rotation → electrical pulses → digital numbers → USB HID report → OS → game. A clear chain of transformation.</figcaption>
+                    </figure>
+
+                    <figure class="post-figure">
+                        <img src="../../public/blog/diy-sim-rig/signal_types_diagram.png" alt="Signal Types What each device outputs" class="post-image">
+                        <figcaption><strong>Signal Types (What Each Device Outputs)</strong> — Magnetic encoder outputs quadrature pulses; EC11 does the same. The XIAO interprets these as counts and direction, then outputs standardized USB HID axis values.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>How Steering Becomes Joystick X (The Math)</h2>
+                    <p>Here's where signal processing meets real-world tuning. The steering wheel doesn't naturally map to the joystick X-axis—you have to build that mapping.</p>
+                    <p>Start with a <strong>raw steering reading</strong>. This is a count: maybe 0 to 900 represents a full left-to-right rotation. Or if you're using angle directly, 0° to 270°. The exact range depends on your encoder and steering geometry.</p>
+                    <p>Next, choose a <strong>steering range</strong> you're comfortable with. Right now, I'm using about 270°. Later, I might go wider—say 540° for more fine control. The key is that you can adjust this anytime.</p>
+                    <p>Then, <strong>normalize to -1.0 to 1.0</strong>. This is a standardized range where 0 is centered (straight ahead), -1.0 is hard left, and 1.0 is hard right.</p>
+                    <p>Finally, <strong>map to the HID integer range</strong>. USB HID joystick axes are 16-bit signed integers: -32768 to 32767. So -1.0 becomes -32768, 0.0 becomes 0, and 1.0 becomes 32767.</p>
+
+                    <div class="math-block">
+                        <code>normalized = (value - center) / (max_range / 2)<br>
+normalized = clamp(normalized, -1.0, 1.0)<br>
+xAxis = normalized * 32767</code>
+                    </div>
+
+                    <p>In practice, this means if my steering encoder gives me a reading of 450 (halfway between 0 and 900), and I center at 450, then:</p>
+                    <div class="math-block">
+                        <code>normalized = (450 - 450) / (900 / 2) = 0<br>
+xAxis = 0 * 32767 = 0  (straight ahead)</code>
+                    </div>
+
+                    <p>If I turn all the way right to 900:</p>
+                    <div class="math-block">
+                        <code>normalized = (900 - 450) / 450 = 1.0<br>
+xAxis = 1.0 * 32767 = 32767  (full right)</code>
+                    </div>
+
+                    <p>Simple, predictable, and tunable. If you want steering to feel faster or slower, you just adjust the range or add a gain factor.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Steering calibration screenshot/notes]
+                        </div>
+                        <figcaption>Serial monitor output showing raw steering counts and the corresponding axis value being sent. Center position is stable, and the value increases smoothly as I turn.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>How Throttle Becomes Joystick Y (Low Resolution → Feels Smooth)</h2>
+                    <p>The EC11 encoder is simpler but has a quirk: it has discrete detents. About 20 per full rotation. My pedal travel is roughly 70°, which means I get about 15 detents—<strong>just 15 distinct positions</strong>.</p>
+                    <p>If I mapped those directly to the joystick axis, throttle would feel "steppy." You'd press the pedal and it would jump between discrete values instead of smoothly increasing. That's bad for driving feel.</p>
+                    <p>So I do three things:</p>
+                    <ol class="post-list" style="list-style-type: decimal;">
+                        <li><strong>Clamp the raw counts</strong> to the usable range (0 to 15)</li>
+                        <li><strong>Map that small range into the full joystick range</strong> (0 to 32767). Even though the detents are discrete, spreading them across the full range makes the jumps less noticeable.</li>
+                        <li><strong>Apply smoothing</strong> so the value ramps instead of jumping</li>
+                    </ol>
+                    <p>Here's a concrete example. If I'm at 7 of 15 detents, that's roughly 47% of the throttle range (before gain). I map that to the joystick:</p>
+                    <div class="math-block">
+                        <code>raw_throttle = 7<br>
+max_detents = 15<br>
+normalized = 7 / 15 = 0.467<br>
+yAxis = 0.467 * 32767 = 15,309</code>
+                    </div>
+                    <p>Then, I apply <strong>sensitivity/gain</strong>. This lets me control how fast the throttle reaches 100%. If I want a sensitive, responsive feel, I use a gain > 1.0. If I want something more gradual, I use a gain < 1.0. I can also apply an exponential curve so the throttle ramps faster at the end of travel.</p>
+                    <p>Finally, <strong>smoothing</strong> (low-pass filtering) ramps the value over a few milliseconds instead of jumping instantly. This makes the controller feel polished even though the underlying sensor is discrete.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Throttle response curve doodle]
+                        </div>
+                        <figcaption>Simple hand-drawn style curve showing the relationship between pedal position (x-axis) and joystick output (y-axis). Notice the curve is smooth and rises predictably. More press = more throttle.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>INPUT_PULLUP (Why It's Cool and Why I Used It)</h2>
+                    <p>When an encoder pin isn't actively being driven high or low, it can "float"—its voltage is undefined, which leads to erratic readings. That's bad. So you need to pull the pin to a known state. Typically, high (to 3.3V) via a resistor.</p>
+                    <p>The XIAO RP2040 has built-in pull-up resistors. You configure a pin with <code>pinMode(pin, INPUT_PULLUP)</code>, and the microcontroller adds an internal resistor to 3.3V. By default, the pin reads HIGH. When the encoder connects that pin to ground, it goes LOW.</p>
+                    <p>Why this is awesome:</p>
+                    <ul class="post-list">
+                        <li><strong>Fewer external components.</strong> No need for physical resistors on every pin.</li>
+                        <li><strong>Cleaner wiring.</strong> Less stuff on the breadboard means fewer things to break.</li>
+                        <li><strong>Reliable transitions.</strong> The encoder grounds the pin cleanly, and the pull-up ensures you always read a stable HIGH otherwise.</li>
+                    </ul>
+                    <p>There's a catch: if your wires are very long (meters) or in a noisy environment, the pull-up might not be enough. In that case, you'd add external pull-ups or even pull-up + capacitor (filtering) to reduce noise. But for a desk-mounted build like mine, the internal pull-up is perfect.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Pull-up explanation mini diagram]
+                        </div>
+                        <figcaption>Simple diagram: a 3.3V rail connected through a resistor to the GPIO pin. Default state is HIGH. When the encoder grounds the pin, it goes LOW. This is INPUT_PULLUP behavior.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>Pedals Getting Stuck (Why I Need Springs Right Now)</h2>
+                    <p>If I had to describe the current pedal feel in one word, it would be "squishy." The pedal doesn't want to come back to zero on its own. It gets stuck partway up because there's friction in the linkage, gravity isn't helping, and there's no active restoring force. That's a problem when you're trying to drive.</p>
+                    <p>Springs fix this. A well-tuned spring provides:</p>
+                    <ul class="post-list">
+                        <li><strong>Reliable return-to-zero.</strong> Release the pedal, and it snaps back. No ambiguity.</li>
+                        <li><strong>Consistent pedal feel.</strong> The effort to press is predictable. The return is predictable. Good for muscle memory.</li>
+                        <li><strong>Less random input noise.</strong> Instead of the pedal creeping up slowly due to friction, it has a clear resting position.</li>
+                    </ul>
+                    <p>Practical spring setup notes:</p>
+                    <ul class="post-list">
+                        <li><strong>Spring must pull smoothly through full travel.</strong> Test it by hand first. If it gets stuck, jammed, or binds, adjust the geometry.</li>
+                        <li><strong>Align the spring so it doesn't rub.</strong> Friction kills consistency. A straight line is best.</li>
+                        <li><strong>Preload helps remove slack.</strong> If the spring is too loose at rest, it will have deadzone where the pedal doesn't move before the spring engages.</li>
+                        <li><strong>Pedal feel tuning is mostly geometry.</strong> The mount point's distance from the pivot changes the required force to press. Closer to the pivot = easier to press. Farther from the pivot = more effort required.</li>
+                    </ul>
+                    <p>I'm still experimenting with spring rates and mounting geometry, but already the difference is night-and-day compared to the unsprung setup.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Pedal underside showing spring placement]
+                        </div>
+                        <figcaption>Bottom view of the pedal showing the spring mounting point, how it connects to the pedal bracket, and the routing to avoid interference. The spring is clearly visible pulling the pedal upward.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>Debug Checklist (Short, Practical)</h2>
+                    <p>When things aren't working, go through this in order:</p>
+                    <ul class="post-list">
+                        <li><strong>Serial changes?</strong> Open the Arduino Serial Monitor and watch raw pin states. Do they toggle when you move the pedal/wheel?</li>
+                        <li><strong>Raw pin states toggle?</strong> If yes, the encoder is fine. If no, check wiring and power.</li>
+                        <li><strong>joy.cpl moves?</strong> If raw pin states are good but joy.cpl doesn't show axis changes, the problem is in your HID code or USB connection.</li>
+                        <li><strong>BeamNG binds?</strong> Go into BeamNG settings and rebind the controller. Sometimes the game doesn't pick up changes instantly.</li>
+                    </ul>
+                </section>
+
+                <section class="section coming-soon-box">
+                    <h2>Coming Soon</h2>
+                    <p>This is just the beginning. Here's what's on the roadmap:</p>
+                    
+                    <h3>Hardware Upgrades</h3>
+                    <ul class="post-list">
+                        <li>Updated CAD files — cleaner mounts, better pedal linkage, professional-looking enclosure</li>
+                        <li>Updated wiring diagrams — final pin labels, cleaner routing, cable management notes</li>
+                        <li>Brake pedal axis — third EC11 encoder for a separate brake pedal</li>
+                        <li>Higher resolution pedal sensor — switch to a smooth analog sensor or I2C accelerometer for continuous throttle instead of detents</li>
+                        <li>Optional motor/centering experiments — add haptic feedback using a small motor (not force feedback, just rumble/centering effects)</li>
+                    </ul>
+
+                    <h3>Budget Upgrade Path</h3>
+                    <p>If you want to build this and improve it step by step, here's the progression I recommend:</p>
+                    <ol class="post-list" style="list-style-type: decimal;">
+                        <li><strong>Step 1: Springs + cleaner linkage</strong> — cost $0–5, huge feel improvement. Do this first.</li>
+                        <li><strong>Step 2: Better pedal sensor</strong> — upgrade to a smooth analog or I2C sensor. Cost $5–15. Eliminates the "steppy" feel.</li>
+                        <li><strong>Step 3: Stronger wheel mechanics</strong> — improve steering geometry, add bearings if needed. Cost $5–20. Depends on your design.</li>
+                        <li><strong>Step 4: Motor/driver experiments</strong> — add optional haptic feedback. Cost $10–30 depending on the motor and driver board.</li>
+                    </ol>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: Coming soon CAD screenshot]
+                        </div>
+                        <figcaption>Early CAD screenshot showing the improved pedal linkage and mounting brackets. Annotations point out key improvements like spring preload adjustability and cable routing.</figcaption>
+                    </figure>
+                </section>
+
+                <section class="section">
+                    <h2>Final Notes</h2>
+                    <p>This is a real, working controller built from commodity parts. It's not as polished as a $300 wheel, but it works, and I've learned a lot. The best part? I can keep improving it without starting over.</p>
+                    <p>If you want to build something similar, start small. Get the XIAO and one sensor working first. Make sure the signal flow is solid. Then iterate. Add springs, tune the response curves, improve the mechanics. That's how you build something good on a budget.</p>
+                    <p>Stay tuned for follow-up posts on the higher-resolution sensor, the brake pedal, and the updated CAD files. I'll document the whole process.</p>
+                </section>
+
+                <nav class="post-nav">
+                    <a href="../index.html" class="back-link">← Back to Blog</a>
+                </nav>
+            </article>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-title">Get in Touch</div>
+            <form class="footer-form" action="https://formspree.io/f/your-id" method="POST">
+                <input type="email" name="email" placeholder="your email" required>
+                <textarea name="message" placeholder="message" rows="1"></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </footer>
+    </div>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/696a7d7e4310ab197fbebb5c/1jf3vkdjn';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+    <style>
+        .blog-post {
+            max-width: 800px;
+        }
+
+        .post-header {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-date {
+            font-size: 0.875rem;
+            color: var(--muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-header h1 {
+            font-size: 2.25rem;
+            line-height: 1.2;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            font-family: "Instrument Serif", serif;
+            font-weight: 400;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .post-tag {
+            font-size: 0.8125rem;
+            padding: 4px 10px;
+            background: rgba(92, 242, 214, 0.1);
+            border: 1px solid rgba(92, 242, 214, 0.3);
+            border-radius: 4px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 600;
+        }
+
+        .section h3 {
+            font-size: 1.25rem;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .post-list {
+            list-style-position: outside;
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .post-list li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .section p {
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .post-figure {
+            margin: 32px 0;
+            text-align: center;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, rgba(92, 242, 214, 0.1), rgba(79, 179, 255, 0.1));
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 60px 20px;
+            margin-bottom: 12px;
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .post-figure figcaption {
+            font-size: 0.9375rem;
+            color: var(--muted);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .math-block {
+            background: rgba(10, 30, 52, 0.8);
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            color: var(--accent-2);
+            line-height: 1.6;
+        }
+
+        .coming-soon-box {
+            background: rgba(92, 242, 214, 0.08);
+            border: 1px solid rgba(92, 242, 214, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 48px;
+        }
+
+        .coming-soon-box h2 {
+            margin-top: 0;
+        }
+
+        .coming-soon-box h3 {
+            margin-top: 20px;
+        }
+
+        .coming-soon-box p {
+            color: var(--text);
+        }
+
+        .post-nav {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .back-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent-2);
+        }
+
+        @media (max-width: 768px) {
+            .post-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .blog-post {
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/696a7d7e4310ab197fbebb5c/1jf3vkdjn';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+</html>

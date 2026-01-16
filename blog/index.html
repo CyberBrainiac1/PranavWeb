@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pranav Emmadi | Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="page">
+        <aside class="sidebar">
+            <div class="identity">
+                <h1>Pranav Emmadi</h1>
+                <div class="dots" aria-hidden="true">
+                    <span class="dot dot-orange"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="dot dot-magenta"></span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a class="nav-link" href="../index.html">About</a>
+                <a class="nav-link" href="../experiences.html">Experiences</a>
+                <a class="nav-link" href="../projects.html">Projects</a>
+                <a class="nav-link" href="../bucket.html">Bucket List</a>
+                <a class="nav-link" href="../pinout.html">Pranav's Pinout Guide</a>
+                <a class="nav-link active" href="index.html">Blog</a>
+            </nav>
+
+            <div class="social">
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+                <a href="mailto:emmadipranav@gmail.com">Email</a>
+            </div>
+
+            <div class="photo-card">
+                <img src="../PFP.jpg" alt="Pranav Emmadi" class="photo-img">
+            </div>
+        </aside>
+
+        <main class="content">
+            <section class="section">
+                <h2>Blog</h2>
+                <p class="section-intro">Thoughts, projects, and the lessons I've learned along the way.</p>
+
+                <div class="blog-grid">
+                    <article class="blog-card">
+                        <div class="blog-header">
+                            <time class="blog-date">Jan 16, 2026</time>
+                            <h3><a href="diy-sim-racing-rig-xiao-rp2040.html">Budget DIY Sim Racing Rig: Steering Wheel + Pedals with XIAO RP2040</a></h3>
+                        </div>
+                        <p class="blog-excerpt">How I built a working sim racing controller from cheap parts: an XIAO RP2040 microcontroller, a magnetic encoder for steering, and an EC11 rotary encoder for throttle. Windows sees it as a game controller, and it works in BeamNG.</p>
+                        <div class="blog-tags">
+                            <span class="blog-tag">robotics</span>
+                            <span class="blog-tag">diy</span>
+                            <span class="blog-tag">simracing</span>
+                            <span class="blog-tag">rp2040</span>
+                            <span class="blog-tag">budget</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-title">Get in Touch</div>
+            <form class="footer-form" action="https://formspree.io/f/your-id" method="POST">
+                <input type="email" name="email" placeholder="your email" required>
+                <textarea name="message" placeholder="message" rows="1"></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </footer>
+    </div>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/696a7d7e4310ab197fbebb5c/1jf3vkdjn';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+    <style>
+        .blog-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .blog-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(10, 30, 52, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .blog-card:hover {
+            border-color: var(--accent);
+            background: rgba(10, 30, 52, 0.6);
+        }
+
+        .blog-header {
+            margin-bottom: 12px;
+        }
+
+        .blog-date {
+            font-size: 0.875rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .blog-header h3 {
+            margin-top: 8px;
+            font-size: 1.375rem;
+            font-weight: 600;
+        }
+
+        .blog-header a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .blog-header a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .blog-excerpt {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .blog-tag {
+            font-size: 0.8125rem;
+            padding: 4px 10px;
+            background: rgba(92, 242, 214, 0.1);
+            border: 1px solid rgba(92, 242, 214, 0.3);
+            border-radius: 4px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .section-intro {
+            color: var(--muted);
+            margin-top: 8px;
+        }
+    </style>
+</body>
+</html>
