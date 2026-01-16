@@ -1,0 +1,134 @@
+<svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #2d5f6e; }
+      .title { font-size: 16px; font-weight: bold; fill: #e8f4f8; }
+      .subtitle { font-size: 10px; fill: #9bc5d4; }
+      .pin { rx: 2; }
+      .pin-power { fill: #ff6b6b; }
+      .pin-gnd { fill: #333333; }
+      .pin-io { fill: #4ecdc4; }
+      .pin-analog { fill: #ffc300; }
+      .pin-i2c { fill: #9bc5d4; }
+      .pin-spi { fill: #a78bfa; }
+      .pin-label { font-size: 7px; fill: white; font-weight: bold; text-anchor: middle; }
+      .section-label { font-size: 10px; fill: #c0e0e8; font-weight: bold; }
+    </style>
+  </defs>
+  
+  <rect class="bg" width="500" height="300" rx="12"/>
+  <text x="250" y="24" class="title" text-anchor="middle">ESP32 Dev Board</text>
+  <text x="250" y="38" class="subtitle" text-anchor="middle">Dual-core @ 240MHz • WiFi • Bluetooth • 3.3V Logic</text>
+  
+  <!-- Top - Power & GND -->
+  <text x="20" y="55" class="section-label">Power & Ground</text>
+  <rect class="pin pin-power" x="20" y="62" width="25" height="11"/>
+  <text class="pin-label" x="32" y="69">5V</text>
+  
+  <rect class="pin pin-power" x="50" y="62" width="25" height="11"/>
+  <text class="pin-label" x="62" y="69">3V3</text>
+  
+  <rect class="pin pin-gnd" x="80" y="62" width="25" height="11"/>
+  <text class="pin-label" x="92" y="69">GND</text>
+  
+  <!-- GPIO section -->
+  <text x="20" y="90" class="section-label">GPIO Pins (0-39)</text>
+  <rect class="pin pin-io" x="20" y="97" width="24" height="10"/>
+  <text class="pin-label" x="32" y="103">G0</text>
+  
+  <rect class="pin pin-io" x="48" y="97" width="24" height="10"/>
+  <text class="pin-label" x="60" y="103">G2</text>
+  
+  <rect class="pin pin-io" x="76" y="97" width="24" height="10"/>
+  <text class="pin-label" x="88" y="103">G4</text>
+  
+  <rect class="pin pin-io" x="104" y="97" width="24" height="10"/>
+  <text class="pin-label" x="116" y="103">G5</text>
+  
+  <rect class="pin pin-io" x="132" y="97" width="24" height="10"/>
+  <text class="pin-label" x="144" y="103">G12</text>
+  
+  <rect class="pin pin-io" x="160" y="97" width="24" height="10"/>
+  <text class="pin-label" x="172" y="103">G13</text>
+  
+  <rect class="pin pin-io" x="188" y="97" width="24" height="10"/>
+  <text class="pin-label" x="200" y="103">G14</text>
+  
+  <rect class="pin pin-io" x="216" y="97" width="24" height="10"/>
+  <text class="pin-label" x="228" y="103">G15</text>
+  
+  <rect class="pin pin-io" x="244" y="97" width="24" height="10"/>
+  <text class="pin-label" x="256" y="103">G18</text>
+  
+  <rect class="pin pin-io" x="272" y="97" width="24" height="10"/>
+  <text class="pin-label" x="284" y="103">G19</text>
+  
+  <rect class="pin pin-io" x="300" y="97" width="24" height="10"/>
+  <text class="pin-label" x="312" y="103">G21</text>
+  
+  <rect class="pin pin-io" x="328" y="97" width="24" height="10"/>
+  <text class="pin-label" x="340" y="103">G22</text>
+  
+  <rect class="pin pin-io" x="356" y="97" width="24" height="10"/>
+  <text class="pin-label" x="368" y="103">G23</text>
+  
+  <rect class="pin pin-io" x="384" y="97" width="24" height="10"/>
+  <text class="pin-label" x="396" y="103">G25</text>
+  
+  <rect class="pin pin-io" x="412" y="97" width="24" height="10"/>
+  <text class="pin-label" x="424" y="103">G26</text>
+  
+  <rect class="pin pin-io" x="440" y="97" width="24" height="10"/>
+  <text class="pin-label" x="452" y="103">G27</text>
+  
+  <rect class="pin pin-io" x="468" y="97" width="24" height="10"/>
+  <text class="pin-label" x="480" y="103">G32</text>
+  
+  <!-- ADC section -->
+  <text x="20" y="125" class="section-label">ADC Input (12-bit)</text>
+  <rect class="pin pin-analog" x="20" y="132" width="24" height="10"/>
+  <text class="pin-label" x="32" y="138">A0</text>
+  
+  <rect class="pin pin-analog" x="48" y="132" width="24" height="10"/>
+  <text class="pin-label" x="60" y="138">A1</text>
+  
+  <rect class="pin pin-analog" x="76" y="132" width="24" height="10"/>
+  <text class="pin-label" x="88" y="138">A2</text>
+  
+  <rect class="pin pin-analog" x="104" y="132" width="24" height="10"/>
+  <text class="pin-label" x="116" y="138">A3</text>
+  
+  <rect class="pin pin-analog" x="132" y="132" width="24" height="10"/>
+  <text class="pin-label" x="144" y="138">A4</text>
+  
+  <rect class="pin pin-analog" x="160" y="132" width="24" height="10"/>
+  <text class="pin-label" x="172" y="138">A5</text>
+  
+  <!-- Communication section -->
+  <text x="20" y="160" class="section-label">Communication Protocols</text>
+  
+  <!-- I2C -->
+  <rect class="pin pin-i2c" x="20" y="167" width="40" height="10"/>
+  <text class="pin-label" x="40" y="173">I2C</text>
+  
+  <!-- SPI -->
+  <rect class="pin pin-spi" x="65" y="167" width="40" height="10"/>
+  <text class="pin-label" x="85" y="173">SPI</text>
+  
+  <!-- UART -->
+  <rect class="pin pin-io" x="110" y="167" width="40" height="10"/>
+  <text class="pin-label" x="130" y="173">UART</text>
+  
+  <!-- WiFi/BLE -->
+  <rect class="pin pin-power" x="155" y="167" width="60" height="10"/>
+  <text class="pin-label" x="185" y="173">WiFi/BLE</text>
+  
+  <!-- Key specs -->
+  <text x="20" y="200" class="subtitle">32-bit dual-core @ 240MHz • 520KB SRAM • 4MB Flash</text>
+  <text x="20" y="217" class="subtitle">16 PWM channels • I2C • SPI • 3× UART • Touch sensors</text>
+  <text x="20" y="234" class="subtitle">Built-in WiFi 802.11 b/g/n • Bluetooth 5 LE</text>
+  
+  <!-- Note -->
+  <text x="250" y="270" class="subtitle" text-anchor="middle">Pinout • 3.3V Logic • Dual core • Wireless capable</text>
+  <text x="250" y="285" class="subtitle" text-anchor="middle">Click a pin for details</text>
+</svg>

@@ -1,0 +1,89 @@
+<svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #2d5f6e; }
+      .title { font-size: 16px; font-weight: bold; fill: #e8f4f8; }
+      .subtitle { font-size: 10px; fill: #9bc5d4; }
+      .pin { rx: 2; }
+      .pin-power { fill: #ff6b6b; }
+      .pin-gnd { fill: #333333; }
+      .pin-io { fill: #4ecdc4; }
+      .pin-analog { fill: #ffc300; }
+      .pin-i2c { fill: #9bc5d4; }
+      .pin-label { font-size: 7px; fill: white; font-weight: bold; text-anchor: middle; }
+      .section-label { font-size: 9px; fill: #c0e0e8; font-weight: bold; }
+    </style>
+  </defs>
+  
+  <rect class="bg" width="400" height="280" rx="12"/>
+  <text x="200" y="24" class="title" text-anchor="middle">XIAO RP2040</text>
+  <text x="200" y="38" class="subtitle" text-anchor="middle">Seeed Studio • 3.3V Logic • 14-pin</text>
+  
+  <!-- Left side -->
+  <text x="25" y="55" class="section-label">Left</text>
+  <rect class="pin pin-power" x="15" y="62" width="28" height="11"/>
+  <text class="pin-label" x="29" y="69">5V</text>
+  
+  <rect class="pin pin-gnd" x="15" y="76" width="28" height="11"/>
+  <text class="pin-label" x="29" y="83">GND</text>
+  
+  <rect class="pin pin-io" x="15" y="90" width="28" height="11"/>
+  <text class="pin-label" x="29" y="97">D0</text>
+  
+  <rect class="pin pin-io" x="15" y="104" width="28" height="11"/>
+  <text class="pin-label" x="29" y="111">D1</text>
+  
+  <rect class="pin pin-io" x="15" y="118" width="28" height="11"/>
+  <text class="pin-label" x="29" y="125">D2</text>
+  
+  <rect class="pin pin-io" x="15" y="132" width="28" height="11"/>
+  <text class="pin-label" x="29" y="139">D3</text>
+  
+  <rect class="pin pin-io" x="15" y="146" width="28" height="11"/>
+  <text class="pin-label" x="29" y="153">D4</text>
+  
+  <rect class="pin pin-io" x="15" y="160" width="28" height="11"/>
+  <text class="pin-label" x="29" y="167">D5</text>
+  
+  <rect class="pin pin-io" x="15" y="174" width="28" height="11"/>
+  <text class="pin-label" x="29" y="181">D6</text>
+  
+  <rect class="pin pin-io" x="15" y="188" width="28" height="11"/>
+  <text class="pin-label" x="29" y="195">D7</text>
+  
+  <rect class="pin pin-io" x="15" y="202" width="28" height="11"/>
+  <text class="pin-label" x="29" y="209">D8</text>
+  
+  <rect class="pin pin-io" x="15" y="216" width="28" height="11"/>
+  <text class="pin-label" x="29" y="223">D9</text>
+  
+  <!-- Right side -->
+  <text x="342" y="55" class="section-label">Right</text>
+  <rect class="pin pin-power" x="357" y="62" width="28" height="11"/>
+  <text class="pin-label" x="371" y="69">3V3</text>
+  
+  <rect class="pin pin-gnd" x="357" y="76" width="28" height="11"/>
+  <text class="pin-label" x="371" y="83">GND</text>
+  
+  <rect class="pin pin-analog" x="357" y="90" width="28" height="11"/>
+  <text class="pin-label" x="371" y="97">A0</text>
+  
+  <rect class="pin pin-analog" x="357" y="104" width="28" height="11"/>
+  <text class="pin-label" x="371" y="111">A1</text>
+  
+  <rect class="pin pin-analog" x="357" y="118" width="28" height="11"/>
+  <text class="pin-label" x="371" y="125">A2</text>
+  
+  <rect class="pin pin-io" x="357" y="132" width="28" height="11"/>
+  <text class="pin-label" x="371" y="139">D10</text>
+  
+  <rect class="pin pin-i2c" x="357" y="146" width="28" height="11"/>
+  <text class="pin-label" x="371" y="153">SCL</text>
+  
+  <rect class="pin pin-i2c" x="357" y="160" width="28" height="11"/>
+  <text class="pin-label" x="371" y="167">SDA</text>
+  
+  <!-- Info -->
+  <text x="200" y="245" class="subtitle" text-anchor="middle">RP2040 @ 133MHz • 264KB SRAM • USB-C</text>
+  <text x="200" y="260" class="subtitle" text-anchor="middle">I2C: SCL/SDA • SPI: D8-D10 • Click pin for details</text>
+</svg>

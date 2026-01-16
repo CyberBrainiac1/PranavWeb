@@ -1,15 +1,15 @@
 ﻿@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:opsz@8..72&family=Space+Grotesk:wght@400;600&display=swap");
 
 :root {
-    --bg: #e8f4f8;
-    --grid-strong: rgba(135, 206, 235, 0.08);
-    --grid-soft: rgba(135, 206, 235, 0.04);
-    --text: #1a3a47;
-    --muted: #4a7c8f;
-    --accent: #2ea89e;
-    --accent-2: #2b7fd6;
-    --card: rgba(255, 255, 255, 0.7);
-    --border: rgba(135, 206, 235, 0.25);
+    --bg: #071525;
+    --grid-strong: rgba(173, 205, 255, 0.08);
+    --grid-soft: rgba(173, 205, 255, 0.035);
+    --text: #e6f1ff;
+    --muted: #97b4d9;
+    --accent: #5cf2d6;
+    --accent-2: #4fb3ff;
+    --card: rgba(10, 30, 52, 0.6);
+    --border: rgba(143, 188, 255, 0.18);
 }
 
 * {
@@ -23,8 +23,8 @@ body {
     overflow: auto;
     background-color: var(--bg);
     background-image:
-        radial-gradient(circle at 15% 20%, rgba(173, 216, 230, 0.15), transparent 45%),
-        radial-gradient(circle at 80% 10%, rgba(135, 206, 250, 0.1), transparent 40%),
+        radial-gradient(circle at 15% 20%, rgba(92, 242, 214, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 10%, rgba(79, 179, 255, 0.12), transparent 40%),
         repeating-linear-gradient(0deg, var(--grid-strong) 0 1px, transparent 1px 120px),
         repeating-linear-gradient(90deg, var(--grid-strong) 0 1px, transparent 1px 120px),
         repeating-linear-gradient(0deg, var(--grid-soft) 0 1px, transparent 1px 24px),
