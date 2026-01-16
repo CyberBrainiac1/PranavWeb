@@ -1,103 +1,189 @@
-<svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Board background -->
-  <rect width="400" height="600" fill="#2d5f6e" rx="8"/>
+<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #2d5f6e; }
+      .title { font-size: 16px; font-weight: bold; fill: #e8f4f8; }
+      .subtitle { font-size: 10px; fill: #9bc5d4; }
+      .pin { rx: 2; }
+      .pin-power { fill: #ff6b6b; }
+      .pin-gnd { fill: #333333; }
+      .pin-io { fill: #4ecdc4; }
+      .pin-label { font-size: 7px; fill: white; font-weight: bold; text-anchor: middle; }
+      .pin-num { font-size: 6px; fill: #b0d4dc; text-anchor: middle; }
+    </style>
+  </defs>
   
-  <!-- Board title -->
-  <text x="200" y="30" font-size="18" font-weight="bold" fill="#e8f4f8" text-anchor="middle">
-    Raspberry Pi 4B
-  </text>
-  <text x="200" y="50" font-size="12" fill="#9bc5d4" text-anchor="middle">
-    40-pin GPIO Header
-  </text>
+  <rect class="bg" width="500" height="340" rx="12"/>
+  <text x="250" y="24" class="title" text-anchor="middle">Raspberry Pi 4B</text>
+  <text x="250" y="38" class="subtitle" text-anchor="middle">40-pin GPIO Header • 3.3V Logic</text>
   
-  <!-- Left rail label -->
-  <text x="40" y="85" font-size="11" fill="#c0e0e8" font-weight="bold">ODD PINS</text>
-  
-  <!-- Right rail label -->
-  <text x="280" y="85" font-size="11" fill="#c0e0e8" font-weight="bold">EVEN PINS</text>
-  
-  <!-- Left pins (odd) -->
-  <g id="left-pins">
-    <!-- Pin row 1: 3.3V, 5V -->
-    <rect x="20" y="100" width="40" height="18" fill="#ff6b6b" rx="2"/>
-    <text x="40" y="112" font-size="9" fill="white" font-weight="bold" text-anchor="middle">3.3V</text>
-    <text x="40" y="125" font-size="8" fill="#b0d4dc">Pin 1</text>
+  <!-- Left column (odd pins 1-39) -->
+  <g id="left">
+    <text x="35" y="50" class="subtitle">Left Side</text>
+    <!-- Row 1 -->
+    <rect class="pin pin-power" x="20" y="60" width="28" height="11"/>
+    <text class="pin-label" x="34" y="66">3V3</text>
+    <text class="pin-num" x="34" y="72">1</text>
     
-    <rect x="300" y="100" width="40" height="18" fill="#ff6b6b" rx="2"/>
-    <text x="320" y="112" font-size="9" fill="white" font-weight="bold" text-anchor="middle">5V</text>
-    <text x="320" y="125" font-size="8" fill="#b0d4dc">Pin 2</text>
+    <rect class="pin pin-io" x="20" y="74" width="28" height="11"/>
+    <text class="pin-label" x="34" y="80">G2</text>
+    <text class="pin-num" x="34" y="86">3</text>
     
-    <!-- Pin row 2: GPIO2/SDA, GND -->
-    <rect x="20" y="140" width="40" height="18" fill="#4ecdc4" rx="2"/>
-    <text x="40" y="152" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO2</text>
-    <text x="40" y="165" font-size="8" fill="#b0d4dc">SDA1 (I2C)</text>
+    <rect class="pin pin-io" x="20" y="88" width="28" height="11"/>
+    <text class="pin-label" x="34" y="94">G3</text>
+    <text class="pin-num" x="34" y="100">5</text>
     
-    <rect x="300" y="140" width="40" height="18" fill="#333333" rx="2"/>
-    <text x="320" y="152" font-size="9" fill="white" font-weight="bold" text-anchor="middle">GND</text>
-    <text x="320" y="165" font-size="8" fill="#b0d4dc">Pin 6</text>
+    <rect class="pin pin-io" x="20" y="102" width="28" height="11"/>
+    <text class="pin-label" x="34" y="108">G4</text>
+    <text class="pin-num" x="34" y="114">7</text>
     
-    <!-- Pin row 3: GPIO3/SCL, GPIO14/TX -->
-    <rect x="20" y="180" width="40" height="18" fill="#4ecdc4" rx="2"/>
-    <text x="40" y="192" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO3</text>
-    <text x="40" y="205" font-size="8" fill="#b0d4dc">SCL1 (I2C)</text>
+    <rect class="pin pin-gnd" x="20" y="116" width="28" height="11"/>
+    <text class="pin-label" x="34" y="122">GND</text>
+    <text class="pin-num" x="34" y="128">9</text>
     
-    <rect x="300" y="180" width="40" height="18" fill="#95e1d3" rx="2"/>
-    <text x="320" y="192" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO14</text>
-    <text x="320" y="205" font-size="8" fill="#b0d4dc">TX (UART0)</text>
+    <rect class="pin pin-io" x="20" y="130" width="28" height="11"/>
+    <text class="pin-label" x="34" y="136">G17</text>
+    <text class="pin-num" x="34" y="142">11</text>
     
-    <!-- Pin row 4: GPIO4, GPIO15/RX -->
-    <rect x="20" y="220" width="40" height="18" fill="#95e1d3" rx="2"/>
-    <text x="40" y="232" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO4</text>
-    <text x="40" y="245" font-size="8" fill="#b0d4dc">Pin 7</text>
+    <rect class="pin pin-io" x="20" y="144" width="28" height="11"/>
+    <text class="pin-label" x="34" y="150">G27</text>
+    <text class="pin-num" x="34" y="156">13</text>
     
-    <rect x="300" y="220" width="40" height="18" fill="#95e1d3" rx="2"/>
-    <text x="320" y="232" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO15</text>
-    <text x="320" y="245" font-size="8" fill="#b0d4dc">RX (UART0)</text>
+    <rect class="pin pin-io" x="20" y="158" width="28" height="11"/>
+    <text class="pin-label" x="34" y="164">G22</text>
+    <text class="pin-num" x="34" y="170">15</text>
     
-    <!-- Pin row 5: GND, GPIO18/PWM -->
-    <rect x="20" y="260" width="40" height="18" fill="#333333" rx="2"/>
-    <text x="40" y="272" font-size="9" fill="white" font-weight="bold" text-anchor="middle">GND</text>
-    <text x="40" y="285" font-size="8" fill="#b0d4dc">Pin 9</text>
+    <rect class="pin pin-power" x="20" y="172" width="28" height="11"/>
+    <text class="pin-label" x="34" y="178">3V3</text>
+    <text class="pin-num" x="34" y="184">17</text>
     
-    <rect x="300" y="260" width="40" height="18" fill="#ffd93d" rx="2"/>
-    <text x="320" y="272" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO18</text>
-    <text x="320" y="285" font-size="8" fill="#b0d4dc">PWM0</text>
+    <rect class="pin pin-io" x="20" y="186" width="28" height="11"/>
+    <text class="pin-label" x="34" y="192">G10</text>
+    <text class="pin-num" x="34" y="198">19</text>
     
-    <!-- SPI pins -->
-    <rect x="20" y="300" width="40" height="18" fill="#a78bfa" rx="2"/>
-    <text x="40" y="312" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO10</text>
-    <text x="40" y="325" font-size="8" fill="#b0d4dc">MOSI (SPI)</text>
+    <rect class="pin pin-io" x="20" y="200" width="28" height="11"/>
+    <text class="pin-label" x="34" y="206">G9</text>
+    <text class="pin-num" x="34" y="212">21</text>
     
-    <rect x="300" y="300" width="40" height="18" fill="#a78bfa" rx="2"/>
-    <text x="320" y="312" font-size="8" fill="white" font-weight="bold" text-anchor="middle">GPIO8</text>
-    <text x="320" y="325" font-size="8" fill="#b0d4dc">CE0 (SPI)</text>
+    <rect class="pin pin-io" x="20" y="214" width="28" height="11"/>
+    <text class="pin-label" x="34" y="220">G11</text>
+    <text class="pin-num" x="34" y="226">23</text>
+    
+    <rect class="pin pin-gnd" x="20" y="228" width="28" height="11"/>
+    <text class="pin-label" x="34" y="234">GND</text>
+    <text class="pin-num" x="34" y="240">25</text>
+    
+    <rect class="pin pin-io" x="20" y="242" width="28" height="11"/>
+    <text class="pin-label" x="34" y="248">G0</text>
+    <text class="pin-num" x="34" y="254">27</text>
+    
+    <rect class="pin pin-io" x="20" y="256" width="28" height="11"/>
+    <text class="pin-label" x="34" y="262">G5</text>
+    <text class="pin-num" x="34" y="268">29</text>
+    
+    <rect class="pin pin-io" x="20" y="270" width="28" height="11"/>
+    <text class="pin-label" x="34" y="276">G6</text>
+    <text class="pin-num" x="34" y="282">31</text>
+    
+    <rect class="pin pin-io" x="20" y="284" width="28" height="11"/>
+    <text class="pin-label" x="34" y="290">G13</text>
+    <text class="pin-num" x="34" y="296">33</text>
+    
+    <rect class="pin pin-io" x="20" y="298" width="28" height="11"/>
+    <text class="pin-label" x="34" y="304">G19</text>
+    <text class="pin-num" x="34" y="310">35</text>
+    
+    <rect class="pin pin-io" x="20" y="312" width="28" height="11"/>
+    <text class="pin-label" x="34" y="318">G26</text>
+    <text class="pin-num" x="34" y="324">37</text>
+    
+    <rect class="pin pin-gnd" x="20" y="326" width="28" height="11"/>
+    <text class="pin-label" x="34" y="332">GND</text>
+    <text class="pin-num" x="34" y="338">39</text>
   </g>
   
-  <!-- Legend -->
-  <g id="legend" transform="translate(20, 460)">
-    <text x="0" y="0" font-size="11" font-weight="bold" fill="#c0e0e8">Legend:</text>
+  <!-- Right column (even pins 2-40) -->
+  <g id="right">
+    <text x="435" y="50" class="subtitle">Right Side</text>
+    <!-- Row 1 -->
+    <rect class="pin pin-power" x="452" y="60" width="28" height="11"/>
+    <text class="pin-label" x="466" y="66">5V</text>
+    <text class="pin-num" x="466" y="72">2</text>
     
-    <rect x="0" y="12" width="12" height="12" fill="#ff6b6b"/>
-    <text x="16" y="21" font-size="9" fill="#c0e0e8">Power (3.3V/5V)</text>
+    <rect class="pin pin-power" x="452" y="74" width="28" height="11"/>
+    <text class="pin-label" x="466" y="80">5V</text>
+    <text class="pin-num" x="466" y="86">4</text>
     
-    <rect x="140" y="12" width="12" height="12" fill="#4ecdc4"/>
-    <text x="156" y="21" font-size="9" fill="#c0e0e8">I2C</text>
+    <rect class="pin pin-gnd" x="452" y="88" width="28" height="11"/>
+    <text class="pin-label" x="466" y="94">GND</text>
+    <text class="pin-num" x="466" y="100">6</text>
     
-    <rect x="220" y="12" width="12" height="12" fill="#95e1d3"/>
-    <text x="236" y="21" font-size="9" fill="#c0e0e8">GPIO/UART</text>
+    <rect class="pin pin-io" x="452" y="102" width="28" height="11"/>
+    <text class="pin-label" x="466" y="108">G14</text>
+    <text class="pin-num" x="466" y="114">8</text>
     
-    <rect x="0" y="32" width="12" height="12" fill="#ffd93d"/>
-    <text x="16" y="41" font-size="9" fill="#c0e0e8">PWM</text>
+    <rect class="pin pin-io" x="452" y="116" width="28" height="11"/>
+    <text class="pin-label" x="466" y="122">G15</text>
+    <text class="pin-num" x="466" y="128">10</text>
     
-    <rect x="140" y="32" width="12" height="12" fill="#a78bfa"/>
-    <text x="156" y="41" font-size="9" fill="#c0e0e8">SPI</text>
+    <rect class="pin pin-io" x="452" y="130" width="28" height="11"/>
+    <text class="pin-label" x="466" y="136">G18</text>
+    <text class="pin-num" x="466" y="142">12</text>
     
-    <rect x="220" y="32" width="12" height="12" fill="#333333"/>
-    <text x="236" y="41" font-size="9" fill="#c0e0e8">GND</text>
+    <rect class="pin pin-gnd" x="452" y="144" width="28" height="11"/>
+    <text class="pin-label" x="466" y="150">GND</text>
+    <text class="pin-num" x="466" y="156">14</text>
+    
+    <rect class="pin pin-io" x="452" y="158" width="28" height="11"/>
+    <text class="pin-label" x="466" y="164">G23</text>
+    <text class="pin-num" x="466" y="170">16</text>
+    
+    <rect class="pin pin-io" x="452" y="172" width="28" height="11"/>
+    <text class="pin-label" x="466" y="178">G24</text>
+    <text class="pin-num" x="466" y="184">18</text>
+    
+    <rect class="pin pin-gnd" x="452" y="186" width="28" height="11"/>
+    <text class="pin-label" x="466" y="192">GND</text>
+    <text class="pin-num" x="466" y="198">20</text>
+    
+    <rect class="pin pin-io" x="452" y="200" width="28" height="11"/>
+    <text class="pin-label" x="466" y="206">G25</text>
+    <text class="pin-num" x="466" y="212">22</text>
+    
+    <rect class="pin pin-io" x="452" y="214" width="28" height="11"/>
+    <text class="pin-label" x="466" y="220">G8</text>
+    <text class="pin-num" x="466" y="226">24</text>
+    
+    <rect class="pin pin-io" x="452" y="228" width="28" height="11"/>
+    <text class="pin-label" x="466" y="234">G7</text>
+    <text class="pin-num" x="466" y="240">26</text>
+    
+    <rect class="pin pin-io" x="452" y="242" width="28" height="11"/>
+    <text class="pin-label" x="466" y="248">G1</text>
+    <text class="pin-num" x="466" y="254">28</text>
+    
+    <rect class="pin pin-gnd" x="452" y="256" width="28" height="11"/>
+    <text class="pin-label" x="466" y="262">GND</text>
+    <text class="pin-num" x="466" y="268">30</text>
+    
+    <rect class="pin pin-io" x="452" y="270" width="28" height="11"/>
+    <text class="pin-label" x="466" y="276">G12</text>
+    <text class="pin-num" x="466" y="282">32</text>
+    
+    <rect class="pin pin-gnd" x="452" y="284" width="28" height="11"/>
+    <text class="pin-label" x="466" y="290">GND</text>
+    <text class="pin-num" x="466" y="296">34</text>
+    
+    <rect class="pin pin-io" x="452" y="298" width="28" height="11"/>
+    <text class="pin-label" x="466" y="304">G16</text>
+    <text class="pin-num" x="466" y="310">36</text>
+    
+    <rect class="pin pin-io" x="452" y="312" width="28" height="11"/>
+    <text class="pin-label" x="466" y="318">G20</text>
+    <text class="pin-num" x="466" y="324">38</text>
+    
+    <rect class="pin pin-io" x="452" y="326" width="28" height="11"/>
+    <text class="pin-label" x="466" y="332">G21</text>
+    <text class="pin-num" x="466" y="338">40</text>
   </g>
-  
-  <!-- Note -->
-  <text x="200" y="575" font-size="9" fill="#b0d4dc" text-anchor="middle">
-    3.3V logic only. Click a pin for details.
-  </text>
 </svg>
