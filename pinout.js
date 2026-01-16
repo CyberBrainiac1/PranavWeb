@@ -7,7 +7,7 @@ const boards = {
             "GPIO pins are 3.3V only. Do not feed 5V into GPIO.",
             "Pins 27 and 28 are reserved for HAT EEPROM (I2C0)."
         ],
-        image: "images/raspberry-pi-4b.jpg",
+        image: "images/raspberry-pi-4b-simplified.svg",
         imageAlt: "Raspberry Pi 4B board",
         imageCredit: {
             text: "Laserlicht / Wikimedia Commons",
@@ -90,7 +90,7 @@ const boards = {
             "Logic level is 5V. Use level shifting for 3.3V devices.",
             "PWM pins: D3, D5, D6, D9, D10, D11."
         ],
-        image: "images/arduino-uno.jpg",
+        image: "images/arduino-uno-simplified.svg",
         imageAlt: "Arduino Uno R3 board",
         imageCredit: {
             text: "SparkFun Electronics / Wikimedia Commons",
@@ -164,7 +164,7 @@ const boards = {
             "GPIO is 3.3V only. VBUS is 5V from USB.",
             "D0-D3 are ADC capable inputs."
         ],
-        image: "images/xiao-rp2040.jpg",
+        image: "images/xiao-rp2040-simplified.svg",
         imageAlt: "Seeed Studio XIAO RP2040 board",
         imageCredit: {
             text: "Seeed Studio",
@@ -228,7 +228,7 @@ const boards = {
             "GPIO0, GPIO2, GPIO12, GPIO15 are boot strapping pins.",
             "Some boards omit GPIO2 or GPIO15. Check your silkscreen."
         ],
-        image: "images/esp32-dev-board.jpg",
+        image: "images/esp32-dev-board-simplified.svg",
         imageAlt: "ESP32 Dev Board",
         imageCredit: {
             text: "Edwiyanto / Wikimedia Commons",
