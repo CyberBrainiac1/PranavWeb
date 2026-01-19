@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Making a DIY Racing Rig (Simple) | Pranav Emmadi</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <div class="page">
+        <aside class="sidebar">
+            <div class="identity">
+                <h1>Pranav Emmadi</h1>
+                <div class="dots" aria-hidden="true">
+                    <span class="dot dot-orange"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="dot dot-magenta"></span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a class="nav-link" href="../../index.html">About</a>
+                <a class="nav-link" href="../../experiences.html">Experiences</a>
+                <a class="nav-link" href="../../projects.html">Projects</a>
+                <a class="nav-link" href="../../bucket.html">Bucket List</a>
+                <a class="nav-link" href="../../pinout.html">Pranav's Pinout Guide</a>
+                <a class="nav-link active" href="../index.html">Blog</a>
+            </nav>
+
+            <div class="social">
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="https://discord.com" target="_blank" rel="noreferrer">Discord</a>
+                <a href="mailto:emmadipranav@gmail.com">Email</a>
+            </div>
+
+            <div class="photo-card">
+                <img src="../../PFP.jpg" alt="Pranav Emmadi" class="photo-img">
+            </div>
+        </aside>
+
+        <main class="content blog-post">
+            <article>
+                <header class="post-header">
+                    <time class="post-date">March 2, 2026</time>
+                    <h1>Making a DIY Racing Rig (Simple)</h1>
+                    <div class="post-tags">
+                        <span class="post-tag">diy</span>
+                        <span class="post-tag">simracing</span>
+                        <span class="post-tag">simple</span>
+                        <span class="post-tag">build</span>
+                    </div>
+                </header>
+
+                <section class="section">
+                    <h2>Goal</h2>
+                    <p>I wanted a racing wheel and pedal setup without the price tag. This version is the simplest working build: one steering axis, one pedal axis, and a tiny microcontroller that shows up as a USB gamepad.</p>
+                </section>
+
+                <section class="section">
+                    <h2>Parts List (Minimal)</h2>
+                    <ul class="post-list">
+                        <li><strong>Microcontroller:</strong> Any HID-capable board (XIAO RP2040 or similar)</li>
+                        <li><strong>Steering sensor:</strong> Magnetic encoder or a cheap potentiometer</li>
+                        <li><strong>Pedal sensor:</strong> Potentiometer or rotary encoder</li>
+                        <li><strong>Hardware:</strong> Basic brackets, bolts, and a return spring</li>
+                        <li><strong>Wiring:</strong> Jumper wires + a small breadboard</li>
+                    </ul>
+                </section>
+
+                <section class="section">
+                    <h2>Simple Build Steps</h2>
+                    <ol class="post-list" style="list-style-type: decimal;">
+                        <li>Mount the steering sensor so it rotates with the wheel shaft.</li>
+                        <li>Mount the pedal sensor so it moves as you press the pedal.</li>
+                        <li>Wire both sensors to the microcontroller (power, ground, signal).</li>
+                        <li>Flash firmware that maps sensor values to two USB axes.</li>
+                        <li>Open the Windows controller tester and calibrate center points.</li>
+                    </ol>
+                </section>
+
+                <section class="section">
+                    <h2>What Makes It "Good"</h2>
+                    <ul class="post-list">
+                        <li><strong>Stable center:</strong> The wheel always returns to a clear center point.</li>
+                        <li><strong>Smooth input:</strong> Axis values move steadily, not in jumps.</li>
+                        <li><strong>Clean wiring:</strong> Short wires, shared ground, and no loose connections.</li>
+                        <li><strong>Upgradeable:</strong> You can swap in better sensors later.</li>
+                    </ul>
+                </section>
+
+                <section class="section">
+                    <h2>Next Up</h2>
+                    <p>I'll add a brake pedal, refine the mounting, and post the updated wiring + calibration notes once the hardware is locked in.</p>
+                </section>
+
+                <nav class="post-nav">
+                    <a href="../index.html" class="back-link">Back to Blog</a>
+                </nav>
+            </article>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-title">Get in Touch</div>
+            <form class="footer-form" action="https://formspree.io/f/your-id" method="POST">
+                <input type="email" name="email" placeholder="your email" required>
+                <textarea name="message" placeholder="message" rows="1"></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </footer>
+    </div>
+
+    <style>
+        .blog-post {
+            max-width: 800px;
+        }
+
+        .post-header {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-date {
+            font-size: 0.875rem;
+            color: var(--muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-header h1 {
+            font-size: 2.15rem;
+            line-height: 1.2;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            font-family: "Instrument Serif", serif;
+            font-weight: 400;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .post-tag {
+            font-size: 0.8125rem;
+            padding: 4px 10px;
+            background: rgba(92, 242, 214, 0.1);
+            border: 1px solid rgba(92, 242, 214, 0.3);
+            border-radius: 4px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 600;
+        }
+
+        .post-list {
+            list-style-position: outside;
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .post-list li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .section p {
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .post-nav {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .back-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent-2);
+        }
+
+        @media (max-width: 768px) {
+            .post-header h1 {
+                font-size: 1.7rem;
+            }
+
+            .blog-post {
+                max-width: 100%;
+            }
+        }
+    </style>
+</body>
+</html>

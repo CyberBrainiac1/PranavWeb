@@ -706,6 +706,62 @@ body {
     font-weight: 600;
 }
 
+.blog-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.blog-card {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.blog-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(4, 14, 30, 0.35);
+}
+
+.blog-header h3 {
+    font-size: 1.2rem;
+    margin-top: 8px;
+}
+
+.blog-header a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.blog-date {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.blog-excerpt {
+    color: var(--muted);
+    margin: 12px 0;
+}
+
+.blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.blog-tag {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(92, 242, 214, 0.3);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
 .bucket-list {
     display: grid;
     gap: 10px;

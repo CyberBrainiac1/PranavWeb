@@ -54,30 +54,30 @@
 
                 <section class="section">
                     <h2>Why I Built This (and Why It's Budget)</h2>
-                    <p>OK so I'm obsessed with BeamNG—it's this insanely realistic racing game where you can actually feel what bad driving does to a car. But here's the thing: actual racing wheels and pedals cost like, $300+ easy. That's not happening. I'm a broke teenager.</p>
-                    <p>So I thought, what if I just... build my own? Like, could I actually slap together a real controller from cheap stuff and make it actually work? Turns out yeah, you totally can. You just need a tiny microcontroller, some sensors, and honestly not that much else.</p>
-                    <p>The whole idea is <strong>buy cheap parts, make it work, then make it better</strong>. I spent like $30 total. Add a spring here, swap a sensor there, better mounting later. No giant upfront money dump, just keep improving it as I go.</p>
-                    <p>This is my first post about this whole thing, and I'm gonna walk you through exactly what I did, what works, and what's still kinda sketchy.</p>
+                    <p>I enjoy BeamNG because it models vehicle dynamics realistically, but commercial racing wheels and pedals are expensive. I wanted a budget-friendly setup that I could build and iterate on.</p>
+                    <p>I decided to build my own controller from inexpensive parts. A small microcontroller and a couple of sensors are enough to create a functional prototype.</p>
+                    <p>The approach is to start simple, validate the core inputs, and upgrade over time. This first version cost about $30 and leaves room for better sensors and mechanics later.</p>
+                    <p>This post documents what I built, what works today, and what still needs refinement.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
                             [IMAGE PLACEHOLDER: Hero desk shot]
                         </div>
-                        <figcaption>Full rig on desk, laptop running BeamNG, USB cable visible. This is the finished setup—steering wheel on the left, throttle pedal on the right, all talking to the XIAO over USB.</figcaption>
+                        <figcaption>Full rig on desk with BeamNG running. The steering wheel sits on the left, the throttle pedal on the right, and everything connects to the XIAO over USB.</figcaption>
                     </figure>
                 </section>
 
                 <section class="section">
-                    <h2>What I Have Working Right Now</h2>
-                    <p>Real talk: this isn't finished. It's still a work in progress and I'm constantly tweaking it. But right now, it actually works:</p>
+                    <h2>Current Status</h2>
+                    <p>This build is still a work in progress, but the current version is functional:</p>
                     <ul class="post-list">
-                        <li><strong>Windows thinks it's a game controller</strong> — I plug it in and it shows up in the joy.cpl thing that Windows has for joysticks</li>
-                        <li><strong>Steering actually works</strong> — turn my wheel left, the joystick goes left; turn right, it goes right</li>
-                        <li><strong>Throttle works too</strong> — press the pedal, the throttle axis moves up</li>
-                        <li><strong>I can still debug it while using it</strong> — I can open the serial monitor on my laptop and see what the sensors are reading while I'm driving</li>
-                        <li><strong>Games actually recognize it</strong> — BeamNG sees both axes and I can drive around in the game</li>
+                        <li><strong>Windows recognizes it as a game controller</strong> - it appears in <code>joy.cpl</code></li>
+                        <li><strong>Steering input maps correctly</strong> - the X-axis moves left/right with the wheel</li>
+                        <li><strong>Throttle input maps correctly</strong> - the Y-axis increases with pedal travel</li>
+                        <li><strong>Live debugging is available</strong> - I can monitor sensor readings in the serial console while testing</li>
+                        <li><strong>Games recognize it</strong> - BeamNG detects both axes and accepts the controller</li>
                     </ul>
-                    <p>The one thing that sucks right now? No brake. Just throttle. I'm planning to add a second pedal soon though.</p>
+                    <p>The missing piece is a brake pedal, which I plan to add next.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
@@ -88,93 +88,93 @@
                 </section>
 
                 <section class="section">
-                    <h2>The Parts (Cheap Stuff List)</h2>
-                    <p>Here's literally everything I used, ordered by how broke I needed to be:</p>
+                    <h2>Budget Parts List</h2>
+                    <p>Here is the current parts list for the build:</p>
                     <ul class="post-list">
-                        <li><strong>Seeed Studio XIAO RP2040</strong> — $5–8. This tiny board is the brains of the whole thing. It's fast and can talk to your computer like a real controller</li>
-                        <li><strong>Magnetic encoder on the steering shaft</strong> — $2–5. No moving parts wear out, just detects magnetic changes. Clean and simple</li>
-                        <li><strong>EC11 rotary encoder</strong> — $1–3. These are the mechanical "clicky" things. I'm using one for throttle right now</li>
-                        <li><strong>Springs</strong> — like $0–2. Just basic springs to make the pedals snap back</li>
-                        <li><strong>Random wire</strong> — dirt cheap. I just used jumper wires</li>
-                        <li><strong>A box or 3D printed bracket</strong> — free if you have a 3D printer, like $5–10 otherwise</li>
-                        <li><strong>Breadboard or some solder stuff</strong> — $1–3, optional</li>
-                        <li><strong>Screws and brackets from the hardware store</strong> — another $2–5</li>
+                        <li><strong>Seeed Studio XIAO RP2040</strong> - $5-8. Compact microcontroller with USB HID support</li>
+                        <li><strong>Magnetic encoder on the steering shaft</strong> - $2-5. Non-contact steering position sensing</li>
+                        <li><strong>EC11 rotary encoder</strong> - $1-3. Used for throttle in the current version</li>
+                        <li><strong>Springs</strong> - $0-2. Return force for the pedals</li>
+                        <li><strong>Jumper wires</strong> - basic wiring</li>
+                        <li><strong>A box or 3D printed bracket</strong> - mounting hardware</li>
+                        <li><strong>Breadboard or soldered connections</strong> - optional</li>
+                        <li><strong>Screws and brackets</strong> - for mounting</li>
                     </ul>
-                    <p><strong>Total bill: like $30 tops.</strong> That's literally 1/10th the price of a real racing wheel. Insane, right?</p>
+                    <p><strong>Total cost: around $30.</strong> That is roughly one-tenth the price of a typical commercial racing wheel.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
                             [IMAGE PLACEHOLDER: Parts laid out]
                         </div>
-                        <figcaption>Everything spread out neatly: XIAO board, magnetic encoder, EC11, springs, wire, and mounting brackets. It doesn't look like much, but it's all you need.</figcaption>
+                        <figcaption>Parts laid out: XIAO board, magnetic encoder, EC11, springs, wire, and mounting brackets. This covers the essentials for the build.</figcaption>
                     </figure>
                 </section>
 
                 <section class="section">
-                    <h2>How I Wired It (My Pins)</h2>
-                    <p>The XIAO runs at 3.3V, so everything uses 3.3V. No level shifting nonsense, just one voltage everywhere. Keeps it simple.</p>
+                    <h2>How I Wired It (Pinout)</h2>
+                    <p>The XIAO runs at 3.3V, so everything uses 3.3V logic. A single voltage rail keeps wiring simple.</p>
                     
-                    <h3>Throttle (EC11 thing)</h3>
+                    <h3>Throttle (EC11 encoder)</h3>
                     <ul class="post-list">
-                        <li>GND → XIAO GND</li>
-                        <li>A pin → XIAO D4</li>
-                        <li>B pin → XIAO D5</li>
+                        <li>GND -> XIAO GND</li>
+                        <li>A pin -> XIAO D4</li>
+                        <li>B pin -> XIAO D5</li>
                     </ul>
 
-                    <h3>Steering (Magnetic encoder thingy)</h3>
+                    <h3>Steering (magnetic encoder)</h3>
                     <ul class="post-list">
-                        <li>VCC → XIAO 3V3</li>
-                        <li>GND → XIAO GND</li>
-                        <li>Signal 1 → XIAO D0</li>
-                        <li>Signal 2 → XIAO D1</li>
+                        <li>VCC -> XIAO 3V3</li>
+                        <li>GND -> XIAO GND</li>
+                        <li>Signal 1 -> XIAO D0</li>
+                        <li>Signal 2 -> XIAO D1</li>
                     </ul>
 
-                    <h3>Wiring Checklist (Don't Mess This Up)</h3>
+                    <h3>Wiring Checklist (Avoid Common Issues)</h3>
                     <ul class="post-list">
-                        <li><strong>ALL grounds connected:</strong> like seriously, all GND pins go to XIAO GND. No separate ground pins floating around.</li>
-                        <li><strong>Keep wires short:</strong> try to keep sensor wires under 50cm if possible. Long wires pick up electrical noise from like, everything.</li>
-                        <li><strong>Don't route next to power cables:</strong> if you add a motor later, don't let the motor power cables cross your sensor wires. That causes noise.</li>
-                        <li><strong>If throttle reads backwards:</strong> just swap the A/B pins, or flip it in code. Your choice.</li>
+                        <li><strong>Connect all grounds:</strong> tie every GND pin to XIAO GND and avoid floating grounds.</li>
+                        <li><strong>Keep wires short:</strong> aim for sensor runs under 50 cm to reduce electrical noise.</li>
+                        <li><strong>Avoid power cable routing:</strong> keep sensor wires away from motor power lines to reduce noise.</li>
+                        <li><strong>If throttle is reversed:</strong> swap the A/B pins or invert the direction in code.</li>
                     </ul>
 
                     <figure class="post-figure">
                         <img src="../../public/blog/diy-sim-rig/wiring_diagram.png" alt="Wiring Map High Level" class="post-image">
-                        <figcaption><strong>Wiring Map (High Level)</strong> — XIAO at the center, throttle encoder on D4/D5, steering encoder on D0/D1. All grounds tied together. Simple and clean.</figcaption>
+                        <figcaption><strong>Wiring Map (High Level)</strong> - XIAO at the center, throttle encoder on D4/D5, steering encoder on D0/D1. All grounds tied together for a shared reference.</figcaption>
                     </figure>
                 </section>
 
                 <section class="section">
                     <h2>Signal Journey (From Turning the Wheel to the Game)</h2>
-                    <p>OK so here's what happens when you turn the steering wheel and press the pedal. It's actually pretty cool when you think about it:</p>
+                    <p>Here is the signal flow when you turn the wheel and press the pedal:</p>
                     <ol class="post-list" style="list-style-type: decimal;">
-                        <li><strong>You turn the wheel.</strong> The steering shaft rotates and the magnetic encoder notices the magnetic field changing.</li>
-                        <li><strong>Sensors send electrical signals.</strong> The encoders send pulses to the XIAO telling it which direction things are moving.</li>
-                        <li><strong>XIAO reads and converts to numbers.</strong> It counts the pulses and figures out where everything is positioned.</li>
-                        <li><strong>XIAO sends USB controller data.</strong> Every ~10ms it packages up the current steering angle and throttle and sends it over USB in a standard format.</li>
-                        <li><strong>Windows recognizes it as a controller.</strong> Your computer looks at this data and says "oh this is a gamepad".</li>
-                        <li><strong>BeamNG reads the controller.</strong> The game polls your controller and maps those axes to steering and throttle in the game.</li>
+                        <li><strong>Wheel rotation.</strong> The steering shaft rotates and the magnetic encoder senses the field change.</li>
+                        <li><strong>Encoder pulses.</strong> The encoders send pulses to the XIAO that indicate direction and motion.</li>
+                        <li><strong>Position calculation.</strong> The XIAO counts pulses and computes position.</li>
+                        <li><strong>USB HID report.</strong> About every 10 ms, it packages steering and throttle data into a standard USB HID report.</li>
+                        <li><strong>OS enumeration.</strong> The operating system recognizes the device as a game controller.</li>
+                        <li><strong>Game input.</strong> The game polls the HID axes and maps them to steering and throttle.</li>
                     </ol>
-                    <p>The cool part? Once the XIAO sends the right USB format, everything else just works. I didn't have to write any fancy driver software or anything. The OS just handles it.</p>
+                    <p>Once the XIAO sends standard USB HID reports, the operating system handles the rest with no custom driver required.</p>
 
                     <figure class="post-figure">
                         <img src="../../public/blog/diy-sim-rig/signal_flowchart.png" alt="Signal Flow End to End" class="post-image">
-                        <figcaption><strong>Signal Flow (End to End)</strong> — From physical rotation → electrical pulses → digital numbers → USB HID report → OS → game. A clear chain of transformation.</figcaption>
+                        <figcaption><strong>Signal Flow (End to End)</strong> - From physical rotation -> electrical pulses -> digital numbers -> USB HID report -> OS -> game. A clear chain of transformation.</figcaption>
                     </figure>
 
                     <figure class="post-figure">
                         <img src="../../public/blog/diy-sim-rig/signal_types_diagram.png" alt="Signal Types What each device outputs" class="post-image">
-                        <figcaption><strong>Signal Types (What Each Device Outputs)</strong> — Magnetic encoder outputs quadrature pulses; EC11 does the same. The XIAO interprets these as counts and direction, then outputs standardized USB HID axis values.</figcaption>
+                        <figcaption><strong>Signal Types (What Each Device Outputs)</strong> - Magnetic encoder outputs quadrature pulses; EC11 does the same. The XIAO interprets these as counts and direction, then outputs standardized USB HID axis values.</figcaption>
                     </figure>
                 </section>
 
                 <section class="section">
                     <h2>Steering Math (Turning Numbers Into Movement)</h2>
-                    <p>OK so here's where it gets interesting. My steering wheel doesn't naturally map to the joystick axis. I gotta build that mapping myself.</p>
-                    <p>My encoder gives me a number between 0 and 900, representing a full left-to-right rotation. But the joystick axis expects a number between -32768 and 32767. So I gotta translate.</p>
-                    <p>Here's my process:</p>
-                    <p><strong>Step 1:</strong> Figure out the center point. Let's say 450 is straight ahead (halfway).</p>
-                    <p><strong>Step 2:</strong> Convert to a range of -1.0 to 1.0. That's the standard "normal" range where -1 is full left and 1 is full right.</p>
-                    <p><strong>Step 3:</strong> Multiply by 32767 to get the actual joystick number.</p>
+                    <p>The steering encoder's raw range does not match the joystick axis range, so I map it in code.</p>
+                    <p>The encoder outputs 0 to 900 for a full left-to-right rotation, while the joystick axis expects -32768 to 32767, so I translate the range.</p>
+                    <p>Process:</p>
+                    <p><strong>Step 1:</strong> Determine the center point (for example, 450 as straight ahead).</p>
+                    <p><strong>Step 2:</strong> Normalize to -1.0 to 1.0, where -1 is full left and 1 is full right.</p>
+                    <p><strong>Step 3:</strong> Scale by 32767 to get the joystick value.</p>
 
                     <div class="math-block">
                         <code>normalized = (raw_value - center) / (range / 2)<br>
@@ -182,19 +182,19 @@ normalized = clamp(normalized, -1.0, 1.0)<br>
 xAxis = normalized * 32767</code>
                     </div>
 
-                    <p>So if I'm at 450 (center):</p>
+                    <p>Example: if the raw value is 450 (center):</p>
                     <div class="math-block">
                         <code>normalized = (450 - 450) / (900 / 2) = 0<br>
 xAxis = 0  (straight)</code>
                     </div>
 
-                    <p>If I'm at 900 (full right):</p>
+                    <p>Example: if the raw value is 900 (full right):</p>
                     <div class="math-block">
                         <code>normalized = (900 - 450) / 450 = 1.0<br>
 xAxis = 32767  (full right)</code>
                     </div>
 
-                    <p>And if I want steering to feel faster or slower, I just adjust the numbers. Easy.</p>
+                    <p>If steering needs to feel faster or slower, I adjust the scaling factors.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
@@ -206,44 +206,44 @@ xAxis = 32767  (full right)</code>
 
                 <section class="section">
                     <h2>Throttle Math (Making Discrete Clicks Feel Smooth)</h2>
-                    <p>OK so here's the problem with the EC11 encoder: it's "clicky". It has discrete detents. Like 20 per rotation. My pedal only travels 70 degrees, which means I only get about 15 distinct positions from the encoder.</p>
-                    <p>If I just sent those 15 positions directly to the joystick, throttle would feel all "steppy" and weird. You'd press it and it'd jump between positions instead of smoothly increasing. That sucks.</p>
-                    <p>So here's what I do:</p>
+                    <p>The EC11 encoder has discrete detents (about 20 per rotation). With roughly 70 degrees of pedal travel, I only get around 15 distinct positions.</p>
+                    <p>If I sent those positions directly, throttle would feel stepped instead of smooth, jumping between fixed values.</p>
+                    <p>Approach:</p>
                     <ol class="post-list" style="list-style-type: decimal;">
-                        <li><strong>Clamp the raw counts</strong> to 0 to 15</li>
-                        <li><strong>Spread those 15 positions across the full joystick range</strong> (0 to 32767). Even though there are only 15 clicks, spreading them out makes the jumps way less noticeable.</li>
-                        <li><strong>Add smoothing</strong> so the value ramps instead of jumping instantly</li>
+                        <li><strong>Clamp the raw counts</strong> to 0 through 15.</li>
+                        <li><strong>Map the 15 positions across the full joystick range</strong> (0 to 32767) to minimize the perceived steps.</li>
+                        <li><strong>Add smoothing</strong> so the value ramps between steps.</li>
                     </ol>
-                    <p>Example: if I'm at 7 of 15 detents:</p>
+                    <p>Example: at 7 of 15 detents:</p>
                     <div class="math-block">
                         <code>raw = 7<br>
 normalized = 7 / 15 = 0.467 (about 47%)<br>
 yAxis = 0.467 * 32767 = 15,309</code>
                     </div>
 
-                    <p>Then I can also add <strong>sensitivity tuning</strong>. If I want the pedal to feel super responsive, I use a multiplier > 1.0. If I want it more gradual, I use a multiplier < 1.0. I can even add an exponential curve to make it ramp faster at the end.</p>
-                    <p>Then <strong>smoothing</strong> (low-pass filtering) ramps the value over a few milliseconds. Makes it feel way more polished even though the sensor is mechanically discrete.</p>
+                    <p>I also add <strong>sensitivity tuning</strong>: a multiplier above 1.0 for a more responsive pedal, or below 1.0 for a smoother ramp. An exponential curve can increase response near the end of travel.</p>
+                    <p><strong>Smoothing</strong> (low-pass filtering) ramps the value over a few milliseconds so the output feels continuous even with a mechanically discrete sensor.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
                             [IMAGE PLACEHOLDER: Throttle response curve doodle]
                         </div>
-                        <figcaption>Simple hand-drawn style curve showing the relationship between pedal position (x-axis) and joystick output (y-axis). Notice the curve is smooth and rises predictably. More press = more throttle.</figcaption>
+                        <figcaption>Simple hand-drawn style curve showing the relationship between pedal position (x-axis) and joystick output (y-axis). The curve rises smoothly and predictably as pedal travel increases.</figcaption>
                     </figure>
                 </section>
 
                 <section class="section">
-                    <h2>INPUT_PULLUP (Why It's So Cool)</h2>
-                    <p>OK so there's this thing called "floating". When a pin isn't actively being held high or low, its voltage is just... undefined. That leads to garbage readings. Not good.</p>
-                    <p>The fix is to pull the pin to a known state using a resistor. Usually, pull it up to 3.3V. The XIAO has built-in resistors for this, so you don't need to add anything.</p>
-                    <p>You just do <code>pinMode(pin, INPUT_PULLUP)</code> and boom—the microcontroller internally connects a resistor to 3.3V on that pin. By default it reads HIGH. When the encoder grounds the pin, it goes LOW.</p>
-                    <p>Why is this awesome?</p>
+                    <h2>INPUT_PULLUP (Why It Matters)</h2>
+                    <p>When a pin is not actively driven high or low, it can float and produce unstable readings.</p>
+                    <p>The fix is to pull the pin to a known state through a resistor, typically up to 3.3V. The XIAO includes internal pull-ups, so no external components are required.</p>
+                    <p>Using <code>pinMode(pin, INPUT_PULLUP)</code> enables an internal resistor to 3.3V. The pin reads HIGH by default and goes LOW when the encoder pulls it to ground.</p>
+                    <p>Benefits:</p>
                     <ul class="post-list">
-                        <li><strong>Fewer parts.</strong> No external resistors needed on every single pin.</li>
-                        <li><strong>Cleaner breadboard.</strong> Less stuff = less things breaking.</li>
-                        <li><strong>Super reliable.</strong> The encoder grounds the pin cleanly and the pull-up ensures you always read stable HIGH otherwise.</li>
+                        <li><strong>Fewer parts.</strong> No external resistors needed on each input.</li>
+                        <li><strong>Cleaner wiring.</strong> Fewer components reduce points of failure.</li>
+                        <li><strong>Reliable readings.</strong> The pull-up keeps the input stable when the encoder is open.</li>
                     </ul>
-                    <p>The downside? If your wires are like, meters long or in a super noisy environment, the pull-up might not be enough. Then you'd need external pull-ups with capacitors to filter noise. But for a desk setup like mine, internal pull-ups are perfect.</p>
+                    <p>If wiring runs are very long or the environment is noisy, external pull-ups with capacitors can help. For a short, desk-scale setup, the internal pull-ups are usually sufficient.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
@@ -254,22 +254,22 @@ yAxis = 0.467 * 32767 = 15,309</code>
                 </section>
 
                 <section class="section">
-                    <h2>Pedals That Don't Get Stuck</h2>
-                    <p>So at first, my pedals were kinda bad. They didn't want to come back up on their own. They'd get stuck partway because of friction in the linkage and gravity pulling down. That's a problem when you're driving and you release the throttle but it just... stays there.</p>
-                    <p>Springs fix this instantly. A good spring gives you:</p>
+                    <h2>Reliable Pedal Return</h2>
+                    <p>Initially, the pedals did not return cleanly. Friction in the linkage and gravity left them partway down, which is a problem when you release the throttle and the input does not reset.</p>
+                    <p>Adding springs fixes this and provides:</p>
                     <ul class="post-list">
-                        <li><strong>Return to zero.</strong> Release the pedal and it snaps back. No ambiguity.</li>
-                        <li><strong>Consistent feel.</strong> Pressing feels the same every time. Returning feels the same every time. Good for muscle memory.</li>
-                        <li><strong>Less weird input noise.</strong> Instead of the pedal creeping up slowly due to friction, it has a clear resting spot.</li>
+                        <li><strong>Return to zero.</strong> Release the pedal and it returns to a consistent resting point.</li>
+                        <li><strong>Consistent feel.</strong> Press and release feel the same each cycle, which supports muscle memory.</li>
+                        <li><strong>Cleaner input.</strong> The pedal settles to a clear resting position instead of creeping due to friction.</li>
                     </ul>
                     <p>Tips for springs:</p>
                     <ul class="post-list">
-                        <li><strong>Make sure it moves smoothly.</strong> Test by hand first. If it gets stuck, adjust the geometry.</li>
-                        <li><strong>Don't let it rub.</strong> Friction ruins consistency. A straight line is best.</li>
-                        <li><strong>Preload helps.</strong> If the spring is too loose when not pressed, you'll have deadzone before things start moving.</li>
-                        <li><strong>Distance from pivot = effort.</strong> Mount the spring attachment point closer to the pivot if you want easier pedal pressing. Farther = harder.</li>
+                        <li><strong>Ensure smooth travel.</strong> Test by hand and adjust geometry if it binds.</li>
+                        <li><strong>Avoid rubbing.</strong> Keep the motion path straight to reduce friction.</li>
+                        <li><strong>Use preload.</strong> A small preload removes dead zone before movement starts.</li>
+                        <li><strong>Leverage matters.</strong> Mount closer to the pivot for lighter effort; farther away increases resistance.</li>
                     </ul>
-                    <p>I'm still tweaking spring rates and geometry, but already it's 100x better than before.</p>
+                    <p>I'm still tuning spring rates and geometry, but the return behavior is already noticeably improved.</p>
 
                     <figure class="post-figure">
                         <div class="image-placeholder">
@@ -280,48 +280,48 @@ yAxis = 0.467 * 32767 = 15,309</code>
                 </section>
 
                 <section class="section">
-                    <h2>Debugging When Stuff Breaks</h2>
-                    <p>When things don't work, go through this checklist:</p>
+                    <h2>Debugging Checklist</h2>
+                    <p>When something is not working, use this checklist:</p>
                     <ul class="post-list">
-                        <li><strong>Check the serial monitor:</strong> Open Arduino's serial monitor and watch the raw pin states. Do they toggle when you move stuff around?</li>
-                        <li><strong>Pins toggling but joy.cpl not moving?</strong> The sensor works, but your USB HID code is broken or the connection is bad. Check the code.</li>
-                        <li><strong>joy.cpl shows axes moving?</strong> Great. Now test in BeamNG. If it doesn't work in the game, rebind the controller in game settings sometimes helps.</li>
-                        <li><strong>Nothing works?</strong> Check your wiring first. Is everything actually connected? Are the GND pins really connected?</li>
+                        <li><strong>Check the serial monitor:</strong> Open Arduino's serial monitor and confirm that pin states toggle when you move the controls.</li>
+                        <li><strong>Pins toggle but joy.cpl does not move:</strong> the sensor works, so check the USB HID code and connection.</li>
+                        <li><strong>joy.cpl shows axes moving:</strong> test in BeamNG; if it still fails, rebind the controller in game settings.</li>
+                        <li><strong>No response at all:</strong> recheck wiring and verify all GND pins are connected.</li>
                     </ul>
                 </section>
 
                 <section class="section coming-soon-box">
                     <h2>What's Next</h2>
-                    <p>This is just the start. I've got a bunch of stuff planned:</p>
+                    <p>This is an early version, and several improvements are planned:</p>
                     
-                    <h3>Hardware Stuff</h3>
+                    <h3>Hardware</h3>
                     <ul class="post-list">
-                        <li>Better CAD files and 3D prints — cleaner mounting, better pedal design</li>
-                        <li>Updated wiring diagrams — cleaner and more organized</li>
-                        <li>A brake pedal — add a third encoder so I actually have braking</li>
-                        <li>Better throttle sensor — switch from mechanical detents to a smooth analog sensor so throttle feels actually smooth</li>
-                        <li>Maybe add a small motor — for haptic feedback (like rumble when you crash, or centering force on the steering wheel)</li>
+                        <li>Refined CAD and 3D prints for cleaner mounting and improved pedal geometry.</li>
+                        <li>Updated wiring diagrams for clarity and organization.</li>
+                        <li>A brake pedal using a third encoder for braking input.</li>
+                        <li>A smoother throttle sensor to replace mechanical detents.</li>
+                        <li>A small motor for optional haptic feedback (rumble or centering force).</li>
                     </ul>
 
                     <h3>Budget Upgrade Path</h3>
-                    <p>If you wanna build this and upgrade it slowly, here's my recommendation:</p>
+                    <p>If you want to build this and upgrade gradually, here is a suggested order:</p>
                     <ol class="post-list" style="list-style-type: decimal;">
-                        <li><strong>First: springs + better linkage</strong> — like $0–5, huge difference. Do this first.</li>
-                        <li><strong>Second: better pedal sensor</strong> — upgrade to a smooth sensor. Cost $5–15. Removes the "clickiness".</li>
-                        <li><strong>Third: stronger steering</strong> — better geometry, maybe bearings. Cost $5–20.</li>
-                        <li><strong>Fourth: haptic stuff</strong> — add optional motor feedback. Cost $10–30 depending on parts.</li>
+                        <li><strong>First: springs and linkage</strong> - around $0-5, a large improvement.</li>
+                        <li><strong>Second: smoother pedal sensor</strong> - upgrade to a smooth sensor for about $5-15.</li>
+                        <li><strong>Third: stronger steering</strong> - improved geometry or bearings, about $5-20.</li>
+                        <li><strong>Fourth: haptic feedback</strong> - optional motor feedback, about $10-30 depending on parts.</li>
                     </ol>
                 </section>
 
                 <section class="section">
                     <h2>Wrapping Up</h2>
-                    <p>So yeah, I built a working racing controller from like $30 worth of parts. It's not as fancy as a $300 wheel, but it actually works and I'm constantly making it better.</p>
-                    <p>If you wanna try this, start small. Get the XIAO and one sensor working first. Make sure the signals are good. Then iterate from there. Add springs, tune the response, improve the mechanical stuff. That's how you build something good without spending tons of money.</p>
-                    <p>I'm planning more posts about adding the smooth throttle sensor, building the brake pedal, and sharing the CAD files. So stay tuned I guess.</p>
+                    <p>This build delivers a functional racing controller with roughly $30 in parts. It is not as refined as a $300 wheel, but it works reliably and continues to improve.</p>
+                    <p>If you want to try this, start small: get the XIAO and one sensor working first, verify the signals, then iterate with springs, tuning, and mechanical improvements.</p>
+                    <p>Future posts will cover the smooth throttle sensor, a brake pedal build, and CAD file releases.</p>
                 </section>
 
                 <nav class="post-nav">
-                    <a href="../index.html" class="back-link">← Back to Blog</a>
+                    <a href="../index.html" class="back-link">&larr; Back to Blog</a>
                 </nav>
             </article>
         </main>
