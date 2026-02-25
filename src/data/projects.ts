@@ -1,182 +1,203 @@
-export type ProjectDetailSection = {
-  heading: string
+export type ProjectStatus = 'featured' | 'active' | 'team' | 'in-progress'
+
+export type ProjectSection = {
+  heading:
+    | 'Goal'
+    | 'Hardware [ADD PARTS]'
+    | 'Electronics/Control [ADD]'
+    | 'Firmware/Software experiments [ADD]'
+    | 'Tuning / Feel [ADD]'
+    | 'What I’m improving next [ADD]'
+    | string
   bullets: string[]
-  placeholders?: string[]
 }
 
 export type Project = {
-  slug: string
+  id: string
   name: string
   summary: string
-  status: 'active' | 'in-progress' | 'team'
+  status: ProjectStatus
   tags: string[]
+  links?: Array<{ label: string; href: string }>
   featured?: boolean
-  links?: Array<{ label: string; url: string }>
-  details: ProjectDetailSection[]
-  codeUpdate?: string[]
+  rev: string
+  spec: string
+  details: ProjectSection[]
 }
 
 export const projects: Project[] = [
   {
-    slug: 'sim-racing-wheel-force-feedback',
+    id: 'sim-racing-wheel-force-feedback',
     name: 'Sim Racing Wheel / Force Feedback',
     summary:
-      'Budget DIY steering wheel + pedals using XIAO RP2040, magnetic steering sensing, and EC11 throttle input with iterative upgrades toward force feedback.',
-    status: 'active',
+      'DIY steering wheel + pedal rig built around low-cost hardware and iterative tuning, with force-feedback direction as the top priority path.',
+    status: 'featured',
     featured: true,
-    tags: ['RP2040', 'Embedded', 'Control', 'Sim Racing', 'Mechanical Design'],
+    tags: ['Sim Racing', 'Force Feedback', 'XIAO RP2040', 'ESP32', 'Control'],
+    rev: 'REV 2',
+    spec: 'STATUS / ACTIVE',
     links: [
-      { label: 'Build Log', url: '#blog' },
-      { label: 'See the Build', url: '#projects' },
+      { label: 'Blog Build Log', href: '#experiments' },
+      { label: 'Project Focus', href: '#projects' },
     ],
     details: [
       {
-        heading: 'System Overview',
+        heading: 'Goal',
         bullets: [
-          'Windows recognizes it as a game controller through standard USB HID behavior.',
-          'Steering axis is read from magnetic encoder counts and mapped into joystick range.',
-          'Throttle axis uses EC11 counts with smoothing and gain tuning to improve feel.',
+          'Build a practical sim setup that feels good to drive while staying budget-conscious.',
+          'Keep the platform open for future hardware upgrades instead of locking into one design.',
         ],
       },
       {
-        heading: 'Force Feedback Roadmap',
+        heading: 'Hardware [ADD PARTS]',
         bullets: [
-          'Current setup focuses on reliable steering + throttle input on low-cost hardware.',
-          '[VERIFY] Next hardware pass adds force feedback module with safer torque limits and better mounting rigidity.',
-          '[VERIFY] Planned software loop includes centering behavior and basic in-game feedback mapping.',
-        ],
-        placeholders: [
-          '[IMAGE PLACEHOLDER: FFB motor mount concept]',
-          '[IMAGE PLACEHOLDER: Wheel shaft + coupling close-up]',
+          'Current stack uses a compact microcontroller + encoder-based steering and pedal sensing.',
+          '[ADD] Finalized mechanical BOM list and revision snapshots.',
         ],
       },
       {
-        heading: 'V2 Accelerator Pedal (Shorter Travel)',
+        heading: 'Electronics/Control [ADD]',
         bullets: [
-          'I redesigned the accelerator pedal and it now moves about one-third the distance of the old design.',
-          'That means my EC11 encoder gives about one-third the counts too (for example, roughly 15 counts became about 5).',
-          'Without software scaling, each encoder click would become a large throttle jump.',
-          'I changed the clamp range from 0..15 to 0..5, still map 0..5 to the full joystick Y axis, keep smoothing so output ramps instead of snapping, and keep a sensitivity/gain factor so I can tune how quickly it reaches full throttle.',
-          'This keeps the build budget-friendly while staying upgradeable for better future sensors.',
-        ],
-        placeholders: [
-          '[IMAGE PLACEHOLDER: V2 pedal CAD or sketch]',
-          '[IMAGE PLACEHOLDER: V2 pedal linkage close-up]',
+          'Sensor-to-axis mapping is tuned for reliable USB controller behavior.',
+          '[ADD] Final control wiring diagram for wheel, pedal, and future FFB path.',
         ],
       },
-    ],
-    codeUpdate: [
-      'THR_MAX_COUNTS changed from 15 to 5',
-      'gain and smoothing still apply',
-      'invert flag fixes direction',
-    ],
-  },
-  {
-    slug: 'diy-robotic-hand',
-    name: 'DIY Robotic Hand',
-    summary:
-      'Biologically inspired robotic hand project focused on practical mechanisms, controllable motion, and iterative mechanical/electrical integration.',
-    status: 'active',
-    tags: ['Mechanisms', '3D Printing', 'Embedded'],
-    links: [{ label: 'GitHub Repo', url: 'https://github.com/CyberBrainiac1/RoboticHand' }],
-    details: [
       {
-        heading: 'Current Scope',
+        heading: 'Firmware/Software experiments [ADD]',
         bullets: [
-          'Designing and refining finger mechanisms for reliable actuation.',
-          'Testing structure, linkage tolerances, and practical assembly constraints.',
-          'Integrating control and embedded experimentation in parallel with hardware revisions.',
+          'Mapped encoder readings into full joystick range with practical filtering.',
+          '[ADD] Firmware experiments list and test matrix.',
+        ],
+      },
+      {
+        heading: 'Tuning / Feel [ADD]',
+        bullets: [
+          'V2 pedal travel is shorter, so count range was adapted to preserve drivability.',
+          'Gain and smoothing are still part of the tuning loop to avoid jumpy throttle response.',
+          '[ADD] Repeatable tuning profile notes across different games.',
+        ],
+      },
+      {
+        heading: 'What I’m improving next [ADD]',
+        bullets: [
+          'Mechanical rigidity and cleaner mounting for more consistent steering feel.',
+          '[ADD] Force-feedback implementation milestones and safety constraints.',
         ],
       },
     ],
   },
   {
-    slug: 'ftc-evergreen-dragons',
+    id: 'ftc-evergreen-dragons',
     name: 'FTC Evergreen Dragons',
     summary:
-      'Competitive FTC robotics work spanning robot architecture, mechanism design, and system integration across seasons.',
+      'Team-focused competitive robotics work with emphasis on mechanism design, integration, and practical iteration.',
     status: 'team',
-    tags: ['FTC', 'Team Build', 'CAD', 'Rapid Prototyping'],
+    tags: ['FTC', 'Mechanisms', 'CAD', 'Integration'],
+    rev: 'REV 1',
+    spec: 'STATUS / TEAM',
     details: [
       {
-        heading: 'Focus Areas',
+        heading: 'Focus',
         bullets: [
-          'Mechanical design and practical subsystem integration.',
-          'Iteration between CAD, manufacturing, and field testing.',
-          'Bringing student-built systems to reliable match performance.',
+          'Translate concepts into buildable subsystems through rapid prototype loops.',
+          'Balance CAD intent with what actually survives physical testing.',
         ],
       },
     ],
   },
   {
-    slug: 'frc-2854-prototypes',
+    id: 'frc-2854-prototypes',
     name: 'FRC 2854 Prototypes',
     summary:
-      'Prototype-focused collaboration around FRC-style mechanisms and subsystem concepts with an emphasis on real-world reliability.',
+      'Prototype-driven contribution work around mechanism concepts and manufacturable subsystem ideas.',
     status: 'team',
-    tags: ['FRC', 'Prototyping', 'Mechanisms'],
+    tags: ['FRC', 'Prototype', 'Mechanics'],
+    rev: 'REV 1',
+    spec: 'STATUS / TEAM',
     details: [
       {
-        heading: 'Prototype Direction',
+        heading: 'Focus',
         bullets: [
-          'Rapid mechanism concept testing for practical build feasibility.',
-          'Comparing tradeoffs in packaging, strength, and manufacturability.',
-          'Documenting what survives repeated test cycles and what needs redesign.',
+          'Quickly evaluate mechanism paths and packaging constraints.',
+          'Document what works physically before scaling complexity.',
         ],
       },
     ],
   },
   {
-    slug: 'esp32-control-projects',
+    id: 'esp32-control-projects',
     name: 'ESP32 Control Projects',
     summary:
-      'Embedded control experiments that connect sensors, actuators, and lightweight control logic for physical robotics systems.',
+      'Embedded control experiments connecting sensors, drivers, and practical behavior tuning for robotics tasks.',
     status: 'active',
-    tags: ['ESP32', 'Sensors', 'Control'],
+    tags: ['ESP32', 'Sensors', 'Control', 'Python'],
+    rev: 'REV 1',
+    spec: 'STATUS / ACTIVE',
     details: [
       {
-        heading: 'What I Work On',
+        heading: 'Scope',
         bullets: [
-          'Sensor readout pipelines and practical filtering in noisy hardware setups.',
-          'Actuator control loops tuned for stable behavior under real constraints.',
-          'Fast hardware/software iteration with bench testing and logging.',
+          'Sensor readout + filtering under real hardware noise.',
+          'Control loop tuning for repeatable behavior across revisions.',
         ],
       },
     ],
   },
   {
-    slug: 'maker-tools-solderbuddy',
+    id: 'maker-tools-solderbuddy',
     name: 'Maker Tools / SolderBuddy',
     summary:
-      'Compact build-support tools for the workbench, including SolderBuddy from the AMD x Hack Club Prototype Hackathon.',
+      'Compact desk-side helper tooling for bench builds, including SolderBuddy from AMD x Hack Club Prototype Hackathon.',
     status: 'active',
-    tags: ['Tools', 'Hackathon', 'Desktop Hardware'],
-    links: [{ label: 'GitHub Repo', url: 'https://github.com/CyberBrainiac1/SolderBuddy' }],
+    tags: ['Tools', 'Hackathon', 'Bench Workflow'],
+    rev: 'REV 1',
+    spec: 'STATUS / ACTIVE',
+    links: [{ label: 'GitHub Repo', href: 'https://github.com/CyberBrainiac1/SolderBuddy' }],
     details: [
       {
-        heading: 'Tooling Goal',
+        heading: 'Scope',
         bullets: [
-          'Reduce friction during wiring, soldering, and bench debugging.',
-          'Design compact hardware helpers that actually improve workflow.',
-          'Keep builds inexpensive and easy to reproduce.',
+          'Reduce friction during soldering and wiring sessions.',
+          'Keep tools compact, fast to use, and easy to reproduce.',
         ],
       },
     ],
   },
   {
-    slug: 'quadruped',
+    id: 'quadruped',
     name: 'Quadruped',
     summary:
-      'In-progress quadruped platform exploring mechanical architecture, control strategy, and iteration on stable locomotion.',
+      'In-progress legged robotics platform exploring mechanical architecture and control tradeoffs.',
     status: 'in-progress',
-    tags: ['In Progress', 'Legged Robotics', 'Control'],
+    tags: ['Quadruped', 'In Progress', 'Control'],
+    rev: 'REV 0',
+    spec: 'STATUS / IN PROGRESS',
     details: [
       {
-        heading: 'Status',
+        heading: 'Scope',
         bullets: [
-          'Early-stage mechanical and control prototyping.',
-          'Working through drivetrain, frame, and control tradeoffs.',
-          'Collecting lessons before committing to full build architecture.',
+          'Early architecture exploration before committing to a final drivetrain layout.',
+          'Collecting stability and control lessons from small iteration cycles.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'diy-robotic-hand',
+    name: 'DIY Robotic Hand',
+    summary:
+      'Biologically inspired hand build focused on practical mechanism iteration and embedded integration.',
+    status: 'active',
+    tags: ['Robotic Hand', '3D Printing', 'Mechanisms'],
+    rev: 'REV 2',
+    spec: 'STATUS / ACTIVE',
+    links: [{ label: 'GitHub Repo', href: 'https://github.com/CyberBrainiac1/RoboticHand' }],
+    details: [
+      {
+        heading: 'Scope',
+        bullets: [
+          'Iterating finger mechanics and actuation paths.',
+          'Testing structure and assembly constraints between revisions.',
         ],
       },
     ],

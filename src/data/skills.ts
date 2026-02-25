@@ -1,20 +1,44 @@
-export type Skill = {
-  name: string
-  group: 'CAD' | 'Fabrication' | 'Embedded' | 'Software' | 'Systems'
-  icon: 'cad' | 'fabrication' | 'embedded' | 'software' | 'systems'
+export type SkillModule = {
+  id: string
+  label: string
+  title: string
+  items: string[]
 }
 
-export const skills: Skill[] = [
-  { name: 'SolidWorks', group: 'CAD', icon: 'cad' },
-  { name: 'Onshape', group: 'CAD', icon: 'cad' },
-  { name: '3D Printing', group: 'Fabrication', icon: 'fabrication' },
-  { name: 'Machining', group: 'Fabrication', icon: 'fabrication' },
-  { name: 'Rapid Prototyping', group: 'Fabrication', icon: 'fabrication' },
-  { name: 'ESP32', group: 'Embedded', icon: 'embedded' },
-  { name: 'Raspberry Pi', group: 'Embedded', icon: 'embedded' },
-  { name: 'Sensors + Actuators', group: 'Embedded', icon: 'embedded' },
-  { name: 'Python', group: 'Software', icon: 'software' },
-  { name: 'HTML/CSS', group: 'Software', icon: 'software' },
-  { name: 'System Integration', group: 'Systems', icon: 'systems' },
-  { name: 'Hardware Debugging', group: 'Systems', icon: 'systems' },
+export const skillModules: SkillModule[] = [
+  {
+    id: 'cad',
+    label: 'MODULE / CAD',
+    title: 'Design + Mechanisms',
+    items: ['SolidWorks', 'Onshape', 'Mechanism packaging', 'Assembly-driven iteration'],
+  },
+  {
+    id: 'fabrication',
+    label: 'MODULE / FAB',
+    title: 'Prototyping + Fabrication',
+    items: ['3D printing', 'Basic machining', 'Rapid prototyping', 'Fixture-minded builds'],
+  },
+  {
+    id: 'electronics',
+    label: 'MODULE / ELECTRO',
+    title: 'Electronics + Control',
+    items: ['Basic electronics', 'Motor drivers', 'Sensors', 'Signal sanity checks'],
+  },
+  {
+    id: 'embedded',
+    label: 'MODULE / EMBED',
+    title: 'Embedded Stack',
+    items: ['ESP32', 'Python', 'Raspberry Pi', 'Real-world tuning loops'],
+  },
+  {
+    id: 'systems',
+    label: 'MODULE / TEST',
+    title: 'Testing + Iteration',
+    items: [
+      'Hardware-software integration',
+      'Bench validation',
+      'Debug-first iteration',
+      'Build / iterate / test',
+    ],
+  },
 ]

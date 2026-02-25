@@ -1,284 +1,143 @@
-import { type FormEvent, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import {
-  ArrowRight,
-  Boxes,
-  BrainCircuit,
-  Code2,
-  Cpu,
-  ChevronRight,
-  DraftingCompass,
-  ExternalLink,
-  Github,
-  GraduationCap,
-  Hammer,
-  Mail,
-  Sparkles,
-  Wrench,
-  X,
-} from 'lucide-react'
+import { useMemo, useState, type FormEvent } from 'react'
+import { motion } from 'framer-motion'
+import { Copy, Github, Linkedin, Mail } from 'lucide-react'
+import { BlueprintBackground } from './components/BlueprintBackground'
+import { Hero } from './components/Hero'
+import { Navbar } from './components/Navbar'
+import { ProjectCard } from './components/ProjectCard'
+import { ProjectDetailsDialog } from './components/ProjectDetailsDialog'
+import { Section } from './components/Section'
+import { LabelTag } from './components/LabelTag'
 import { projects, type Project } from './data/projects'
-import { skills } from './data/skills'
-import { timeline } from './data/timeline'
+import { skillModules } from './data/skills'
+import { experiments } from './data/experiments'
+import { useActiveSection } from './hooks/useActiveSection'
 
-const blogPosts = [
-  {
-    title: 'Making a DIY Racing Rig (Simple)',
-    date: '2026-03-02',
-    excerpt:
-      'A simple racing wheel and pedal build focused on low-cost parts, clean wiring, and quick iteration.',
-  },
-  {
-    title: 'Budget DIY Sim Racing Rig: Steering Wheel + Pedals with XIAO RP2040',
-    date: '2026-01-16',
-    excerpt:
-      'Full build notes on steering encoder mapping, pedal tuning, USB HID output, and reliability upgrades.',
-  },
-]
-
-const bucketList = [
-  'Program a humanoid',
-  'Use RL to train a robot',
-  'Go to BWSI',
-  'Design my very own robot arm',
-  'Design my very own robot hand',
+const navItems = [
+  { id: 'home', label: 'Home' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'teams', label: 'Teams' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'experiments', label: 'Experiments' },
+  { id: 'contact', label: 'Contact' },
 ]
 
 const teams = [
   {
-    name: 'FTC Evergreen Dragons',
-    subtitle: 'Founder + builder',
+    label: 'SECTION A',
+    name: 'FTC: Evergreen Dragons',
     bullets: [
-      'Lead mechanism-heavy builds for competitive robotics.',
-      'Drive integration across CAD, fabrication, and subsystem testing.',
-      'Focus on designs that survive real match conditions.',
+      'Founder + active builder with mechanism-first workflows.',
+      'Rapid CAD-to-hardware iteration for competition-ready systems.',
+      'Focus on builds that perform outside ideal demo conditions.',
     ],
   },
   {
-    name: 'FRC 2854 Prototypes',
-    subtitle: 'Prototype support',
+    label: 'SECTION B',
+    name: 'FRC: 2854 Prototypes',
     bullets: [
-      'Contribute to mechanism prototype experiments.',
-      'Validate manufacturability and reliability through fast test loops.',
-      'Capture lessons that translate into stronger next revisions.',
+      'Prototype contribution across mechanism concepts and integration tasks.',
+      'Build-for-reliability mindset during concept validation.',
+      'Practical iteration loops before committing final architecture.',
     ],
   },
 ]
 
-const research = {
-  title: '[VERIFY] Working Paper: Real-Time Embedded Vision for Low-Cost Robotics',
-  bullets: [
-    'Primary direction: image classification that can run on constrained hardware.',
-    'Current status: test framework and measurement notes in progress.',
-    'Planned extension: Isaac Sim-backed synthetic evaluation workflows.',
-  ],
-}
-
-const statusStyles: Record<Project['status'], string> = {
-  active: 'bg-emerald-300/15 text-emerald-200 border-emerald-300/25',
-  team: 'bg-sky-300/15 text-sky-200 border-sky-300/25',
-  'in-progress': 'bg-amber-300/15 text-amber-200 border-amber-300/25',
-}
-
-const statusLabel: Record<Project['status'], string> = {
-  active: 'Active',
-  team: 'Team',
-  'in-progress': 'In Progress',
-}
-
-const skillIconByKey = {
-  cad: DraftingCompass,
-  fabrication: Hammer,
-  embedded: Cpu,
-  software: Code2,
-  systems: Boxes,
-}
-
-const scrollToSection = (id: string) => {
-  const section = document.getElementById(id)
-  if (!section) return
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.25 },
-  transition: { duration: 0.5, ease: 'easeOut' as const },
+type ContactDraft = {
+  subject: string
+  body: string
 }
 
 function App() {
-  const [activeProject, setActiveProject] = useState<Project | null>(null)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [contactDraft, setContactDraft] = useState<ContactDraft | null>(null)
+  const sectionIds = useMemo(() => navItems.map((item) => item.id), [])
+  const activeSection = useActiveSection(sectionIds)
   const featuredProject = projects.find((project) => project.featured) ?? projects[0]
-  const groupedSkills = useMemo(() => {
-    return skills.reduce<Record<string, typeof skills>>((acc, skill) => {
-      if (!acc[skill.group]) {
-        acc[skill.group] = []
-      }
-      acc[skill.group].push(skill)
-      return acc
-    }, {})
-  }, [])
 
-  const handleContact = (event: FormEvent<HTMLFormElement>) => {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id)
+    if (!element) return
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleSeeBuild = () => {
+    scrollToSection('projects')
+    setTimeout(() => {
+      setSelectedProject(featuredProject)
+    }, 260)
+  }
+
+  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const form = event.currentTarget
-    const data = new FormData(form)
+    const data = new FormData(event.currentTarget)
     const name = String(data.get('name') ?? '')
     const email = String(data.get('email') ?? '')
     const message = String(data.get('message') ?? '')
-    const subject = encodeURIComponent(`Portfolio contact from ${name || 'Website visitor'}`)
-    const body = encodeURIComponent(`${message}\n\nFrom: ${name}\nEmail: ${email}`)
-    window.location.href = `mailto:emmadipranav@gmail.com?subject=${subject}&body=${body}`
-    form.reset()
+    const subject = `Portfolio message from ${name || '[ADD NAME]'}`
+    const body = `${message}\n\nName: ${name}\nEmail: ${email}`
+
+    setContactDraft({ subject, body })
+  }
+
+  const copyDraft = async () => {
+    if (!contactDraft) return
+    try {
+      await navigator.clipboard.writeText(
+        `Subject: ${contactDraft.subject}\n\n${contactDraft.body}`,
+      )
+    } catch {
+      // Keep UI functional if clipboard permissions are blocked.
+    }
   }
 
   return (
-    <div className="app-shell text-slate-100">
-      <div className="mx-auto max-w-7xl px-5 pb-20 pt-7 sm:px-8 lg:px-12">
-        <header className="sticky top-4 z-30 mb-8 rounded-full border border-cyan-200/20 bg-slate-950/70 px-4 py-3 backdrop-blur-xl">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="font-display text-xl tracking-wide text-cyan-100">Pranav Emmadi</p>
-            <nav className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.15em] text-slate-300">
-              <button type="button" className="nav-chip" onClick={() => scrollToSection('projects')}>
-                Projects
-              </button>
-              <button type="button" className="nav-chip" onClick={() => scrollToSection('teams')}>
-                Teams
-              </button>
-              <button type="button" className="nav-chip" onClick={() => scrollToSection('research')}>
-                Research
-              </button>
-              <button type="button" className="nav-chip" onClick={() => scrollToSection('skills')}>
-                Skills
-              </button>
-              <button type="button" className="nav-chip" onClick={() => scrollToSection('timeline')}>
-                Timeline
-              </button>
-              <button type="button" className="nav-chip" onClick={() => scrollToSection('contact')}>
-                Contact
-              </button>
-            </nav>
-          </div>
-        </header>
+    <div className="relative min-h-screen text-slate-100">
+      <BlueprintBackground />
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, ease: 'easeOut' }}
-          className="relative mb-10 grid gap-8 rounded-3xl border border-cyan-200/20 bg-slate-950/55 p-6 shadow-2xl shadow-black/40 lg:grid-cols-[1.1fr_0.9fr] lg:p-10"
+      <main className="mx-auto max-w-7xl px-4 pb-20 pt-5 sm:px-7 lg:px-12">
+        <Navbar items={navItems} activeSection={activeSection} onNavigate={scrollToSection} />
+
+        <Hero
+          onViewProjects={() => scrollToSection('projects')}
+          onContact={() => scrollToSection('contact')}
+          onSeeBuild={handleSeeBuild}
+        />
+
+        <Section
+          id="projects"
+          label="FIG.02 / PROJECT INDEX"
+          title="Projects"
+          subtitle="Featured work first, deduped from legacy pages and organized into a single source of truth."
         >
-          <span className="hero-rail">FTC / FRC / MAKER</span>
-          <div className="space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200/25 bg-cyan-200/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-cyan-100">
-              <Sparkles size={14} />
-              Robotics + Hardware
-            </p>
-            <h1 className="font-display text-[clamp(3rem,12vw,7.5rem)] leading-[0.86] text-white">
-              <span className="block">ROBOTICS</span>
-              <span className="block text-cyan-200">BUILDER</span>
-              <span className="block text-slate-200">MECH + CODE</span>
-            </h1>
-            <div className="flex flex-wrap gap-3">
-              <button type="button" className="btn-primary" onClick={() => scrollToSection('projects')}>
-                View Projects
-              </button>
-              <button type="button" className="btn-secondary" onClick={() => scrollToSection('contact')}>
-                Contact
-              </button>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div className="max-w-xs overflow-hidden rounded-2xl border border-cyan-200/25 bg-slate-900/65">
-              <img src="/PFP.jpg" alt="Pranav Emmadi portrait" className="h-36 w-full object-cover" />
-            </div>
-            <p className="text-lg leading-relaxed text-slate-100">
-              I&apos;m Pranav Emmadi. I build robots and hardware projects and I like making things
-              that work outside perfect demos. I&apos;m based near San Jose.
-            </p>
-            <div className="rounded-2xl border border-cyan-200/20 bg-slate-900/60 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-cyan-200/90">Featured</p>
-              <p className="mt-2 text-xl font-semibold text-white">
-                Featured: Sim Racing Wheel + Force Feedback
-              </p>
-              <button
-                type="button"
-                className="mt-4 inline-flex items-center gap-2 text-cyan-200 transition hover:text-cyan-100"
-                onClick={() => setActiveProject(featuredProject)}
-              >
-                See the Build <ArrowRight size={16} />
-              </button>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="stat-chip">Sim Wheel: Force Feedback</div>
-              <div className="stat-chip">CAD: SolidWorks + Onshape</div>
-              <div className="stat-chip">Embedded: ESP32 + Python</div>
-            </div>
-          </div>
-        </motion.section>
-
-        <motion.section id="projects" {...fadeInUp} className="section-card">
-          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="kicker">Projects</p>
-              <h2 className="section-title">Builds That Ship</h2>
-            </div>
-            <p className="max-w-xl text-sm text-slate-300">
-              Single source of truth from <code>src/data/projects.ts</code>, with duplicate entries
-              merged and sim wheel prioritized.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2">
             {projects.map((project) => (
-              <motion.article
-                key={project.slug}
-                whileHover={{ y: -4, scale: 1.01 }}
+              <motion.div
+                key={project.id}
+                whileHover={{ y: -3 }}
                 transition={{ duration: 0.2 }}
-                className={`rounded-2xl border p-4 ${
-                  project.featured
-                    ? 'border-cyan-200/35 bg-cyan-200/10'
-                    : 'border-cyan-200/15 bg-slate-900/55'
-                }`}
               >
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <h3 className="text-lg font-semibold text-white">{project.name}</h3>
-                  <span className={`status-pill ${statusStyles[project.status]}`}>
-                    {statusLabel[project.status]}
-                  </span>
-                </div>
-                <p className="mb-4 text-sm text-slate-300">{project.summary}</p>
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="tag-pill">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveProject(project)}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-cyan-200 transition hover:text-cyan-100"
-                >
-                  Open details <ExternalLink size={14} />
-                </button>
-              </motion.article>
+                <ProjectCard project={project} onOpen={setSelectedProject} />
+              </motion.div>
             ))}
           </div>
-        </motion.section>
+        </Section>
 
-        <motion.section id="teams" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Teams</p>
-          <h2 className="section-title">FTC + FRC</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <Section
+          id="teams"
+          label="FIG.03 / TEAM PANELS"
+          title="Teams"
+          subtitle="Current team contexts and contribution scope."
+        >
+          <div className="grid gap-4 md:grid-cols-2">
             {teams.map((team) => (
-              <article key={team.name} className="rounded-2xl border border-cyan-200/15 bg-slate-900/55 p-5">
-                <h3 className="text-lg font-semibold text-white">{team.name}</h3>
-                <p className="mt-1 text-sm uppercase tracking-[0.15em] text-cyan-200">{team.subtitle}</p>
+              <article key={team.name} className="blueprint-panel">
+                <LabelTag text={team.label} />
+                <h3 className="mt-3 text-2xl font-semibold text-white">{team.name}</h3>
                 <ul className="mt-3 space-y-2 text-sm text-slate-300">
                   {team.bullets.map((bullet) => (
-                    <li key={bullet} className="flex items-start gap-2">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                    <li key={bullet} className="flex gap-2">
+                      <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-cyan-200" />
                       <span>{bullet}</span>
                     </li>
                   ))}
@@ -286,213 +145,152 @@ function App() {
               </article>
             ))}
           </div>
-        </motion.section>
+        </Section>
 
-        <motion.section id="research" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Research</p>
-          <h2 className="section-title">{research.title}</h2>
-          <ul className="mt-4 space-y-2 text-sm text-slate-300">
-            {research.bullets.map((bullet) => (
-              <li key={bullet} className="flex items-start gap-2">
-                <BrainCircuit className="mt-0.5 shrink-0 text-cyan-200" size={16} />
-                <span>{bullet}</span>
-              </li>
+        <Section
+          id="skills"
+          label="FIG.04 / MODULE GRID"
+          title="Skills"
+          subtitle="Deduped into module cards for CAD, fabrication, electronics, embedded work, and iteration."
+        >
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {skillModules.map((module) => (
+              <article key={module.id} className="blueprint-panel">
+                <LabelTag text={module.label} />
+                <h3 className="mt-3 text-xl font-semibold text-white">{module.title}</h3>
+                <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                  {module.items.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
             ))}
-          </ul>
-        </motion.section>
+          </div>
+        </Section>
 
-        <motion.section id="skills" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Skills</p>
-          <h2 className="section-title">Build Stack</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Object.entries(groupedSkills).map(([group, items]) => (
-              <article key={group} className="rounded-2xl border border-cyan-200/15 bg-slate-900/55 p-4">
-                <h3 className="mb-3 text-base font-semibold text-white">{group}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {items.map((skill) => {
-                    const Icon = skillIconByKey[skill.icon]
-                    return (
-                      <span key={skill.name} className="skill-pill">
-                        <Icon size={14} />
-                        {skill.name}
-                      </span>
-                    )
-                  })}
+        <Section
+          id="experiments"
+          label="FIG.05 / LAB LOGS"
+          title="Experiments"
+          subtitle="Test logs and active investigation tracks."
+        >
+          <div className="grid gap-4 md:grid-cols-3">
+            {experiments.map((experiment) => (
+              <article key={experiment.id} className="blueprint-panel">
+                <div className="flex items-center justify-between gap-2">
+                  <LabelTag text={experiment.label} />
+                  <LabelTag text={experiment.status} />
                 </div>
+                <h3 className="mt-3 text-xl font-semibold text-white">{experiment.title}</h3>
+                <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                  {experiment.notes.map((note) => (
+                    <li key={note} className="flex gap-2">
+                      <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                      <span>{note}</span>
+                    </li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
-        </motion.section>
+        </Section>
 
-        <motion.section id="timeline" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Timeline</p>
-          <h2 className="section-title">LinkedIn Import</h2>
-          <p className="mt-2 text-sm text-slate-300">
-            Data comes from <code>src/data/timeline.ts</code>, generated by{' '}
-            <code>npm run timeline:generate</code>.
-          </p>
-          <div className="mt-5 space-y-3">
-            {timeline.map((entry) => (
-              <article key={`${entry.date}-${entry.title}`} className="rounded-2xl border border-cyan-200/15 bg-slate-900/55 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-cyan-200">{entry.date}</p>
-                <h3 className="mt-1 text-base font-semibold text-white">{entry.title}</h3>
-                <p className="text-sm text-slate-300">{entry.organization}</p>
-                <p className="mt-2 text-sm text-slate-400">{entry.notes}</p>
-              </article>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section id="blog" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Blog</p>
-          <h2 className="section-title">Build Logs</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            {blogPosts.map((post) => (
-              <article key={post.title} className="rounded-2xl border border-cyan-200/15 bg-slate-900/55 p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-cyan-200">{post.date}</p>
-                <h3 className="mt-2 text-lg font-semibold text-white">{post.title}</h3>
-                <p className="mt-2 text-sm text-slate-300">{post.excerpt}</p>
-              </article>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section id="bucket" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Bucket List</p>
-          <h2 className="section-title">Robotics Goals</h2>
-          <div className="mt-5 grid gap-2">
-            {bucketList.map((item) => (
-              <div key={item} className="flex items-center gap-3 rounded-xl border border-cyan-200/15 bg-slate-900/55 px-4 py-3 text-sm text-slate-300">
-                <span className="inline-block h-3 w-3 rounded-sm border border-cyan-200/40 bg-slate-950" />
-                {item}
-              </div>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section id="contact" {...fadeInUp} className="section-card mt-6">
-          <p className="kicker">Contact</p>
-          <h2 className="section-title">Get In Touch</h2>
-          <p className="mt-2 max-w-2xl text-sm text-slate-300">
-            Client-side form opens your email app. You can also contact me directly on LinkedIn or GitHub.
-          </p>
-          <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <Section
+          id="contact"
+          label="FIG.06 / CONTACT"
+          title="Contact"
+          subtitle="Direct links + a client-only draft form for email handoff."
+        >
+          <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="space-y-3">
-              <a className="contact-link" href="mailto:emmadipranav@gmail.com">
-                <Mail size={16} /> emmadipranav@gmail.com
+              <a className="contact-button" href="mailto:emmadipranav@gmail.com">
+                <Mail size={16} /> Email
               </a>
-              <a className="contact-link" href="https://github.com/CyberBrainiac1" target="_blank" rel="noreferrer">
+              <a
+                className="contact-button"
+                href="https://www.linkedin.com/in/pranav-emmadi-874723399/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin size={16} /> LinkedIn
+              </a>
+              <a
+                className="contact-button"
+                href="https://github.com/CyberBrainiac1"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Github size={16} /> GitHub
               </a>
-              <a className="contact-link" href="https://linkedin.com" target="_blank" rel="noreferrer">
-                <GraduationCap size={16} /> LinkedIn
-              </a>
             </div>
-            <form onSubmit={handleContact} className="grid gap-3 rounded-2xl border border-cyan-200/15 bg-slate-900/55 p-4">
-              <input className="field" name="name" placeholder="Name" required />
-              <input className="field" name="email" type="email" placeholder="Email" required />
-              <textarea className="field min-h-28 resize-y" name="message" placeholder="Message" required />
-              <button type="submit" className="btn-primary mt-1 justify-center">
-                Send
+
+            <form onSubmit={handleContactSubmit} className="blueprint-panel space-y-3">
+              <label className="field-group">
+                <span>NAME / ID</span>
+                <input className="field" name="name" required placeholder="Name" />
+              </label>
+              <label className="field-group">
+                <span>EMAIL / ROUTE</span>
+                <input className="field" type="email" name="email" required placeholder="Email" />
+              </label>
+              <label className="field-group">
+                <span>MESSAGE / NOTES</span>
+                <textarea
+                  className="field min-h-28 resize-y"
+                  name="message"
+                  required
+                  placeholder="Message"
+                />
+              </label>
+              <button type="submit" className="btn-primary-mag">
+                Draft Message
               </button>
+
+              {contactDraft ? (
+                <div className="rounded-xl border border-cyan-200/30 bg-cyan-300/10 p-3 text-sm text-slate-200">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cyan-100">
+                    Ready to send
+                  </p>
+                  <p className="mt-2 text-xs text-slate-300">
+                    Subject: <span className="text-cyan-100">{contactDraft.subject}</span>
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button type="button" className="btn-outline-mag" onClick={copyDraft}>
+                      <Copy size={14} /> Copy message to email
+                    </button>
+                    <a
+                      className="btn-outline-mag"
+                      href={`mailto:emmadipranav@gmail.com?subject=${encodeURIComponent(contactDraft.subject)}&body=${encodeURIComponent(contactDraft.body)}`}
+                    >
+                      Open Email
+                    </a>
+                  </div>
+                </div>
+              ) : null}
             </form>
           </div>
-        </motion.section>
-      </div>
+        </Section>
 
-      <AnimatePresence>
-        {activeProject ? (
-          <motion.div
-            key={activeProject.slug}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
-            onClick={() => setActiveProject(null)}
-          >
-            <motion.dialog
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 24, scale: 0.98 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              open
-              className="max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-cyan-200/25 bg-slate-900/95 p-6 shadow-2xl shadow-black/50"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="mb-5 flex items-start justify-between gap-4">
-                <div>
-                  <p className="kicker">Project Detail</p>
-                  <h3 className="mt-1 text-2xl font-semibold text-white">{activeProject.name}</h3>
-                  <p className="mt-2 text-sm text-slate-300">{activeProject.summary}</p>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Close modal"
-                  className="rounded-full border border-cyan-200/25 p-2 text-slate-200 transition hover:bg-cyan-200/10"
-                  onClick={() => setActiveProject(null)}
-                >
-                  <X size={16} />
-                </button>
-              </div>
+        <footer className="mt-8 border-t border-cyan-200/20 pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.16em] text-slate-400">
+            <p>© {new Date().getFullYear()} Pranav Emmadi</p>
+            <p className="font-mono text-cyan-100/80">Build / Iterate / Test</p>
+          </div>
+        </footer>
+      </main>
 
-              {activeProject.details.map((section) => (
-                <section key={section.heading} className="mb-5 rounded-2xl border border-cyan-200/15 bg-slate-950/55 p-4">
-                  <h4 className="text-lg font-medium text-cyan-100">{section.heading}</h4>
-                  <ul className="mt-3 space-y-2 text-sm text-slate-300">
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-start gap-2">
-                        <ChevronRight size={16} className="mt-0.5 shrink-0 text-cyan-200" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  {section.placeholders?.length ? (
-                    <div className="mt-4 grid gap-2">
-                      {section.placeholders.map((placeholder) => (
-                        <div key={placeholder} className="rounded-xl border border-dashed border-cyan-200/30 bg-cyan-200/5 px-3 py-2 text-xs text-cyan-100/90">
-                          {placeholder}
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                </section>
-              ))}
-
-              {activeProject.codeUpdate?.length ? (
-                <aside className="mb-4 rounded-2xl border border-cyan-200/30 bg-cyan-200/10 p-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.15em] text-cyan-100">
-                    V2 Code Update
-                  </p>
-                  <ul className="mt-2 space-y-1 text-sm text-slate-200">
-                    {activeProject.codeUpdate.map((item) => (
-                      <li key={item} className="flex items-start gap-2">
-                        <Wrench size={14} className="mt-1 shrink-0 text-cyan-100" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </aside>
-              ) : null}
-
-              {activeProject.links?.length ? (
-                <div className="flex flex-wrap gap-3">
-                  {activeProject.links.map((link) => (
-                    <a
-                      key={link.url}
-                      href={link.url}
-                      className="btn-secondary"
-                      target={link.url.startsWith('http') ? '_blank' : undefined}
-                      rel={link.url.startsWith('http') ? 'noreferrer' : undefined}
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-              ) : null}
-            </motion.dialog>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      <ProjectDetailsDialog
+        project={selectedProject}
+        open={Boolean(selectedProject)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedProject(null)
+          }
+        }}
+      />
     </div>
   )
 }
