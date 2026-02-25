@@ -233,6 +233,42 @@ yAxis = 0.467 * 32767 = 15,309</code>
                 </section>
 
                 <section class="section">
+                    <h2>V2 Accelerator Pedal (Shorter Travel)</h2>
+                    <p>I redesigned the accelerator pedal for a tighter feel, and now it only moves about one-third the distance of my old design.</p>
+                    <p>Because of that shorter travel, my EC11 encoder also produces about one-third the counts. In practice, what used to be around 15 counts is now around 5 counts.</p>
+                    <p>If I left the old software mapping untouched, each encoder click would become a massive jump in throttle and the pedal would feel way too aggressive.</p>
+                    <p>So I updated my logic to match the new hardware:</p>
+                    <ul class="post-list">
+                        <li>Clamp range changed from <strong>0..15</strong> to <strong>0..5</strong>.</li>
+                        <li>I still map <strong>0..5</strong> into the full joystick Y-axis range.</li>
+                        <li>I kept smoothing so throttle ramps instead of snapping between values.</li>
+                        <li>I kept a sensitivity/gain factor so I can tune how quickly it reaches full throttle.</li>
+                    </ul>
+                    <p>This keeps the rig budget-friendly while staying easy to upgrade later when I swap in better sensors or revise the linkage again.</p>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: V2 pedal CAD or sketch]
+                        </div>
+                    </figure>
+
+                    <figure class="post-figure">
+                        <div class="image-placeholder">
+                            [IMAGE PLACEHOLDER: V2 pedal linkage close-up]
+                        </div>
+                    </figure>
+
+                    <aside class="v2-callout">
+                        <h3>V2 Code Update</h3>
+                        <ul class="post-list">
+                            <li><code>THR_MAX_COUNTS</code> changed from <strong>15</strong> to <strong>5</strong>.</li>
+                            <li><code>gain</code> and smoothing still apply.</li>
+                            <li><code>invert</code> flag fixes direction.</li>
+                        </ul>
+                    </aside>
+                </section>
+
+                <section class="section">
                     <h2>INPUT_PULLUP (Why It Matters)</h2>
                     <p>When a pin is not actively driven high or low, it can float and produce unstable readings.</p>
                     <p>The fix is to pull the pin to a known state through a resistor, typically up to 3.3V. The XIAO includes internal pull-ups, so no external components are required.</p>
@@ -459,6 +495,23 @@ yAxis = 0.467 * 32767 = 15,309</code>
             overflow-x: auto;
             color: var(--accent);
             line-height: 1.6;
+        }
+
+        .v2-callout {
+            background: rgba(79, 179, 255, 0.09);
+            border: 1px solid rgba(79, 179, 255, 0.35);
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 14px;
+        }
+
+        .v2-callout h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-2);
         }
 
         .coming-soon-box {

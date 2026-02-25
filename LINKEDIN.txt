@@ -1,0 +1,5 @@
+# Format per line:
+# YYYY-MM | Role or Milestone | Organization | Notes
+#
+# Example:
+# 2025-08 | Robotics Builder | FTC Evergreen Dragons | Led mechanism integration and rapid testing cycles
