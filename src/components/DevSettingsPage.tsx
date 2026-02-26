@@ -10,10 +10,14 @@ import {
 import { Section } from './Section'
 
 const DEV_UNLOCK_SESSION_KEY = 'pranav_dev_unlocked_v1'
-const DEV_PASSWORD = '07032011'
+const DEV_PASSWORD_SHA256 = 'df5f6e554528c26eda45d913156a8872df9c43ae3049390dcdc441994dc78b3b'
 
-function getConfiguredPassword() {
-  return DEV_PASSWORD
+async function sha256Hex(input: string) {
+  const bytes = new TextEncoder().encode(input)
+  const digest = await crypto.subtle.digest('SHA-256', bytes)
+  return Array.from(new Uint8Array(digest))
+    .map((value) => value.toString(16).padStart(2, '0'))
+    .join('')
 }
 
 export function DevSettingsPage() {
@@ -109,11 +113,11 @@ export function DevSettingsPage() {
     saveRuntimeConfig(normalizeConfig(config))
   }, [config, isUnlocked])
 
-  const handleUnlock = (event: FormEvent<HTMLFormElement>) => {
+  const handleUnlock = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const expected = getConfiguredPassword()
 
-    if (passwordInput === expected) {
+    const inputHash = await sha256Hex(passwordInput)
+    if (inputHash === DEV_PASSWORD_SHA256) {
       setIsUnlocked(true)
       setPasswordError('')
       setPasswordInput('')
@@ -175,9 +179,7 @@ export function DevSettingsPage() {
             <p className="text-sm text-slate-300">
               This password lock is client-side only. It is meant for convenience, not strong security.
             </p>
-            <p className="text-sm text-slate-300">
-              Dev password is set to <span className="font-mono">07032011</span>.
-            </p>
+            <p className="text-sm text-slate-300">Dev password is hidden and no longer shown in UI.</p>
           </article>
 
           <form onSubmit={handleUnlock} className="blueprint-panel space-y-3">
