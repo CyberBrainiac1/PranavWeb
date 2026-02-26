@@ -19,11 +19,10 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
         <span>FTC / FRC / MAKER</span>
         <div className="measurement-ticks" />
       </div>
-      <div className="relative z-[1] grid gap-7 lg:gap-10 lg:grid-cols-[1.06fr_0.94fr]">
-        <div className="space-y-5 sm:space-y-6">
-          <div className="flex items-center gap-2">
-            <LabelTag text="FIG.01" />
-            <LabelTag text="SECTION A" />
+      <div className="relative z-[1] grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+        <div className="space-y-5">
+          <div className="flex items-center">
+            <LabelTag text="FIG.01 / HERO" />
           </div>
           <h1 className="space-y-1">
             {headlineLines.map((line, index) => (
@@ -39,7 +38,7 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
               </motion.span>
             ))}
           </h1>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
             <button
               type="button"
               onClick={onViewProjects}
@@ -57,10 +56,10 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3.5 sm:space-y-4">
           <p className="hero-intro">
-            I&apos;m Pranav Emmadi. I build robots, test ideas fast, and keep what actually works.
-            I&apos;m based near San Jose.
+            I&apos;m Pranav Emmadi. I build robots, test ideas quickly, and keep what actually
+            works in real conditions. I&apos;m based near San Jose.
           </p>
           <motion.article
             whileHover={{ y: -2 }}
@@ -81,12 +80,6 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
               See the Build <ArrowRight size={15} />
             </button>
           </motion.article>
-
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="spec-chip">Sim Wheel: Force Feedback</div>
-            <div className="spec-chip">CAD: SolidWorks + Onshape</div>
-            <div className="spec-chip">Embedded: ESP32 + Sensors</div>
-          </div>
         </div>
       </div>
     </section>

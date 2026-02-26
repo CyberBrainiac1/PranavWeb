@@ -53,14 +53,14 @@ body {
 }
 
 .section-shell {
-  margin-top: 1.35rem;
+  margin-top: 1.45rem;
   border-radius: 1.3rem;
   border: 1px solid rgba(136, 192, 162, 0.24);
   background: rgba(9, 16, 15, 0.74);
   box-shadow:
     inset 0 1px 0 rgba(173, 220, 193, 0.08),
     0 14px 34px rgba(0, 0, 0, 0.32);
-  padding: clamp(0.92rem, 1.8vw, 1.35rem);
+  padding: clamp(1rem, 2vw, 1.55rem);
   overflow: hidden;
 }
 
@@ -73,11 +73,11 @@ body {
 }
 
 .hero-shell {
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
   border-radius: 1.4rem;
   border: 1px solid rgba(140, 194, 165, 0.26);
   background: rgba(8, 14, 13, 0.78);
-  padding: clamp(0.92rem, 2vw, 1.4rem);
+  padding: clamp(1rem, 2.3vw, 1.7rem);
   box-shadow:
     inset 0 1px 0 rgba(181, 227, 200, 0.08),
     0 16px 36px rgba(0, 0, 0, 0.34);
@@ -138,8 +138,8 @@ body {
 
 .headline-line {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 12.5vw, 8.2rem);
-  line-height: 0.84;
+  font-size: clamp(2.8rem, 10.2vw, 7rem);
+  line-height: 0.88;
   letter-spacing: 0.03em;
   color: #f2fbff;
 }
@@ -166,8 +166,8 @@ body {
 
 .hero-intro {
   margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: clamp(1rem, 1.1vw, 1.14rem);
+  line-height: 1.72;
   color: #d2dfd6;
 }
 
@@ -175,7 +175,7 @@ body {
   border-radius: 1rem;
   border: 1px solid rgba(145, 198, 170, 0.28);
   background: rgba(12, 25, 21, 0.78);
-  padding: clamp(0.9rem, 1.4vw, 1.08rem);
+  padding: clamp(0.92rem, 1.4vw, 1.15rem);
   box-shadow: inset 0 0 0 1px rgba(145, 198, 170, 0.08);
 }
 
@@ -289,6 +289,26 @@ body {
   box-shadow:
     inset 0 1px 0 rgba(174, 221, 195, 0.08),
     0 8px 22px rgba(0, 0, 0, 0.24);
+}
+
+.about-copy p {
+  margin: 0;
+  font-size: 0.99rem;
+  line-height: 1.76;
+  color: #d8e4dc;
+}
+
+.about-copy p + p {
+  margin-top: 0.94rem;
+}
+
+.about-highlights {
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.about-highlights li {
+  line-height: 1.56;
 }
 
 .contact-button {
@@ -466,7 +486,7 @@ body {
 
   .hero-intro {
     font-size: 0.98rem;
-    line-height: 1.62;
+    line-height: 1.66;
   }
 
   .featured-callout h2 {

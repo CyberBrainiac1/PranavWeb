@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlertTriangle,
-  ArrowRight,
   CheckCircle2,
   Github,
   Linkedin,
@@ -30,11 +29,7 @@ const navItems = [
   { path: '/contact', label: 'Contact' },
 ]
 
-const STORAGE_KEYS = {
-  contactKey: 'pranav_contact_form_key',
-}
-
-const CONTACT_SERVICE_KEY_DEFAULT =
+const CONTACT_SERVICE_KEY =
   profileInfo.contactServiceKey.trim() ||
   (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '').trim()
 
@@ -47,125 +42,68 @@ type ContactPageProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
   status: ContactStatus
   sending: boolean
-  contactKeyOverride: string
-  onContactKeyOverrideChange: (value: string) => void
-  hasBuiltInContactKey: boolean
-}
-
-const readStorage = (key: string) => {
-  if (typeof window === 'undefined') return ''
-  return window.localStorage.getItem(key) ?? ''
-}
-
-const writeStorage = (key: string, value: string) => {
-  if (typeof window === 'undefined') return
-  if (value.trim()) {
-    window.localStorage.setItem(key, value)
-    return
-  }
-  window.localStorage.removeItem(key)
 }
 
 function HomePage({
   onViewProjects,
-  onViewSkills,
   onContact,
   onSeeBuild,
-  onOpenProject,
 }: {
   onViewProjects: () => void
-  onViewSkills: () => void
   onContact: () => void
   onSeeBuild: () => void
-  onOpenProject: (project: Project) => void
 }) {
-  const quickProjects = projects.slice(0, 3)
-
   return (
     <>
       <Hero onViewProjects={onViewProjects} onContact={onContact} onSeeBuild={onSeeBuild} />
 
       <Section
-        id="home-overview"
-        label="FIG.02 / QUICK ROUTES"
-        title="Quick Links"
-        subtitle="Just the essentials: Home, Projects, Skills, and Contact."
+        id="about"
+        label="FIG.02 / ABOUT"
+        title="About Me"
+        subtitle="I care about building hardware that holds up in the real world, not just in one clean test."
       >
-        <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))]">
-          <article className="blueprint-panel space-y-3">
-            <LabelTag text="FEATURED" />
-            <h3 className="text-xl font-semibold text-white">Sim Wheel</h3>
-            <p className="text-sm text-slate-300">
-              Jump straight into the Sim Racing Wheel + Force Feedback build.
-            </p>
-            <button
-              type="button"
-              onClick={onSeeBuild}
-              className="btn-outline-mag mt-1 w-full justify-center sm:w-auto"
-            >
-              Open Featured <ArrowRight size={14} />
-            </button>
+        <div className="grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <article className="blueprint-panel about-copy">
+            {profileInfo.aboutParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
           </article>
 
-          <article className="blueprint-panel space-y-3">
-            <LabelTag text="PROJECTS" />
-            <h3 className="text-xl font-semibold text-white">Browse Projects</h3>
-            <p className="text-sm text-slate-300">
-              Scroll through all my builds and open details for each one.
-            </p>
-            <button
-              type="button"
-              onClick={onViewProjects}
-              className="btn-outline-mag mt-1 w-full justify-center sm:w-auto"
-            >
-              Open Projects <ArrowRight size={14} />
-            </button>
-          </article>
+          <aside className="blueprint-panel space-y-3 sm:space-y-4">
+            <LabelTag text="CURRENT FOCUS" />
+            <h3 className="text-xl font-semibold text-white">What I care about in every build</h3>
+            <ul className="about-highlights space-y-2 text-sm text-slate-300">
+              <li>Designing mechanisms that stay reliable after real use.</li>
+              <li>Fast prototyping and testing so every version gets better.</li>
+              <li>Clear, upgrade-friendly systems instead of one-off builds.</li>
+              <li>Keeping performance high without overcomplicating things.</li>
+            </ul>
 
-          <article className="blueprint-panel space-y-3">
-            <LabelTag text="SKILLS" />
-            <h3 className="text-xl font-semibold text-white">Core Skills</h3>
-            <p className="text-sm text-slate-300">
-              Quick look at the stuff I use most when building.
-            </p>
-            <button
-              type="button"
-              onClick={onViewSkills}
-              className="btn-outline-mag mt-1 w-full justify-center sm:w-auto"
-            >
-              Open Skills <ArrowRight size={14} />
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-3">
-            <LabelTag text="CONTACT" />
-            <h3 className="text-xl font-semibold text-white">Send A Message</h3>
-            <p className="text-sm text-slate-300">
-              Send me a message and it goes straight to my inbox.
-            </p>
-            <button
-              type="button"
-              onClick={onContact}
-              className="btn-outline-mag mt-1 w-full justify-center sm:w-auto"
-            >
-              Contact <ArrowRight size={14} />
-            </button>
-          </article>
-        </div>
-      </Section>
-
-      <Section
-        id="home-featured"
-        label="FIG.03 / PREVIEW"
-        title="Project Preview"
-        subtitle="A few highlights. Hit Projects to see everything."
-      >
-        <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))]">
-          {quickProjects.map((project) => (
-            <motion.div key={project.id} whileHover={{ y: -3 }} transition={{ duration: 0.2 }}>
-              <ProjectCard project={project} onOpen={onOpenProject} />
-            </motion.div>
-          ))}
+            <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
+              <button
+                type="button"
+                onClick={onViewProjects}
+                className="btn-primary-mag w-full justify-center"
+              >
+                View Projects
+              </button>
+              <button
+                type="button"
+                onClick={onSeeBuild}
+                className="btn-outline-mag w-full justify-center"
+              >
+                See Sim Wheel
+              </button>
+              <button
+                type="button"
+                onClick={onContact}
+                className="btn-outline-mag w-full justify-center"
+              >
+                Contact
+              </button>
+            </div>
+          </aside>
         </div>
       </Section>
     </>
@@ -244,9 +182,6 @@ function ContactPage({
   onSubmit,
   status,
   sending,
-  contactKeyOverride,
-  onContactKeyOverrideChange,
-  hasBuiltInContactKey,
 }: ContactPageProps) {
   const statusTone =
     status.kind === 'success'
@@ -261,14 +196,17 @@ function ContactPage({
       subtitle="Send a message and I&apos;ll get it by email."
     >
       <div className="grid gap-4 lg:gap-5 xl:grid-cols-[minmax(16rem,0.9fr)_minmax(0,1.1fr)]">
-        <div className="space-y-3">
-          <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-1">
+        <div className="blueprint-panel space-y-3 sm:space-y-4">
+          <p className="text-sm text-slate-300">
+            Best way to reach me is this form. You can also use the direct links below.
+          </p>
+          <div className="grid gap-3">
             <a className="contact-button" href="mailto:emmadipranav@gmail.com">
               <Mail size={16} /> Email
             </a>
             <a
               className="contact-button"
-              href="https://www.linkedin.com/in/pranav-emmadi-874723399/"
+              href={profileInfo.links.linkedin}
               target="_blank"
               rel="noreferrer"
             >
@@ -276,35 +214,16 @@ function ContactPage({
             </a>
             <a
               className="contact-button"
-              href="https://github.com/CyberBrainiac1"
+              href={profileInfo.links.github}
               target="_blank"
               rel="noreferrer"
             >
               <Github size={16} /> GitHub
             </a>
           </div>
-
-          <details className="blueprint-panel">
-            <summary className="cursor-pointer text-sm font-semibold text-white">
-              Contact Setup
-            </summary>
-            <div className="mt-3 space-y-2">
-              <label className="field-group">
-                <span>FORM KEY (OPTIONAL OVERRIDE)</span>
-                <input
-                  className="field"
-                  type="password"
-                  value={contactKeyOverride}
-                  onChange={(event) => onContactKeyOverrideChange(event.target.value)}
-                  placeholder="Paste key to this browser"
-                  autoComplete="off"
-                />
-              </label>
-              <p className="text-xs text-slate-300">
-                Built-in key found: {hasBuiltInContactKey ? 'Yes' : 'No'} (site config or env)
-              </p>
-            </div>
-          </details>
+          <p className="text-xs text-slate-400">
+            Based near San Jose. I usually reply fastest through email.
+          </p>
         </div>
 
         <form onSubmit={onSubmit} className="blueprint-panel min-w-0 space-y-3 sm:space-y-4">
@@ -359,7 +278,6 @@ function App() {
     message: '',
   })
   const [contactSending, setContactSending] = useState(false)
-  const [contactKeyOverride, setContactKeyOverride] = useState('')
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -372,24 +290,14 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [location.pathname])
 
-  useEffect(() => {
-    setContactKeyOverride(readStorage(STORAGE_KEYS.contactKey))
-  }, [])
-
-  const handleContactKeyOverrideChange = (value: string) => {
-    setContactKeyOverride(value)
-    writeStorage(STORAGE_KEYS.contactKey, value.trim())
-  }
-
   const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (contactSending) return
 
-    const activeContactKey = contactKeyOverride.trim() || CONTACT_SERVICE_KEY_DEFAULT
-    if (!activeContactKey) {
+    if (!CONTACT_SERVICE_KEY) {
       setContactStatus({
         kind: 'error',
-        message: 'Add a form service key first in Owner Setup, then submit again.',
+        message: 'Contact form key is not set yet. Add it in site config and try again.',
       })
       return
     }
@@ -411,7 +319,7 @@ function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: activeContactKey,
+          access_key: CONTACT_SERVICE_KEY,
           from_name: name,
           email,
           subject: `Portfolio message from ${name || 'Visitor'}`,
@@ -474,10 +382,8 @@ function App() {
                 element={
                   <HomePage
                     onViewProjects={() => navigate('/projects')}
-                    onViewSkills={() => navigate('/skills')}
                     onContact={() => navigate('/contact')}
                     onSeeBuild={openFeaturedFromHero}
-                    onOpenProject={setSelectedProject}
                   />
                 }
               />
@@ -490,9 +396,6 @@ function App() {
                     onSubmit={handleContactSubmit}
                     status={contactStatus}
                     sending={contactSending}
-                    contactKeyOverride={contactKeyOverride}
-                    onContactKeyOverrideChange={handleContactKeyOverrideChange}
-                    hasBuiltInContactKey={Boolean(CONTACT_SERVICE_KEY_DEFAULT)}
                   />
                 }
               />

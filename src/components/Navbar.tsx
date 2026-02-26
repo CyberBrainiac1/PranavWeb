@@ -54,12 +54,6 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <button type="button" className="resume-chip">
-            Resume [ADD]
-          </button>
-        </div>
-
         <Sheet>
           <SheetTrigger className="inline-flex rounded-lg border border-emerald-200/30 p-2 text-emerald-100 lg:hidden">
             <Menu size={18} />
@@ -85,9 +79,6 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
                   </button>
                 </SheetClose>
               ))}
-              <button type="button" className="resume-chip mt-2 w-full justify-center">
-                Resume [ADD]
-              </button>
             </div>
           </SheetContent>
         </Sheet>
