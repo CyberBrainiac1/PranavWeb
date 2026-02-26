@@ -9,7 +9,7 @@ export function LabelTag({ text, className }: LabelTagProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border border-sky-200/30 bg-sky-300/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-sky-100',
+        'inline-flex items-center rounded-md border border-slate-400/35 bg-transparent px-2 py-0.5 text-[11px] font-medium tracking-[0.04em] text-slate-200',
         className,
       )}
     >

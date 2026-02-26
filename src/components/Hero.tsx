@@ -7,22 +7,15 @@ type HeroProps = {
   onContact: () => void
 }
 
-const headlineLines = ['PRANAV', 'EMMADI', 'ROBOTICS BUILDER']
+const headlineLines = ['PRANAV EMMADI', 'ROBOTICS BUILDER']
 
 export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps) {
   return (
     <section id="home" className="hero-shell relative overflow-hidden">
-      <div className="measurement-strip" aria-hidden="true">
-        <span>FTC / MAKER</span>
-        <div className="measurement-ticks" />
-      </div>
-      <span className="hero-side-word" aria-hidden="true">
-        BUILD
-      </span>
       <div className="relative z-[1] grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <div className="space-y-5">
           <div className="flex items-center">
-            <LabelTag text="FIG.01 / HERO" />
+            <LabelTag text="Home" />
           </div>
           <h1 className="space-y-1">
             {headlineLines.map((line, index) => (
@@ -47,7 +40,7 @@ export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps
             testing, and real results.
           </p>
           <div className="blueprint-panel space-y-3">
-            <LabelTag text="CURRENT FOCUS" />
+            <LabelTag text="Current Focus" />
             <p className="text-sm leading-relaxed text-slate-300">
               Main build right now: Sim Racing Wheel + Force Feedback. I&apos;m tuning it to feel
               smooth, responsive, and easy to keep upgrading.
