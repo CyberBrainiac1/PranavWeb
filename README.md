@@ -31,7 +31,6 @@ The contact form uses Web3Forms.
 2. Choose one setup path:
    - Local dev: add `.env.local` with  
      `VITE_WEB3FORMS_ACCESS_KEY=your_key_here`
-   - Quick hardcoded option: set `contactServiceKey` in `src/data/profile.ts`
    - GitHub Pages deploy (recommended): add repo secret  
      `VITE_WEB3FORMS_ACCESS_KEY` in `Settings -> Secrets and variables -> Actions`
 3. Push to `main`. The workflow now injects that secret during build.

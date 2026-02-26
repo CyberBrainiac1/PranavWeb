@@ -2,8 +2,6 @@ import { profileInfo } from '../data/profile'
 
 export const RUNTIME_CONFIG_STORAGE_KEY = 'pranav_runtime_config_v1'
 export const RUNTIME_CONFIG_EVENT = 'runtime-config-updated'
-const HARDCODED_CONTACT_KEY = 'f228bcc9-6d48-44c4-885a-9efacd425d3e'
-const HARDCODED_BOT_KEY = 'sk-hc-v1-df89b886a0df40f19a9298043352ee1b4ec0337daa184f7bbc8693977029e29f'
 
 export type RuntimeStoryBeat = {
   label: string
@@ -34,8 +32,7 @@ export function getDefaultRuntimeConfig(): RuntimeConfig {
   return {
     contactServiceKey:
       profileInfo.contactServiceKey.trim() ||
-      (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '').trim() ||
-      HARDCODED_CONTACT_KEY,
+      (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '').trim(),
     contactEmail: 'emmadipranav@gmail.com',
     profileName: profileInfo.name,
     profileLocation: profileInfo.location,
@@ -54,9 +51,8 @@ export function getDefaultRuntimeConfig(): RuntimeConfig {
       (import.meta.env.VITE_BOT_MODEL ?? '').trim() ||
       'openai/gpt-oss-120b',
     botApiKey:
-      (import.meta.env.VITE_BOT_API_KEY ?? '').trim() ||
-      HARDCODED_BOT_KEY,
-    botRememberKey: true,
+      (import.meta.env.VITE_BOT_API_KEY ?? '').trim(),
+    botRememberKey: false,
     botKnowledgeText: [
       'Pranav is a hardware-focused robotics builder near San Jose.',
       'He knows the basics and uses a lot of Python when needed.',
