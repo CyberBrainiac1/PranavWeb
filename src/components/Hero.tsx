@@ -19,8 +19,8 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
         <span>FTC / FRC / MAKER</span>
         <div className="measurement-ticks" />
       </div>
-      <div className="relative z-[1] grid gap-8 lg:grid-cols-[1.06fr_0.94fr]">
-        <div className="space-y-6">
+      <div className="relative z-[1] grid gap-7 lg:gap-10 lg:grid-cols-[1.06fr_0.94fr]">
+        <div className="space-y-5 sm:space-y-6">
           <div className="flex items-center gap-2">
             <LabelTag text="FIG.01" />
             <LabelTag text="SECTION A" />
@@ -39,11 +39,19 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
               </motion.span>
             ))}
           </h1>
-          <div className="flex flex-wrap gap-3">
-            <button type="button" onClick={onViewProjects} className="btn-primary-mag">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              type="button"
+              onClick={onViewProjects}
+              className="btn-primary-mag w-full justify-center sm:w-auto"
+            >
               View Projects
             </button>
-            <button type="button" onClick={onContact} className="btn-outline-mag">
+            <button
+              type="button"
+              onClick={onContact}
+              className="btn-outline-mag w-full justify-center sm:w-auto"
+            >
               Contact
             </button>
           </div>
@@ -70,7 +78,7 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
             </button>
           </motion.article>
 
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <div className="spec-chip">Sim Wheel: Force Feedback</div>
             <div className="spec-chip">CAD: SolidWorks + Onshape</div>
             <div className="spec-chip">Embedded: ESP32 + Python</div>

@@ -51,7 +51,7 @@ export function ProjectDetailsDialog({
           </TabsList>
 
           <TabsContent value="spec">
-            <div className="grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
+            <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
               <aside className="rounded-xl border border-cyan-200/15 bg-slate-950/55 p-4">
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cyan-200">
                   PROJECT LABELS
@@ -121,7 +121,7 @@ export function ProjectDetailsDialog({
                   href={link.href}
                   target={external ? '_blank' : undefined}
                   rel={external ? 'noreferrer' : undefined}
-                  className="inline-flex items-center gap-2 rounded-full border border-cyan-200/30 px-3 py-1.5 text-xs uppercase tracking-[0.15em] text-cyan-100 transition hover:border-cyan-100/70 hover:text-cyan-50"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-cyan-200/30 px-3 py-1.5 text-xs uppercase tracking-[0.15em] text-cyan-100 transition hover:border-cyan-100/70 hover:text-cyan-50 sm:w-auto"
                 >
                   {link.label} {external ? <ExternalLink size={12} /> : null}
                 </a>

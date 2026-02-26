@@ -95,7 +95,7 @@ function App() {
     <div className="relative min-h-screen text-slate-100">
       <BlueprintBackground />
 
-      <main className="mx-auto max-w-7xl px-4 pb-20 pt-5 sm:px-7 lg:px-12">
+      <main className="mx-auto w-full max-w-[92rem] px-3 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-10 xl:px-12">
         <Navbar items={navItems} activeSection={activeSection} onNavigate={scrollToSection} />
 
         <Hero
@@ -110,7 +110,7 @@ function App() {
           title="Projects"
           subtitle="Featured work first, deduped from legacy pages and organized into a single source of truth."
         >
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))]">
             {projects.map((project) => (
               <motion.div
                 key={project.id}
@@ -129,7 +129,7 @@ function App() {
           title="Teams"
           subtitle="Current team contexts and contribution scope."
         >
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))]">
             {teams.map((team) => (
               <article key={team.name} className="blueprint-panel">
                 <LabelTag text={team.label} />
@@ -153,7 +153,7 @@ function App() {
           title="Skills"
           subtitle="Deduped into module cards for CAD, fabrication, electronics, embedded work, and iteration."
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
             {skillModules.map((module) => (
               <article key={module.id} className="blueprint-panel">
                 <LabelTag text={module.label} />
@@ -177,7 +177,7 @@ function App() {
           title="Experiments"
           subtitle="Test logs and active investigation tracks."
         >
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))]">
             {experiments.map((experiment) => (
               <article key={experiment.id} className="blueprint-panel">
                 <div className="flex items-center justify-between gap-2">
@@ -204,8 +204,8 @@ function App() {
           title="Contact"
           subtitle="Direct links + a client-only draft form for email handoff."
         >
-          <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="space-y-3">
+          <div className="grid gap-4 lg:gap-5 xl:grid-cols-[minmax(16rem,0.9fr)_minmax(0,1.1fr)]">
+            <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-1">
               <a className="contact-button" href="mailto:emmadipranav@gmail.com">
                 <Mail size={16} /> Email
               </a>
@@ -227,7 +227,7 @@ function App() {
               </a>
             </div>
 
-            <form onSubmit={handleContactSubmit} className="blueprint-panel space-y-3">
+            <form onSubmit={handleContactSubmit} className="blueprint-panel min-w-0 space-y-3 sm:space-y-4">
               <label className="field-group">
                 <span>NAME / ID</span>
                 <input className="field" name="name" required placeholder="Name" />
@@ -239,13 +239,13 @@ function App() {
               <label className="field-group">
                 <span>MESSAGE / NOTES</span>
                 <textarea
-                  className="field min-h-28 resize-y"
+                  className="field min-h-28 resize-y sm:min-h-36"
                   name="message"
                   required
                   placeholder="Message"
                 />
               </label>
-              <button type="submit" className="btn-primary-mag">
+              <button type="submit" className="btn-primary-mag w-full justify-center sm:w-auto">
                 Draft Message
               </button>
 
@@ -257,12 +257,16 @@ function App() {
                   <p className="mt-2 text-xs text-slate-300">
                     Subject: <span className="text-cyan-100">{contactDraft.subject}</span>
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <button type="button" className="btn-outline-mag" onClick={copyDraft}>
+                  <div className="mt-3 grid gap-2 sm:flex sm:flex-wrap">
+                    <button
+                      type="button"
+                      className="btn-outline-mag w-full justify-center sm:w-auto"
+                      onClick={copyDraft}
+                    >
                       <Copy size={14} /> Copy message to email
                     </button>
                     <a
-                      className="btn-outline-mag"
+                      className="btn-outline-mag w-full justify-center sm:w-auto"
                       href={`mailto:emmadipranav@gmail.com?subject=${encodeURIComponent(contactDraft.subject)}&body=${encodeURIComponent(contactDraft.body)}`}
                     >
                       Open Email
