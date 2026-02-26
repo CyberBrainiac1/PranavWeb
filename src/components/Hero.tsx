@@ -59,8 +59,8 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
 
         <div className="space-y-4">
           <p className="hero-intro">
-            I&apos;m Pranav Emmadi. I build robots and hardware projects and I like making things
-            that work outside perfect demos. I&apos;m based near San Jose.
+            I&apos;m Pranav Emmadi. I build robots, test ideas fast, and keep what actually works.
+            I&apos;m based near San Jose.
           </p>
           <motion.article
             whileHover={{ y: -2 }}
@@ -70,8 +70,8 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
             <LabelTag text="SPEC" />
             <h2>Featured: Sim Racing Wheel + Force Feedback</h2>
             <p>
-              My top-priority build: a practical sim setup focused on feel, tuning loops, and
-              modular upgrades.
+              This is my main build right now. I&apos;m focused on making it feel good to drive and
+              easy to upgrade over time.
             </p>
             <button
               type="button"

@@ -88,15 +88,15 @@ function HomePage({
       <Section
         id="home-overview"
         label="FIG.02 / QUICK ROUTES"
-        title="Simple Navigation"
-        subtitle="Four pages only: Home, Projects, Skills, and Contact."
+        title="Quick Links"
+        subtitle="Just the essentials: Home, Projects, Skills, and Contact."
       >
         <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))]">
           <article className="blueprint-panel space-y-3">
             <LabelTag text="FEATURED" />
-            <h3 className="text-xl font-semibold text-white">Sim Wheel Build</h3>
+            <h3 className="text-xl font-semibold text-white">Sim Wheel</h3>
             <p className="text-sm text-slate-300">
-              Open the featured Sim Racing Wheel + Force Feedback project details directly.
+              Jump straight into the Sim Racing Wheel + Force Feedback build.
             </p>
             <button
               type="button"
@@ -111,7 +111,7 @@ function HomePage({
             <LabelTag text="PROJECTS" />
             <h3 className="text-xl font-semibold text-white">Browse Projects</h3>
             <p className="text-sm text-slate-300">
-              View all projects with side-scroll cards and detailed spec dialogs.
+              Scroll through all my builds and open details for each one.
             </p>
             <button
               type="button"
@@ -126,7 +126,7 @@ function HomePage({
             <LabelTag text="SKILLS" />
             <h3 className="text-xl font-semibold text-white">Core Skills</h3>
             <p className="text-sm text-slate-300">
-              See the practical skills stack across design, fabrication, and electronics.
+              Quick look at the stuff I use most when building.
             </p>
             <button
               type="button"
@@ -141,7 +141,7 @@ function HomePage({
             <LabelTag text="CONTACT" />
             <h3 className="text-xl font-semibold text-white">Send A Message</h3>
             <p className="text-sm text-slate-300">
-              Use the contact page to send messages directly to inbox.
+              Send me a message and it goes straight to my inbox.
             </p>
             <button
               type="button"
@@ -158,7 +158,7 @@ function HomePage({
         id="home-featured"
         label="FIG.03 / PREVIEW"
         title="Project Preview"
-        subtitle="Top builds shown here. Open Projects for full view."
+        subtitle="A few highlights. Hit Projects to see everything."
       >
         <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))]">
           {quickProjects.map((project) => (
@@ -181,7 +181,7 @@ function ProjectsPage({ onOpenProject }: { onOpenProject: (project: Project) => 
       id="projects"
       label="FIG.04 / PROJECT INDEX"
       title="Projects"
-      subtitle="Featured build first, then side-scroll through the rest."
+      subtitle="Main build first, then scroll through the rest."
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <ProjectCard project={featuredProject} onOpen={onOpenProject} />
@@ -193,7 +193,7 @@ function ProjectsPage({ onOpenProject }: { onOpenProject: (project: Project) => 
           </div>
           <h3 className="text-2xl font-semibold text-white">Sim Racing Wheel + Force Feedback</h3>
           <p className="text-sm leading-relaxed text-slate-300">
-            This is the top-priority build and has the most complete detail modal.
+            This is the build I&apos;m spending the most time on right now.
           </p>
           <button
             type="button"
@@ -218,7 +218,7 @@ function SkillsPage() {
       id="skills"
       label="FIG.05 / SKILLS"
       title="Skills"
-      subtitle="Core skills grouped into practical build modules."
+      subtitle="The main skills I use across my projects."
     >
       <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
         {skillModules.map((module) => (
@@ -258,7 +258,7 @@ function ContactPage({
       id="contact"
       label="FIG.06 / CONTACT"
       title="Contact"
-      subtitle="Send a message directly to inbox through the form service."
+      subtitle="Send a message and I&apos;ll get it by email."
     >
       <div className="grid gap-4 lg:gap-5 xl:grid-cols-[minmax(16rem,0.9fr)_minmax(0,1.1fr)]">
         <div className="space-y-3">
@@ -286,11 +286,11 @@ function ContactPage({
 
           <details className="blueprint-panel">
             <summary className="cursor-pointer text-sm font-semibold text-white">
-              Owner Setup
+              Contact Setup
             </summary>
             <div className="mt-3 space-y-2">
               <label className="field-group">
-                <span>FORM SERVICE KEY (OPTIONAL OVERRIDE)</span>
+                <span>FORM KEY (OPTIONAL OVERRIDE)</span>
                 <input
                   className="field"
                   type="password"
@@ -301,7 +301,7 @@ function ContactPage({
                 />
               </label>
               <p className="text-xs text-slate-300">
-                Built-in key detected: {hasBuiltInContactKey ? 'Yes' : 'No'} (site config or env)
+                Built-in key found: {hasBuiltInContactKey ? 'Yes' : 'No'} (site config or env)
               </p>
             </div>
           </details>
@@ -309,15 +309,15 @@ function ContactPage({
 
         <form onSubmit={onSubmit} className="blueprint-panel min-w-0 space-y-3 sm:space-y-4">
           <label className="field-group">
-            <span>NAME / ID</span>
+            <span>Name</span>
             <input className="field" name="name" required placeholder="Name" />
           </label>
           <label className="field-group">
-            <span>EMAIL / ROUTE</span>
+            <span>Email</span>
             <input className="field" type="email" name="email" required placeholder="Email" />
           </label>
           <label className="field-group">
-            <span>MESSAGE / NOTES</span>
+            <span>Message</span>
             <textarea
               className="field min-h-28 resize-y sm:min-h-36"
               name="message"
@@ -429,7 +429,7 @@ function App() {
       form.reset()
       setContactStatus({
         kind: 'success',
-        message: 'Your message has been delivered.',
+        message: 'Message sent. Thanks for reaching out.',
       })
     } catch (error) {
       setContactStatus({
@@ -437,7 +437,7 @@ function App() {
         message:
           error instanceof Error
             ? error.message
-            : 'Unable to send right now. Please try again in a moment.',
+            : 'Could not send right now. Try again in a minute.',
       })
     } finally {
       setContactSending(false)

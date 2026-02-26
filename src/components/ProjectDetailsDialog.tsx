@@ -46,15 +46,15 @@ export function ProjectDetailsDialog({
 
         <Tabs defaultValue="spec" className="mt-4">
           <TabsList>
-            <TabsTrigger value="spec">Spec</TabsTrigger>
-            <TabsTrigger value="narrative">Narrative</TabsTrigger>
+            <TabsTrigger value="spec">Overview</TabsTrigger>
+            <TabsTrigger value="narrative">Details</TabsTrigger>
           </TabsList>
 
           <TabsContent value="spec">
             <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
               <aside className="rounded-xl border border-emerald-200/15 bg-slate-950/55 p-4">
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-200">
-                  PROJECT LABELS
+                  QUICK INFO
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
@@ -76,7 +76,7 @@ export function ProjectDetailsDialog({
 
               <div className="rounded-xl border border-emerald-200/15 bg-slate-950/55 p-4">
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-200">
-                  SECTION NOTES
+                  NOTES
                 </p>
                 <ul className="mt-3 space-y-3 text-sm text-slate-300">
                   {project.details.map((section) => (

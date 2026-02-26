@@ -30,7 +30,7 @@ export const projects: Project[] = [
     id: 'sim-racing-wheel-force-feedback',
     name: 'Sim Racing Wheel / Force Feedback',
     summary:
-      'DIY steering wheel + pedal rig built around low-cost hardware and iterative tuning, with force-feedback direction as the top priority path.',
+      'DIY steering wheel and pedal setup I keep improving over time, with force feedback as the big goal.',
     status: 'featured',
     featured: true,
     tags: ['Sim Racing', 'Force Feedback', 'XIAO RP2040', 'ESP32', 'Control'],
@@ -44,44 +44,44 @@ export const projects: Project[] = [
       {
         heading: 'Goal',
         bullets: [
-          'Build a practical sim setup that feels good to drive while staying budget-conscious.',
-          'Keep the platform open for future hardware upgrades instead of locking into one design.',
+          'Build a setup that feels fun and natural to drive without spending a ton.',
+          'Keep the design flexible so I can swap and upgrade parts later.',
         ],
       },
       {
         heading: 'Hardware [ADD PARTS]',
         bullets: [
-          'Current stack uses a compact microcontroller + encoder-based steering and pedal sensing.',
-          '[ADD] Finalized mechanical BOM list and revision snapshots.',
+          'Current version uses a compact controller with encoder-based steering and pedals.',
+          '[ADD] Final parts list and revision snapshots.',
         ],
       },
       {
         heading: 'Electronics/Control [ADD]',
         bullets: [
-          'Sensor-to-axis mapping is tuned for reliable USB controller behavior.',
-          '[ADD] Final control wiring diagram for wheel, pedal, and future FFB path.',
+          'Sensor input is tuned so USB controller behavior feels stable and predictable.',
+          '[ADD] Final wiring diagram for wheel, pedal, and future force feedback.',
         ],
       },
       {
         heading: 'Input/Response tuning [ADD]',
         bullets: [
-          'Encoder readings are mapped to a smooth full-range response.',
-          '[ADD] Tuning log and test matrix for repeatable feel.',
+          'Encoder input is mapped so throttle and steering feel smooth across full range.',
+          '[ADD] Tuning notes and test checklist for repeatable feel.',
         ],
       },
       {
         heading: 'Tuning / Feel [ADD]',
         bullets: [
-          'V2 pedal travel is shorter, so count range was adapted to preserve drivability.',
-          'Gain and smoothing are still part of the tuning loop to avoid jumpy throttle response.',
-          '[ADD] Repeatable tuning profile notes across different games.',
+          'V2 pedal travel is shorter, so I adjusted count range to keep control feel consistent.',
+          'I still use gain and smoothing so throttle does not jump around.',
+          '[ADD] Tuning profile notes across different games.',
         ],
       },
       {
         heading: 'What I’m improving next [ADD]',
         bullets: [
-          'Mechanical rigidity and cleaner mounting for more consistent steering feel.',
-          '[ADD] Force-feedback implementation milestones and safety constraints.',
+          'Better rigidity and cleaner mounting for more consistent steering feel.',
+          '[ADD] Force feedback milestones and safety limits.',
         ],
       },
     ],
@@ -90,7 +90,7 @@ export const projects: Project[] = [
     id: 'ftc-evergreen-dragons',
     name: 'FTC Evergreen Dragons',
     summary:
-      'Team-focused competitive robotics work with emphasis on mechanism design, integration, and practical iteration.',
+      'I build competitive robots with my FTC team, mostly mechanism design and quick testing.',
     status: 'team',
     tags: ['FTC', 'Mechanisms', 'CAD', 'Integration'],
     rev: 'REV 1',
@@ -99,8 +99,8 @@ export const projects: Project[] = [
       {
         heading: 'Focus',
         bullets: [
-          'Translate concepts into buildable subsystems through rapid prototype loops.',
-          'Balance CAD intent with what actually survives physical testing.',
+          'Turn ideas into parts we can actually build and test quickly.',
+          'Update designs based on what happens on real hardware, not just CAD.',
         ],
       },
     ],
@@ -109,7 +109,7 @@ export const projects: Project[] = [
     id: 'frc-2854-prototypes',
     name: 'FRC 2854 Prototypes',
     summary:
-      'Prototype-driven contribution work around mechanism concepts and manufacturable subsystem ideas.',
+      'Prototype work with FRC 2854 to test mechanism ideas and see what is worth building further.',
     status: 'team',
     tags: ['FRC', 'Prototype', 'Mechanics'],
     rev: 'REV 1',
@@ -118,8 +118,8 @@ export const projects: Project[] = [
       {
         heading: 'Focus',
         bullets: [
-          'Quickly evaluate mechanism paths and packaging constraints.',
-          'Document what works physically before scaling complexity.',
+          'Try different mechanism options and figure out what fits.',
+          'Keep notes on what works before making things more complex.',
         ],
       },
     ],
@@ -128,17 +128,17 @@ export const projects: Project[] = [
     id: 'esp32-control-projects',
     name: 'ESP32 Control Projects',
     summary:
-      'Embedded control experiments connecting sensors, drivers, and practical behavior tuning for robotics tasks.',
+      'ESP32 projects where I connect sensors and drivers, then tune behavior for robot tasks.',
     status: 'active',
     tags: ['ESP32', 'Sensors', 'Control'],
     rev: 'REV 1',
     spec: 'STATUS / ACTIVE',
     details: [
       {
-        heading: 'Scope',
+        heading: 'What I worked on',
         bullets: [
-          'Sensor readout + filtering under real hardware noise.',
-          'Control loop tuning for repeatable behavior across revisions.',
+          'Sensor readout and filtering with real hardware noise.',
+          'Tuning control loops so behavior stays consistent across versions.',
         ],
       },
     ],
@@ -147,7 +147,7 @@ export const projects: Project[] = [
     id: 'maker-tools-solderbuddy',
     name: 'Maker Tools / SolderBuddy',
     summary:
-      'Compact desk-side helper tooling for bench builds, including SolderBuddy from AMD x Hack Club Prototype Hackathon.',
+      'Small bench helper tools, including SolderBuddy from the AMD x Hack Club Prototype Hackathon.',
     status: 'active',
     tags: ['Tools', 'Hackathon', 'Bench Workflow'],
     rev: 'REV 1',
@@ -155,10 +155,10 @@ export const projects: Project[] = [
     links: [{ label: 'GitHub Repo', href: 'https://github.com/CyberBrainiac1/SolderBuddy' }],
     details: [
       {
-        heading: 'Scope',
+        heading: 'What I worked on',
         bullets: [
-          'Reduce friction during soldering and wiring sessions.',
-          'Keep tools compact, fast to use, and easy to reproduce.',
+          'Make soldering and wiring sessions smoother and faster.',
+          'Keep tools compact, easy to use, and easy to remake.',
         ],
       },
     ],
@@ -167,17 +167,17 @@ export const projects: Project[] = [
     id: 'quadruped',
     name: 'Quadruped',
     summary:
-      'In-progress legged robotics platform exploring mechanical architecture and control tradeoffs.',
+      'In-progress quadruped where I am testing layout ideas and control tradeoffs.',
     status: 'in-progress',
     tags: ['Quadruped', 'In Progress', 'Control'],
     rev: 'REV 0',
     spec: 'STATUS / IN PROGRESS',
     details: [
       {
-        heading: 'Scope',
+        heading: 'What I worked on',
         bullets: [
-          'Early architecture exploration before committing to a final drivetrain layout.',
-          'Collecting stability and control lessons from small iteration cycles.',
+          'Early layout testing before locking in a final drivetrain.',
+          'Learning stability and control from small test cycles.',
         ],
       },
     ],
@@ -186,7 +186,7 @@ export const projects: Project[] = [
     id: 'diy-robotic-hand',
     name: 'DIY Robotic Hand',
     summary:
-      'Biologically inspired hand build focused on practical mechanism iteration and embedded integration.',
+      'DIY robotic hand build where I keep improving the mechanism and integration.',
     status: 'active',
     tags: ['Robotic Hand', '3D Printing', 'Mechanisms'],
     rev: 'REV 2',
@@ -194,10 +194,10 @@ export const projects: Project[] = [
     links: [{ label: 'GitHub Repo', href: 'https://github.com/CyberBrainiac1/RoboticHand' }],
     details: [
       {
-        heading: 'Scope',
+        heading: 'What I worked on',
         bullets: [
           'Iterating finger mechanics and actuation paths.',
-          'Testing structure and assembly constraints between revisions.',
+          'Testing structure and assembly limits between revisions.',
         ],
       },
     ],
