@@ -25,6 +25,7 @@ import { ProjectStoryScroll } from './components/ProjectStoryScroll'
 import { Section } from './components/Section'
 import { FEATURED_BLOG_SLUG } from './data/blog'
 import { boredIdeas } from './data/bored'
+import { designedItems } from './data/designed'
 import { profileInfo } from './data/profile'
 import { projects, type Project } from './data/projects'
 import { skillModules } from './data/skills'
@@ -32,6 +33,7 @@ import { skillModules } from './data/skills'
 const navItems = [
   { path: '/', label: 'Home' },
   { path: '/projects', label: 'Projects' },
+  { path: '/designed', label: 'Designed' },
   { path: '/blog', label: 'Blog' },
   { path: '/bored', label: 'Bored' },
   { path: '/skills', label: 'Skills' },
@@ -274,6 +276,26 @@ function BoredPage() {
   )
 }
 
+function DesignedPage() {
+  return (
+    <Section
+      id="designed"
+      label="FIG.09 / DESIGNED"
+      title="Cool Things I Personally Designed"
+      subtitle="A quick list of designs I am proud of."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {designedItems.map((item) => (
+          <article key={item.id} className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+            <p className="text-sm text-slate-300">{item.note}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
 function ContactPage({
   onSubmit,
   status,
@@ -484,6 +506,7 @@ function App() {
                 path="/blog/:slug"
                 element={<BlogPostRoute onBackToBlog={() => navigate('/blog')} />}
               />
+              <Route path="/designed" element={<DesignedPage />} />
               <Route path="/bored" element={<BoredPage />} />
               <Route path="/skills" element={<SkillsPage />} />
               <Route
