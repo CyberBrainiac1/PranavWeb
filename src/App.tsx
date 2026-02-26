@@ -17,6 +17,7 @@ import { Navbar } from './components/Navbar'
 import { ProjectCard } from './components/ProjectCard'
 import { ProjectDetailsDialog } from './components/ProjectDetailsDialog'
 import { ProjectRail } from './components/ProjectRail'
+import { ProjectStoryScroll } from './components/ProjectStoryScroll'
 import { Section } from './components/Section'
 import { profileInfo } from './data/profile'
 import { projects, type Project } from './data/projects'
@@ -45,34 +46,68 @@ type ContactPageProps = {
 }
 
 function HomePage({
+  onOpenProject,
+  onOpenProjectsPage,
   onOpenContactPage,
 }: {
+  onOpenProject: (project: Project) => void
+  onOpenProjectsPage: () => void
   onOpenContactPage: () => void
 }) {
+  const scrollToStory = () => {
+    document.getElementById('build-story')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const scrollToContact = () => {
     document.getElementById('home-contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
     <>
-      <Hero onContact={scrollToContact} />
+      <Hero onStartStory={scrollToStory} onContact={scrollToContact} />
 
       <Section
-        id="about"
+        id="build-story"
         label="FIG.02 / ABOUT"
-        title="About Me"
-        subtitle="I build hardware that is practical, reliable, and built to keep improving."
+        title="My Build Story"
+        subtitle="This is the flow I follow every time I make something new."
       >
-        <article className="blueprint-panel about-copy">
-          {profileInfo.aboutParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+        <div className="story-flow-grid">
+          <article className="blueprint-panel about-copy story-main-copy">
+            {profileInfo.aboutParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </article>
+
+          {profileInfo.storyBeats.map((beat, index) => (
+            <motion.article
+              key={beat.title}
+              className="story-flow-card"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.35, delay: index * 0.08, ease: 'easeOut' }}
+            >
+              <span className="story-flow-rotate" aria-hidden="true">
+                {beat.label}
+              </span>
+              <p className="story-flow-index">0{index + 1}</p>
+              <h3>{beat.title}</h3>
+              <p>{beat.text}</p>
+            </motion.article>
           ))}
-        </article>
+        </div>
       </Section>
+
+      <ProjectStoryScroll
+        projects={projects}
+        onOpenProject={onOpenProject}
+        onOpenProjectsPage={onOpenProjectsPage}
+      />
 
       <Section
         id="home-contact"
-        label="FIG.03 / CONTACT"
+        label="FIG.04 / CONTACT"
         title="Let’s Connect"
         subtitle="If you want to collaborate, ask questions, or just say hi, reach out."
       >
@@ -374,6 +409,8 @@ function App() {
                 path="/"
                 element={
                   <HomePage
+                    onOpenProject={setSelectedProject}
+                    onOpenProjectsPage={() => navigate('/projects')}
                     onOpenContactPage={() => navigate('/contact')}
                   />
                 }

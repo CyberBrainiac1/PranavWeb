@@ -3,12 +3,13 @@ import { CornerBracketsSVG } from './CornerBracketsSVG'
 import { LabelTag } from './LabelTag'
 
 type HeroProps = {
+  onStartStory: () => void
   onContact: () => void
 }
 
 const headlineLines = ['PRANAV', 'EMMADI', 'ROBOTICS BUILDER']
 
-export function Hero({ onContact }: HeroProps) {
+export function Hero({ onStartStory, onContact }: HeroProps) {
   return (
     <section id="home" className="hero-shell relative overflow-hidden">
       <CornerBracketsSVG className="opacity-85" />
@@ -16,6 +17,9 @@ export function Hero({ onContact }: HeroProps) {
         <span>FTC / MAKER</span>
         <div className="measurement-ticks" />
       </div>
+      <span className="hero-side-word" aria-hidden="true">
+        BUILD
+      </span>
       <div className="relative z-[1] grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
         <div className="space-y-5">
           <div className="flex items-center">
@@ -50,9 +54,22 @@ export function Hero({ onContact }: HeroProps) {
               smooth, responsive, and easy to keep upgrading.
             </p>
           </div>
-          <button type="button" onClick={onContact} className="btn-primary-mag w-full justify-center sm:w-auto">
-            Scroll to Contact
-          </button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={onStartStory}
+              className="btn-primary-mag w-full justify-center sm:w-auto"
+            >
+              Start The Story
+            </button>
+            <button
+              type="button"
+              onClick={onContact}
+              className="btn-outline-mag w-full justify-center sm:w-auto"
+            >
+              Jump To Contact
+            </button>
+          </div>
         </div>
       </div>
     </section>
