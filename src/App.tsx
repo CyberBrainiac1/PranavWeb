@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlertTriangle,
@@ -45,6 +45,24 @@ const navItems = [
   { path: '/contact', label: 'Contact' },
   { path: '/dev', label: 'Dev' },
 ]
+
+const scrollRouteOrder = [
+  '/',
+  '/projects',
+  '/designed',
+  '/blog',
+  '/bored',
+  '/timeline',
+  '/skills',
+  '/contact',
+]
+
+function canUseRouteScrollTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return true
+  return !target.closest(
+    'input, textarea, select, [contenteditable="true"], .project-rail, [data-disable-route-scroll]',
+  )
+}
 
 type ContactStatus = {
   kind: 'idle' | 'sending' | 'success' | 'error'
@@ -479,6 +497,8 @@ function App() {
   })
   const [contactSending, setContactSending] = useState(false)
   const [runtimeConfig, setRuntimeConfig] = useState(() => loadRuntimeConfig())
+  const routeScrollCooldownRef = useRef(0)
+  const lastScrollDirectionRef = useRef<1 | -1 | 0>(0)
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -486,6 +506,82 @@ function App() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [location.pathname])
+
+  useEffect(() => {
+    const currentIndex = scrollRouteOrder.indexOf(location.pathname)
+    if (currentIndex === -1) return
+
+    const tryNavigateByScrollEdge = () => {
+      const direction = lastScrollDirectionRef.current
+      if (!direction) return
+
+      const now = Date.now()
+      if (now < routeScrollCooldownRef.current) return
+
+      const atTop = window.scrollY <= 4
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4
+
+      let nextPath = ''
+      if (direction > 0 && atBottom && currentIndex < scrollRouteOrder.length - 1) {
+        nextPath = scrollRouteOrder[currentIndex + 1]
+      }
+      if (direction < 0 && atTop && currentIndex > 0) {
+        nextPath = scrollRouteOrder[currentIndex - 1]
+      }
+
+      if (!nextPath || nextPath === location.pathname) return
+      routeScrollCooldownRef.current = now + 700
+      navigate(nextPath)
+    }
+
+    const onWheel = (event: WheelEvent) => {
+      if (!canUseRouteScrollTarget(event.target)) return
+      if (Math.abs(event.deltaY) < 10) return
+      lastScrollDirectionRef.current = event.deltaY > 0 ? 1 : -1
+      tryNavigateByScrollEdge()
+    }
+
+    const onScroll = () => {
+      tryNavigateByScrollEdge()
+    }
+
+    let touchStartY: number | null = null
+    const onTouchStart = (event: TouchEvent) => {
+      if (!canUseRouteScrollTarget(event.target)) return
+      touchStartY = event.touches[0]?.clientY ?? null
+    }
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!canUseRouteScrollTarget(event.target)) return
+      if (touchStartY === null) return
+      const currentY = event.touches[0]?.clientY ?? touchStartY
+      const delta = touchStartY - currentY
+      if (Math.abs(delta) < 18) return
+      lastScrollDirectionRef.current = delta > 0 ? 1 : -1
+      tryNavigateByScrollEdge()
+    }
+
+    const onTouchEnd = () => {
+      touchStartY = null
+      lastScrollDirectionRef.current = 0
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: true })
+    window.addEventListener('touchend', onTouchEnd, { passive: true })
+
+    return () => {
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [location.pathname, navigate])
 
   useEffect(() => {
     const syncRuntimeConfig = () => {
