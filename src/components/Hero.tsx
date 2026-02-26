@@ -3,12 +3,13 @@ import { LabelTag } from './LabelTag'
 
 type HeroProps = {
   onStartStory: () => void
+  onOpenFeaturedStory: () => void
   onContact: () => void
 }
 
 const headlineLines = ['PRANAV', 'EMMADI', 'ROBOTICS BUILDER']
 
-export function Hero({ onStartStory, onContact }: HeroProps) {
+export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps) {
   return (
     <section id="home" className="hero-shell relative overflow-hidden">
       <div className="measurement-strip" aria-hidden="true">
@@ -51,6 +52,13 @@ export function Hero({ onStartStory, onContact }: HeroProps) {
               Main build right now: Sim Racing Wheel + Force Feedback. I&apos;m tuning it to feel
               smooth, responsive, and easy to keep upgrading.
             </p>
+            <button
+              type="button"
+              onClick={onOpenFeaturedStory}
+              className="btn-outline-mag w-full justify-center sm:w-auto"
+            >
+              Read Wheel Build Log
+            </button>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <button

@@ -1,3 +1,5 @@
+import { simWheelProjectSections } from './simWheelStory'
+
 export type ProjectStatus = 'featured' | 'active' | 'team' | 'in-progress'
 
 export type ProjectSection = {
@@ -30,61 +32,17 @@ export const projects: Project[] = [
     id: 'sim-racing-wheel-force-feedback',
     name: 'Sim Racing Wheel / Force Feedback',
     summary:
-      'DIY steering wheel and pedal setup I keep improving over time, with force feedback as the big goal.',
+      'DIY steering wheel + pedals project focused on getting realistic in-game behavior and better force feedback feel over each revision.',
     status: 'featured',
     featured: true,
-    tags: ['Sim Racing', 'Force Feedback', 'XIAO RP2040', 'ESP32', 'Control'],
+    tags: ['Sim Racing', 'Force Feedback', 'Arduino Leonardo', 'BTS7960', 'Encoder A/B'],
     rev: 'REV 2',
     spec: 'STATUS / ACTIVE',
     links: [
-      { label: 'Blog Build Log', href: './blog/diy-sim-racing-rig-xiao-rp2040.html' },
-      { label: 'Project Focus', href: '#/projects' },
+      { label: 'Full Build Log', href: '#/blog/diy-force-feedback-wheel-build-log' },
+      { label: 'CPR vs PPR Notes', href: '#/blog/cpr-vs-ppr-one-rule' },
     ],
-    details: [
-      {
-        heading: 'Goal',
-        bullets: [
-          'Build a setup that feels fun and natural to drive without spending a ton.',
-          'Keep the design flexible so I can swap and upgrade parts later.',
-        ],
-      },
-      {
-        heading: 'Hardware [ADD PARTS]',
-        bullets: [
-          'Current version uses a compact controller with encoder-based steering and pedals.',
-          '[ADD] Final parts list and revision snapshots.',
-        ],
-      },
-      {
-        heading: 'Electronics/Control [ADD]',
-        bullets: [
-          'Sensor input is tuned so USB controller behavior feels stable and predictable.',
-          '[ADD] Final wiring diagram for wheel, pedal, and future force feedback.',
-        ],
-      },
-      {
-        heading: 'Input/Response tuning [ADD]',
-        bullets: [
-          'Encoder input is mapped so throttle and steering feel smooth across full range.',
-          '[ADD] Tuning notes and test checklist for repeatable feel.',
-        ],
-      },
-      {
-        heading: 'Tuning / Feel [ADD]',
-        bullets: [
-          'V2 pedal travel is shorter, so I adjusted count range to keep control feel consistent.',
-          'I still use gain and smoothing so throttle does not jump around.',
-          '[ADD] Tuning profile notes across different games.',
-        ],
-      },
-      {
-        heading: 'What I’m improving next [ADD]',
-        bullets: [
-          'Better rigidity and cleaner mounting for more consistent steering feel.',
-          '[ADD] Force feedback milestones and safety limits.',
-        ],
-      },
-    ],
+    details: simWheelProjectSections,
   },
   {
     id: 'ftc-evergreen-dragons',

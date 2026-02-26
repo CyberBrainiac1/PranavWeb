@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlertTriangle,
+  BookOpenText,
   CheckCircle2,
   Github,
   Linkedin,
@@ -9,8 +10,10 @@ import {
   Mail,
   Send,
 } from 'lucide-react'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { BlueprintBackground } from './components/BlueprintBackground'
+import { BlogIndexPage } from './components/blog/BlogIndexPage'
+import { BlogPostPage } from './components/blog/BlogPostPage'
 import { Hero } from './components/Hero'
 import { LabelTag } from './components/LabelTag'
 import { Navbar } from './components/Navbar'
@@ -19,6 +22,7 @@ import { ProjectDetailsDialog } from './components/ProjectDetailsDialog'
 import { ProjectRail } from './components/ProjectRail'
 import { ProjectStoryScroll } from './components/ProjectStoryScroll'
 import { Section } from './components/Section'
+import { FEATURED_BLOG_SLUG } from './data/blog'
 import { profileInfo } from './data/profile'
 import { projects, type Project } from './data/projects'
 import { skillModules } from './data/skills'
@@ -26,6 +30,7 @@ import { skillModules } from './data/skills'
 const navItems = [
   { path: '/', label: 'Home' },
   { path: '/projects', label: 'Projects' },
+  { path: '/blog', label: 'Blog' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
 ]
@@ -48,10 +53,12 @@ type ContactPageProps = {
 function HomePage({
   onOpenProject,
   onOpenProjectsPage,
+  onOpenFeaturedStory,
   onOpenContactPage,
 }: {
   onOpenProject: (project: Project) => void
   onOpenProjectsPage: () => void
+  onOpenFeaturedStory: () => void
   onOpenContactPage: () => void
 }) {
   const scrollToStory = () => {
@@ -64,7 +71,11 @@ function HomePage({
 
   return (
     <>
-      <Hero onStartStory={scrollToStory} onContact={scrollToContact} />
+      <Hero
+        onStartStory={scrollToStory}
+        onOpenFeaturedStory={onOpenFeaturedStory}
+        onContact={scrollToContact}
+      />
 
       <Section
         id="build-story"
@@ -147,7 +158,13 @@ function HomePage({
   )
 }
 
+function BlogPostRoute({ onBackToBlog }: { onBackToBlog: () => void }) {
+  const { slug = '' } = useParams()
+  return <BlogPostPage slug={slug} onBackToBlog={onBackToBlog} />
+}
+
 function ProjectsPage({ onOpenProject }: { onOpenProject: (project: Project) => void }) {
+  const navigate = useNavigate()
   const featuredProject = projects.find((project) => project.featured) ?? projects[0]
   const railProjects = projects.filter((project) => project.id !== featuredProject.id)
 
@@ -176,6 +193,13 @@ function ProjectsPage({ onOpenProject }: { onOpenProject: (project: Project) => 
             className="btn-primary-mag w-full justify-center sm:w-auto"
           >
             Open Featured Build
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(`/blog/${FEATURED_BLOG_SLUG}`)}
+            className="btn-outline-mag w-full justify-center sm:w-auto"
+          >
+            Read Build Log
           </button>
         </article>
       </div>
@@ -411,11 +435,20 @@ function App() {
                   <HomePage
                     onOpenProject={setSelectedProject}
                     onOpenProjectsPage={() => navigate('/projects')}
+                    onOpenFeaturedStory={() => navigate(`/blog/${FEATURED_BLOG_SLUG}`)}
                     onOpenContactPage={() => navigate('/contact')}
                   />
                 }
               />
               <Route path="/projects" element={<ProjectsPage onOpenProject={setSelectedProject} />} />
+              <Route
+                path="/blog"
+                element={<BlogIndexPage onOpenPost={(slug) => navigate(`/blog/${slug}`)} />}
+              />
+              <Route
+                path="/blog/:slug"
+                element={<BlogPostRoute onBackToBlog={() => navigate('/blog')} />}
+              />
               <Route path="/skills" element={<SkillsPage />} />
               <Route
                 path="/contact"
@@ -433,9 +466,18 @@ function App() {
         </AnimatePresence>
 
         <footer className="mt-8 border-t border-sky-200/20 pt-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.16em] text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.16em] text-slate-400">
             <p>© {new Date().getFullYear()} Pranav Emmadi</p>
-            <p className="font-mono text-sky-100/80">Build / Iterate / Test</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => navigate('/blog')}
+                className="inline-flex items-center gap-1 font-mono text-sky-100/85 transition hover:text-sky-50"
+              >
+                <BookOpenText size={14} /> Blog
+              </button>
+              <p className="font-mono text-sky-100/80">Build / Iterate / Test</p>
+            </div>
           </div>
         </footer>
       </main>
