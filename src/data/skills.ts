@@ -28,7 +28,7 @@ export const skillModules: SkillModule[] = [
     id: 'embedded',
     label: 'EMBEDDED',
     title: 'Embedded Hardware',
-    items: ['ESP32', 'Raspberry Pi', 'Sensor tuning', 'Real-world testing loops'],
+    items: ['ESP32', 'Raspberry Pi', 'Python (used a lot)', 'Sensor tuning'],
   },
   {
     id: 'systems',

@@ -22,7 +22,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
   return (
     <article
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-sky-200/20 bg-slate-950/62 p-4 shadow-lg shadow-black/35 transition hover:border-sky-200/40 hover:shadow-sky-500/10',
+        'project-mag-card relative overflow-hidden rounded-2xl p-4 transition',
         isFeatured && 'md:col-span-2 lg:col-span-2',
       )}
     >
@@ -31,7 +31,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
           <LabelTag text={statusLabel[project.status]} />
           <LabelTag text={project.rev} />
         </div>
-        <div className="relative mb-4 h-40 overflow-hidden rounded-xl border border-sky-200/20 bg-slate-950/70">
+        <div className="project-mag-thumb relative mb-4 h-40 overflow-hidden rounded-xl">
           <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent_0_22px,rgba(168,226,255,0.08)_22px_23px)]" />
           <div className="absolute inset-x-0 bottom-2 px-3">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-sky-100/90">
@@ -49,7 +49,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
         <button
           type="button"
           onClick={() => onOpen(project)}
-          className="mt-auto inline-flex items-center gap-2 pt-5 text-sm uppercase tracking-[0.14em] text-sky-100 transition hover:text-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+          className="project-mag-open mt-auto inline-flex items-center gap-2 pt-5 text-sm uppercase tracking-[0.14em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
         >
           Details <ArrowUpRight size={15} />
         </button>

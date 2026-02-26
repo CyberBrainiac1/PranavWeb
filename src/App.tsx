@@ -15,20 +15,24 @@ import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 're
 import { BlueprintBackground } from './components/BlueprintBackground'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
+import { AssistantPanel } from './components/AssistantPanel'
+import { DevSettingsPage } from './components/DevSettingsPage'
 import { Hero } from './components/Hero'
 import { LabelTag } from './components/LabelTag'
 import { Navbar } from './components/Navbar'
 import { ProjectCard } from './components/ProjectCard'
 import { ProjectDetailsDialog } from './components/ProjectDetailsDialog'
 import { ProjectRail } from './components/ProjectRail'
-import { ProjectStoryScroll } from './components/ProjectStoryScroll'
 import { Section } from './components/Section'
 import { FEATURED_BLOG_SLUG } from './data/blog'
+import { aboutTimelineEntries } from './data/aboutTimeline'
 import { boredIdeas } from './data/bored'
 import { designedItems } from './data/designed'
 import { profileInfo } from './data/profile'
 import { projects, type Project } from './data/projects'
 import { skillModules } from './data/skills'
+import { timeline as linkedinTimeline } from './data/timeline'
+import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
 
 const navItems = [
   { path: '/', label: 'Home' },
@@ -36,13 +40,11 @@ const navItems = [
   { path: '/designed', label: 'Designed' },
   { path: '/blog', label: 'Blog' },
   { path: '/bored', label: 'Bored' },
+  { path: '/timeline', label: 'Timeline' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
+  { path: '/dev', label: 'Dev' },
 ]
-
-const CONTACT_SERVICE_KEY =
-  profileInfo.contactServiceKey.trim() ||
-  (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '').trim()
 
 type ContactStatus = {
   kind: 'idle' | 'sending' | 'success' | 'error'
@@ -53,49 +55,69 @@ type ContactPageProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
   status: ContactStatus
   sending: boolean
+  profile: {
+    contactEmail: string
+    links: { linkedin: string; github: string }
+  }
+}
+
+type RenderProfile = {
+  name: string
+  location: string
+  summary: string
+  heroHeadlineLines: string[]
+  heroIntroText: string
+  aboutParagraphs: string[]
+  storyBeats: Array<{ label: string; title: string; text: string }>
+  contactEmail: string
+  links: { linkedin: string; github: string }
 }
 
 function HomePage({
-  onOpenProject,
+  profile,
   onOpenProjectsPage,
+  onOpenDesignedPage,
+  onOpenBoredPage,
+  onOpenBlogPage,
+  onOpenTimelinePage,
+  onOpenDevPage,
   onOpenFeaturedStory,
   onOpenContactPage,
 }: {
-  onOpenProject: (project: Project) => void
+  profile: RenderProfile
   onOpenProjectsPage: () => void
+  onOpenDesignedPage: () => void
+  onOpenBoredPage: () => void
+  onOpenBlogPage: () => void
+  onOpenTimelinePage: () => void
+  onOpenDevPage: () => void
   onOpenFeaturedStory: () => void
   onOpenContactPage: () => void
 }) {
-  const scrollToStory = () => {
-    document.getElementById('build-story')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const scrollToContact = () => {
-    document.getElementById('home-contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
     <>
       <Hero
-        onStartStory={scrollToStory}
+        onOpenProjects={onOpenProjectsPage}
         onOpenFeaturedStory={onOpenFeaturedStory}
-        onContact={scrollToContact}
+        onContact={onOpenContactPage}
+        headlineLines={profile.heroHeadlineLines}
+        introText={profile.heroIntroText}
       />
 
       <Section
         id="build-story"
         label="FIG.02 / ABOUT"
         title="My Build Story"
-        subtitle="This is the flow I follow every time I make something new."
+        subtitle="Simple process: build, test, learn, improve."
       >
         <div className="story-flow-grid">
           <article className="blueprint-panel about-copy story-main-copy">
-            {profileInfo.aboutParagraphs.map((paragraph) => (
+            {profile.aboutParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </article>
 
-          {profileInfo.storyBeats.map((beat, index) => (
+          {profile.storyBeats.map((beat, index) => (
             <motion.article
               key={beat.title}
               className="story-flow-card"
@@ -115,48 +137,76 @@ function HomePage({
         </div>
       </Section>
 
-      <ProjectStoryScroll
-        projects={projects}
-        onOpenProject={onOpenProject}
-        onOpenProjectsPage={onOpenProjectsPage}
-      />
-
       <Section
-        id="home-contact"
-        label="FIG.04 / CONTACT"
-        title="Let’s Connect"
-        subtitle="If you want to collaborate, ask questions, or just say hi, reach out."
+        id="home-pages"
+        label="FIG.03 / PAGES"
+        title="Explore"
+        subtitle="Scroll and jump into any page."
       >
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <a className="contact-button" href="mailto:emmadipranav@gmail.com">
-            <Mail size={16} /> Email
-          </a>
-          <a
-            className="contact-button"
-            href={profileInfo.links.linkedin}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Linkedin size={16} /> LinkedIn
-          </a>
-          <a
-            className="contact-button"
-            href={profileInfo.links.github}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Github size={16} /> GitHub
-          </a>
-        </div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 color-grid">
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Projects</h3>
+            <p className="text-sm text-slate-300">See my build list and open details.</p>
+            <button type="button" onClick={onOpenProjectsPage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Projects
+            </button>
+          </article>
 
-        <div className="mt-4">
-          <button
-            type="button"
-            onClick={onOpenContactPage}
-            className="btn-outline-mag w-full justify-center sm:w-auto"
-          >
-            Open Full Contact Form
-          </button>
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Designed</h3>
+            <p className="text-sm text-slate-300">Things I personally designed.</p>
+            <button type="button" onClick={onOpenDesignedPage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Designed
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Bored List</h3>
+            <p className="text-sm text-slate-300">Fun and useful stuff to do fast.</p>
+            <button type="button" onClick={onOpenBoredPage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Bored List
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Blog</h3>
+            <p className="text-sm text-slate-300">Build logs and long-form notes.</p>
+            <button type="button" onClick={onOpenBlogPage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Blog
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Timeline</h3>
+            <p className="text-sm text-slate-300">A quick timeline of my journey so far.</p>
+            <button type="button" onClick={onOpenTimelinePage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Timeline
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Contact</h3>
+            <p className="text-sm text-slate-300">Reach out directly.</p>
+            <button type="button" onClick={onOpenContactPage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Contact
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Dev</h3>
+            <p className="text-sm text-slate-300">Edit keys and runtime settings.</p>
+            <button type="button" onClick={onOpenDevPage} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Open Dev
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">Featured Log</h3>
+            <p className="text-sm text-slate-300">Deep Sim Wheel writeup.</p>
+            <button type="button" onClick={onOpenFeaturedStory} className="btn-outline-mag w-full justify-center sm:w-auto">
+              Read Sim Wheel Log
+            </button>
+          </article>
         </div>
       </Section>
     </>
@@ -224,7 +274,7 @@ function SkillsPage() {
       title="Skills"
       subtitle="The main skills I use across my projects."
     >
-      <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
+      <div className="grid gap-4 sm:gap-5 color-grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
         {skillModules.map((module) => (
           <article key={module.id} className="blueprint-panel">
             <LabelTag text={module.label} />
@@ -244,6 +294,35 @@ function SkillsPage() {
   )
 }
 
+function TimelinePage() {
+  const hasRealLinkedInTimeline = linkedinTimeline.some(
+    (entry) =>
+      entry.date !== '[VERIFY]' &&
+      entry.organization.toLowerCase() !== 'no imported timeline yet',
+  )
+  const entries = hasRealLinkedInTimeline ? linkedinTimeline : aboutTimelineEntries
+
+  return (
+    <Section
+      id="timeline"
+      label="FIG.07 / TIMELINE"
+      title="Timeline"
+      subtitle="A quick look at what I have built and where I am going next."
+    >
+      <div className="timeline-grid">
+        {entries.map((entry, index) => (
+          <article key={`${entry.date}-${entry.title}-${index}`} className="timeline-item blueprint-panel">
+            <p className="timeline-date">{entry.date}</p>
+            <h3 className="timeline-title">{entry.title}</h3>
+            <p className="timeline-org">{entry.organization}</p>
+            <p className="timeline-notes">{entry.notes}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
 function BoredPage() {
   return (
     <Section
@@ -252,7 +331,7 @@ function BoredPage() {
       title="Things To Do When Bored"
       subtitle="Quick options when you want something fun, useful, or both."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 color-grid">
         {boredIdeas.map((idea) => (
           <article key={idea.id} className="blueprint-panel space-y-2.5">
             <h3 className="text-lg font-semibold text-white">{idea.title}</h3>
@@ -284,7 +363,7 @@ function DesignedPage() {
       title="Cool Things I Personally Designed"
       subtitle="A quick list of designs I am proud of."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 color-grid">
         {designedItems.map((item) => (
           <article key={item.id} className="blueprint-panel space-y-2.5">
             <h3 className="text-lg font-semibold text-white">{item.title}</h3>
@@ -300,6 +379,7 @@ function ContactPage({
   onSubmit,
   status,
   sending,
+  profile,
 }: ContactPageProps) {
   const statusTone =
     status.kind === 'success'
@@ -319,12 +399,12 @@ function ContactPage({
             Best way to reach me is this form. You can also use the direct links below.
           </p>
           <div className="grid gap-3">
-            <a className="contact-button" href="mailto:emmadipranav@gmail.com">
+            <a className="contact-button" href={`mailto:${profile.contactEmail}`}>
               <Mail size={16} /> Email
             </a>
             <a
               className="contact-button"
-              href={profileInfo.links.linkedin}
+              href={profile.links.linkedin}
               target="_blank"
               rel="noreferrer"
             >
@@ -332,7 +412,7 @@ function ContactPage({
             </a>
             <a
               className="contact-button"
-              href={profileInfo.links.github}
+              href={profile.links.github}
               target="_blank"
               rel="noreferrer"
             >
@@ -385,6 +465,8 @@ function ContactPage({
           ) : null}
         </form>
       </div>
+
+      <AssistantPanel />
     </Section>
   )
 }
@@ -396,6 +478,7 @@ function App() {
     message: '',
   })
   const [contactSending, setContactSending] = useState(false)
+  const [runtimeConfig, setRuntimeConfig] = useState(() => loadRuntimeConfig())
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -404,14 +487,53 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [location.pathname])
 
+  useEffect(() => {
+    const syncRuntimeConfig = () => {
+      setRuntimeConfig(loadRuntimeConfig())
+    }
+    window.addEventListener(RUNTIME_CONFIG_EVENT, syncRuntimeConfig)
+    return () => {
+      window.removeEventListener(RUNTIME_CONFIG_EVENT, syncRuntimeConfig)
+    }
+  }, [])
+
+  const renderProfile: RenderProfile = {
+    name: runtimeConfig.profileName || profileInfo.name,
+    location: runtimeConfig.profileLocation || profileInfo.location,
+    summary: runtimeConfig.profileSummary || profileInfo.summary,
+    heroHeadlineLines:
+      runtimeConfig.heroHeadlineLines.length
+        ? runtimeConfig.heroHeadlineLines
+        : ['PRANAV EMMADI', 'ROBOTICS BUILDER'],
+    heroIntroText:
+      runtimeConfig.heroIntroText ||
+      'I’m Pranav Emmadi. I love building robots and hardware that actually works when it matters.',
+    aboutParagraphs:
+      runtimeConfig.aboutParagraphs.length
+        ? runtimeConfig.aboutParagraphs
+        : profileInfo.aboutParagraphs,
+    storyBeats:
+      runtimeConfig.storyBeats.length
+        ? runtimeConfig.storyBeats
+        : profileInfo.storyBeats,
+    contactEmail: runtimeConfig.contactEmail || 'emmadipranav@gmail.com',
+    links: {
+      linkedin: runtimeConfig.linkedinUrl || profileInfo.links.linkedin,
+      github: runtimeConfig.githubUrl || profileInfo.links.github,
+    },
+  }
+
   const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (contactSending) return
 
-    if (!CONTACT_SERVICE_KEY) {
+    const contactServiceKey = runtimeConfig.contactServiceKey.trim()
+
+    if (!contactServiceKey) {
       setContactStatus({
         kind: 'error',
-        message: 'Contact form key is not set yet. Add it in site config and try again.',
+        message:
+          'Contact form key is missing. Open the Dev tab and set your Web3Forms key.',
       })
       return
     }
@@ -433,7 +555,7 @@ function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: CONTACT_SERVICE_KEY,
+          access_key: contactServiceKey,
           from_name: name,
           email,
           subject: `Portfolio message from ${name || 'Visitor'}`,
@@ -470,7 +592,7 @@ function App() {
     <div className="relative min-h-screen text-slate-100">
       <BlueprintBackground />
 
-      <main className="mx-auto w-full max-w-[92rem] px-3 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-10 xl:px-12">
+      <main className="app-scroll mx-auto w-full max-w-[92rem] px-3 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-10 xl:px-12">
         <Navbar
           items={navItems}
           currentPath={location.pathname}
@@ -479,6 +601,7 @@ function App() {
 
         <AnimatePresence mode="wait">
           <motion.div
+            className="route-page"
             key={location.pathname}
             initial={{ opacity: 0, x: 34 }}
             animate={{ opacity: 1, x: 0 }}
@@ -490,8 +613,13 @@ function App() {
                 path="/"
                 element={
                   <HomePage
-                    onOpenProject={setSelectedProject}
+                    profile={renderProfile}
                     onOpenProjectsPage={() => navigate('/projects')}
+                    onOpenDesignedPage={() => navigate('/designed')}
+                    onOpenBoredPage={() => navigate('/bored')}
+                    onOpenBlogPage={() => navigate('/blog')}
+                    onOpenTimelinePage={() => navigate('/timeline')}
+                    onOpenDevPage={() => navigate('/dev')}
                     onOpenFeaturedStory={() => navigate(`/blog/${FEATURED_BLOG_SLUG}`)}
                     onOpenContactPage={() => navigate('/contact')}
                   />
@@ -508,7 +636,9 @@ function App() {
               />
               <Route path="/designed" element={<DesignedPage />} />
               <Route path="/bored" element={<BoredPage />} />
+              <Route path="/timeline" element={<TimelinePage />} />
               <Route path="/skills" element={<SkillsPage />} />
+              <Route path="/dev" element={<DevSettingsPage />} />
               <Route
                 path="/contact"
                 element={
@@ -516,6 +646,7 @@ function App() {
                     onSubmit={handleContactSubmit}
                     status={contactStatus}
                     sending={contactSending}
+                    profile={renderProfile}
                   />
                 }
               />
@@ -526,7 +657,7 @@ function App() {
 
         <footer className="mt-8 border-t border-sky-200/20 pt-4">
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.16em] text-slate-400">
-            <p>© {new Date().getFullYear()} Pranav Emmadi</p>
+            <p>© {new Date().getFullYear()} {renderProfile.name}</p>
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
@@ -538,6 +669,9 @@ function App() {
               <p className="font-mono text-sky-100/80">Build / Iterate / Test</p>
             </div>
           </div>
+          <p className="mt-2 text-right text-[11px] lowercase tracking-[0.08em] text-slate-500">
+            vibe coded by codex
+          </p>
         </footer>
       </main>
 

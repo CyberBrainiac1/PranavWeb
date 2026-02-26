@@ -6,6 +6,7 @@ export const profileInfo = {
   aboutParagraphs: [
     'I’m Pranav, a robotics builder from near San Jose. I started Evergreen Dragons to create a team that moves fast, learns hard, and builds with purpose.',
     'What drives me is turning rough ideas into real machines you can trust. I care about strong design, clean mechanisms, and practical decisions that make a build better every version.',
+    'I keep the software side simple. I know the basics, and I use a lot of Python when I need it for testing and tuning.',
     'Right now I’m focused on my Sim Racing Wheel with force feedback and a DIY robotic hand. Both projects push me to balance precision, feel, and reliability.',
     'I like work that is hands-on, honest, and useful. If it doesn’t hold up in the real world, it is not done yet.',
   ],

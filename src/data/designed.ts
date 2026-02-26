@@ -8,16 +8,16 @@ export const designedItems: DesignedItem[] = [
   {
     id: 'ftc-shooter',
     title: 'FTC Shooter',
-    note: 'Custom shooter concept built for FTC gameplay needs.',
+    note: 'FTC Evergreen Dragons shooter mechanism work; full final spec sheet is being documented.',
   },
   {
     id: 'robotic-hand',
     title: 'Robotic Hand',
-    note: 'DIY hand mechanism with ongoing iteration and refinement.',
+    note: 'DIY hand aimed at replicating human movement with ongoing design, mechanics, and control iteration.',
   },
   {
     id: 'robotic-arm',
     title: 'Robotic Arm',
-    note: 'Custom robotic arm design focused on practical movement and control.',
+    note: 'Ongoing arm build in servo-channel mapping/testing with gripper approach under validation.',
   },
 ]

@@ -2,14 +2,22 @@ import { motion } from 'framer-motion'
 import { LabelTag } from './LabelTag'
 
 type HeroProps = {
-  onStartStory: () => void
+  onOpenProjects: () => void
   onOpenFeaturedStory: () => void
   onContact: () => void
+  headlineLines: string[]
+  introText: string
 }
 
-const headlineLines = ['PRANAV EMMADI', 'ROBOTICS BUILDER']
+export function Hero({
+  onOpenProjects,
+  onOpenFeaturedStory,
+  onContact,
+  headlineLines,
+  introText,
+}: HeroProps) {
+  const safeHeadlineLines = headlineLines.length ? headlineLines : ['PRANAV EMMADI', 'ROBOTICS BUILDER']
 
-export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps) {
   return (
     <section id="home" className="hero-shell relative overflow-hidden">
       <div className="relative z-[1] grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
@@ -18,7 +26,7 @@ export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps
             <LabelTag text="Home" />
           </div>
           <h1 className="space-y-1">
-            {headlineLines.map((line, index) => (
+            {safeHeadlineLines.map((line, index) => (
               <motion.span
                 key={line}
                 className="headline-line glitch-line block"
@@ -34,11 +42,7 @@ export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps
         </div>
 
         <div className="space-y-4 sm:space-y-5">
-          <p className="hero-intro">
-            I&apos;m Pranav Emmadi. I love building robots and hardware that actually works when
-            it matters. I&apos;m based near San Jose, and I care most about clean design, fast
-            testing, and real results.
-          </p>
+          <p className="hero-intro">{introText}</p>
           <div className="blueprint-panel space-y-3">
             <LabelTag text="Current Focus" />
             <p className="text-sm leading-relaxed text-slate-300">
@@ -56,17 +60,17 @@ export function Hero({ onStartStory, onOpenFeaturedStory, onContact }: HeroProps
           <div className="flex flex-col gap-2 sm:flex-row">
             <button
               type="button"
-              onClick={onStartStory}
+              onClick={onOpenProjects}
               className="btn-primary-mag w-full justify-center sm:w-auto"
             >
-              Start The Story
+              View Projects
             </button>
             <button
               type="button"
               onClick={onContact}
               className="btn-outline-mag w-full justify-center sm:w-auto"
             >
-              Jump To Contact
+              Contact
             </button>
           </div>
         </div>

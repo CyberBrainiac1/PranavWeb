@@ -46,7 +46,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
               onClick={() => onNavigate(item.path)}
               className={cn(
                 'nav-link-chip',
-                isActive(item.path) && 'border-sky-200/60 bg-sky-300/12 text-sky-100',
+                isActive(item.path) && 'nav-link-chip-active',
               )}
             >
               {item.label}
@@ -72,7 +72,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
                     onClick={() => onNavigate(item.path)}
                     className={cn(
                       'w-full rounded-lg border border-sky-200/20 bg-slate-900/70 px-3 py-2 text-left text-sm text-slate-100',
-                      isActive(item.path) && 'border-sky-200/60 text-sky-100',
+                      isActive(item.path) && 'border-sky-200/80 bg-sky-300/15 text-sky-100',
                     )}
                   >
                     {item.label}

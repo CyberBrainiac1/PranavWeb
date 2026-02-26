@@ -23,6 +23,69 @@ npm run build
 npm run preview
 ```
 
+## Contact Form Key (Web3Forms)
+
+The contact form uses Web3Forms.
+
+1. Create a key at `https://web3forms.com/`.
+2. Choose one setup path:
+   - Local dev: add `.env.local` with  
+     `VITE_WEB3FORMS_ACCESS_KEY=your_key_here`
+   - Quick hardcoded option: set `contactServiceKey` in `src/data/profile.ts`
+   - GitHub Pages deploy (recommended): add repo secret  
+     `VITE_WEB3FORMS_ACCESS_KEY` in `Settings -> Secrets and variables -> Actions`
+3. Push to `main`. The workflow now injects that secret during build.
+
+## Bot Setup (Ask Pranav Bot)
+
+Open the `Contact` page and use the **Ask Pranav Bot** panel.
+
+- Local mode: works immediately with built-in site facts.
+- AI mode: add your API key + endpoint + model in the panel.
+
+OpenAI example:
+- Endpoint: `https://api.openai.com/v1/chat/completions`
+- Model: `gpt-4o-mini`
+- API key: your `sk-...` key
+
+OpenRouter example:
+- Endpoint: `https://openrouter.ai/api/v1/chat/completions`
+- Model: provider/model slug you use
+- API key: your OpenRouter key
+
+Hack Club AI proxy example:
+- Endpoint: `https://ai.hackclub.com/proxy/v1/chat/completions`
+- Model: `openai/gpt-oss-120b`
+- API key: your Hack Club proxy key
+
+To "train" it better, update your site data files:
+- `src/data/profile.ts`
+- `src/data/projects.ts`
+- `src/data/skills.ts`
+- `src/data/designed.ts`
+
+The bot response context is built from those files automatically.
+
+## Dev Tab (Password-Protected Settings)
+
+A `Dev` tab is available in the navbar. It lets you edit:
+
+- Web3Forms contact key
+- Bot endpoint
+- Bot model
+- Bot API key
+
+The lock is client-side (good for convenience, not strong security).
+
+To set a custom password:
+
+```bash
+# .env.local
+VITE_DEV_TAB_PASSWORD=your_password_here
+```
+
+If not set, fallback password is `changeme`.
+
 ## LinkedIn Timeline Import
 
 1. Add entries to `LINKEDIN.txt` using:
