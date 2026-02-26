@@ -63,7 +63,9 @@ const STORAGE_KEYS = {
   chatModel: 'pranav_chat_model',
 }
 
-const CONTACT_SERVICE_KEY_DEFAULT = (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '').trim()
+const CONTACT_SERVICE_KEY_DEFAULT =
+  profileInfo.contactServiceKey.trim() ||
+  (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? '').trim()
 const CHAT_ENDPOINT_DEFAULT = (
   import.meta.env.VITE_CHAT_ENDPOINT ?? 'https://api.openai.com/v1/chat/completions'
 ).trim()
@@ -437,7 +439,7 @@ function ContactPage({
                 />
               </label>
               <p className="text-xs text-slate-300">
-                Built-in key detected: {hasBuiltInContactKey ? 'Yes' : 'No'}
+                Built-in key detected: {hasBuiltInContactKey ? 'Yes' : 'No'} (site config or env)
               </p>
             </div>
           </details>
