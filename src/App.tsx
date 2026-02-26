@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   BookOpenText,
   CheckCircle2,
+  ExternalLink,
   Github,
   Linkedin,
   Loader2,
@@ -23,6 +24,7 @@ import { ProjectRail } from './components/ProjectRail'
 import { ProjectStoryScroll } from './components/ProjectStoryScroll'
 import { Section } from './components/Section'
 import { FEATURED_BLOG_SLUG } from './data/blog'
+import { boredIdeas } from './data/bored'
 import { profileInfo } from './data/profile'
 import { projects, type Project } from './data/projects'
 import { skillModules } from './data/skills'
@@ -31,6 +33,7 @@ const navItems = [
   { path: '/', label: 'Home' },
   { path: '/projects', label: 'Projects' },
   { path: '/blog', label: 'Blog' },
+  { path: '/bored', label: 'Bored' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
 ]
@@ -232,6 +235,38 @@ function SkillsPage() {
                 </li>
               ))}
             </ul>
+          </article>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
+function BoredPage() {
+  return (
+    <Section
+      id="bored"
+      label="FIG.08 / BORED LIST"
+      title="Things To Do When Bored"
+      subtitle="Quick options when you want something fun, useful, or both."
+    >
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {boredIdeas.map((idea) => (
+          <article key={idea.id} className="blueprint-panel space-y-2.5">
+            <h3 className="text-lg font-semibold text-white">{idea.title}</h3>
+            <p className="text-sm text-slate-300">{idea.description}</p>
+            {idea.link ? (
+              <a
+                href={idea.link}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-slate-100 transition hover:text-white"
+              >
+                Open <ExternalLink size={14} />
+              </a>
+            ) : (
+              <p className="text-xs text-slate-400">No link needed. Just start.</p>
+            )}
           </article>
         ))}
       </div>
@@ -449,6 +484,7 @@ function App() {
                 path="/blog/:slug"
                 element={<BlogPostRoute onBackToBlog={() => navigate('/blog')} />}
               />
+              <Route path="/bored" element={<BoredPage />} />
               <Route path="/skills" element={<SkillsPage />} />
               <Route
                 path="/contact"
