@@ -9,7 +9,7 @@ type HeroProps = {
   onSeeBuild: () => void
 }
 
-const headlineLines = ['ROBOTICS', 'BUILDER', 'MECH + CODE']
+const headlineLines = ['ROBOTICS', 'BUILDER', 'MECH + CONTROL']
 
 export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
   return (
@@ -73,7 +73,11 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
               My top-priority build: a practical sim setup focused on feel, tuning loops, and
               modular upgrades.
             </p>
-            <button type="button" onClick={onSeeBuild} className="inline-flex items-center gap-2 text-cyan-100">
+            <button
+              type="button"
+              onClick={onSeeBuild}
+              className="inline-flex items-center gap-2 text-emerald-100"
+            >
               See the Build <ArrowRight size={15} />
             </button>
           </motion.article>
@@ -81,7 +85,7 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <div className="spec-chip">Sim Wheel: Force Feedback</div>
             <div className="spec-chip">CAD: SolidWorks + Onshape</div>
-            <div className="spec-chip">Embedded: ESP32 + Python</div>
+            <div className="spec-chip">Embedded: ESP32 + Sensors</div>
           </div>
         </div>
       </div>

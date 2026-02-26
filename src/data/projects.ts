@@ -5,7 +5,7 @@ export type ProjectSection = {
     | 'Goal'
     | 'Hardware [ADD PARTS]'
     | 'Electronics/Control [ADD]'
-    | 'Firmware/Software experiments [ADD]'
+    | 'Input/Response tuning [ADD]'
     | 'Tuning / Feel [ADD]'
     | 'What I’m improving next [ADD]'
     | string
@@ -63,10 +63,10 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: 'Firmware/Software experiments [ADD]',
+        heading: 'Input/Response tuning [ADD]',
         bullets: [
-          'Mapped encoder readings into full joystick range with practical filtering.',
-          '[ADD] Firmware experiments list and test matrix.',
+          'Encoder readings are mapped to a smooth full-range response.',
+          '[ADD] Tuning log and test matrix for repeatable feel.',
         ],
       },
       {
@@ -130,7 +130,7 @@ export const projects: Project[] = [
     summary:
       'Embedded control experiments connecting sensors, drivers, and practical behavior tuning for robotics tasks.',
     status: 'active',
-    tags: ['ESP32', 'Sensors', 'Control', 'Python'],
+    tags: ['ESP32', 'Sensors', 'Control'],
     rev: 'REV 1',
     spec: 'STATUS / ACTIVE',
     details: [

@@ -52,8 +52,8 @@ export function ProjectDetailsDialog({
 
           <TabsContent value="spec">
             <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-              <aside className="rounded-xl border border-cyan-200/15 bg-slate-950/55 p-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cyan-200">
+              <aside className="rounded-xl border border-emerald-200/15 bg-slate-950/55 p-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-200">
                   PROJECT LABELS
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -63,25 +63,25 @@ export function ProjectDetailsDialog({
                 </div>
                 <div className="mt-5 space-y-2 text-sm text-slate-300">
                   <p>
-                    <span className="text-cyan-100">ID:</span> {project.id}
+                    <span className="text-emerald-100">ID:</span> {project.id}
                   </p>
                   <p>
-                    <span className="text-cyan-100">REV:</span> {project.rev}
+                    <span className="text-emerald-100">REV:</span> {project.rev}
                   </p>
                   <p>
-                    <span className="text-cyan-100">STATUS:</span> {project.spec}
+                    <span className="text-emerald-100">STATUS:</span> {project.spec}
                   </p>
                 </div>
               </aside>
 
-              <div className="rounded-xl border border-cyan-200/15 bg-slate-950/55 p-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cyan-200">
+              <div className="rounded-xl border border-emerald-200/15 bg-slate-950/55 p-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-200">
                   SECTION NOTES
                 </p>
                 <ul className="mt-3 space-y-3 text-sm text-slate-300">
                   {project.details.map((section) => (
                     <li key={section.heading}>
-                      <p className="text-cyan-100">{section.heading}</p>
+                      <p className="text-emerald-100">{section.heading}</p>
                       <p className="mt-1 text-slate-300">{section.bullets[0] ?? '[ADD]'}</p>
                     </li>
                   ))}
@@ -99,7 +99,7 @@ export function ProjectDetailsDialog({
                     <ul className="space-y-2 text-sm text-slate-300">
                       {section.bullets.map((bullet) => (
                         <li key={bullet} className="flex items-start gap-2">
-                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-200" />
                           <span>{bullet}</span>
                         </li>
                       ))}
@@ -121,7 +121,7 @@ export function ProjectDetailsDialog({
                   href={link.href}
                   target={external ? '_blank' : undefined}
                   rel={external ? 'noreferrer' : undefined}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-cyan-200/30 px-3 py-1.5 text-xs uppercase tracking-[0.15em] text-cyan-100 transition hover:border-cyan-100/70 hover:text-cyan-50 sm:w-auto"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-emerald-200/30 px-3 py-1.5 text-xs uppercase tracking-[0.15em] text-emerald-100 transition hover:border-emerald-100/70 hover:text-emerald-50 sm:w-auto"
                 >
                   {link.label} {external ? <ExternalLink size={12} /> : null}
                 </a>
@@ -133,3 +133,4 @@ export function ProjectDetailsDialog({
     </Dialog>
   )
 }
+

@@ -195,7 +195,7 @@ function TeamsPage() {
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
               {team.bullets.map((bullet) => (
                 <li key={bullet} className="flex gap-2">
-                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-emerald-200" />
                   <span>{bullet}</span>
                 </li>
               ))}
@@ -223,7 +223,7 @@ function SkillsPage() {
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
               {module.items.map((item) => (
                 <li key={item} className="flex gap-2">
-                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-emerald-200" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -254,7 +254,7 @@ function ExperimentsPage() {
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
               {experiment.notes.map((note) => (
                 <li key={note} className="flex gap-2">
-                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-cyan-200" />
+                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-emerald-200" />
                   <span>{note}</span>
                 </li>
               ))}
@@ -320,12 +320,12 @@ function ContactPage({ contactDraft, onSubmit, onCopyDraft }: ContactPageProps) 
           </button>
 
           {contactDraft ? (
-            <div className="rounded-xl border border-cyan-200/30 bg-cyan-300/10 p-3 text-sm text-slate-200">
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cyan-100">
+            <div className="rounded-xl border border-emerald-200/30 bg-emerald-300/10 p-3 text-sm text-slate-200">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-100">
                 Ready to send
               </p>
               <p className="mt-2 text-xs text-slate-300">
-                Subject: <span className="text-cyan-100">{contactDraft.subject}</span>
+                Subject: <span className="text-emerald-100">{contactDraft.subject}</span>
               </p>
               <div className="mt-3 grid gap-2 sm:flex sm:flex-wrap">
                 <button
@@ -442,10 +442,10 @@ function App() {
           </motion.div>
         </AnimatePresence>
 
-        <footer className="mt-8 border-t border-cyan-200/20 pt-4">
+        <footer className="mt-8 border-t border-emerald-200/20 pt-4">
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.16em] text-slate-400">
             <p>© {new Date().getFullYear()} Pranav Emmadi</p>
-            <p className="font-mono text-cyan-100/80">Build / Iterate / Test</p>
+            <p className="font-mono text-emerald-100/80">Build / Iterate / Test</p>
           </div>
         </footer>
       </main>
@@ -464,4 +464,5 @@ function App() {
 }
 
 export default App
+
 

@@ -23,7 +23,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
   return (
     <article
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-cyan-200/20 bg-slate-950/62 p-4 shadow-lg shadow-black/35 transition hover:border-cyan-200/40 hover:shadow-cyan-500/10',
+        'relative overflow-hidden rounded-2xl border border-emerald-200/20 bg-slate-950/62 p-4 shadow-lg shadow-black/35 transition hover:border-emerald-200/40 hover:shadow-emerald-500/10',
         isFeatured && 'md:col-span-2 lg:col-span-2',
       )}
     >
@@ -33,10 +33,10 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
           <LabelTag text={statusLabel[project.status]} />
           <LabelTag text={project.rev} />
         </div>
-        <div className="relative mb-4 h-40 overflow-hidden rounded-xl border border-cyan-200/20 bg-gradient-to-br from-cyan-300/10 via-slate-900/70 to-slate-950">
+        <div className="relative mb-4 h-40 overflow-hidden rounded-xl border border-emerald-200/20 bg-gradient-to-br from-emerald-300/10 via-slate-900/70 to-slate-950">
           <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent_0_22px,rgba(168,226,255,0.08)_22px_23px)]" />
           <div className="absolute inset-x-0 bottom-2 px-3">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-cyan-100/90">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-100/90">
               {project.spec}
             </p>
           </div>
@@ -51,7 +51,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
         <button
           type="button"
           onClick={() => onOpen(project)}
-          className="mt-auto inline-flex items-center gap-2 pt-5 text-sm uppercase tracking-[0.14em] text-cyan-100 transition hover:text-cyan-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+          className="mt-auto inline-flex items-center gap-2 pt-5 text-sm uppercase tracking-[0.14em] text-emerald-100 transition hover:text-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/60"
         >
           Details <ArrowUpRight size={15} />
         </button>
@@ -59,3 +59,4 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
     </article>
   )
 }
+

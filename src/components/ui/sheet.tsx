@@ -31,14 +31,14 @@ const SheetContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed top-0 z-50 h-full w-[84vw] max-w-sm border border-cyan-200/30 bg-slate-950/96 p-5 shadow-2xl',
+        'fixed top-0 z-50 h-full w-[84vw] max-w-sm border border-emerald-200/30 bg-slate-950/96 p-5 shadow-2xl',
         side === 'right' ? 'right-0' : 'left-0',
         className,
       )}
       {...props}
     >
       {children}
-      <SheetClose className="absolute right-3 top-3 rounded-md border border-cyan-200/20 p-1.5 text-cyan-100 transition hover:bg-cyan-200/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60">
+      <SheetClose className="absolute right-3 top-3 rounded-md border border-emerald-200/20 p-1.5 text-emerald-100 transition hover:bg-emerald-200/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/60">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </SheetClose>
@@ -87,3 +87,4 @@ export {
   SheetTitle,
   SheetDescription,
 }
+

@@ -28,14 +28,14 @@ export const skillModules: SkillModule[] = [
     id: 'embedded',
     label: 'MODULE / EMBED',
     title: 'Embedded Stack',
-    items: ['ESP32', 'Python', 'Raspberry Pi', 'Real-world tuning loops'],
+    items: ['ESP32', 'Raspberry Pi', 'Sensor tuning', 'Real-world tuning loops'],
   },
   {
     id: 'systems',
     label: 'MODULE / TEST',
     title: 'Testing + Iteration',
     items: [
-      'Hardware-software integration',
+      'Hardware integration',
       'Bench validation',
       'Debug-first iteration',
       'Build / iterate / test',
