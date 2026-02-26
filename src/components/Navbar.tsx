@@ -11,17 +11,24 @@ import {
 } from './ui/sheet'
 
 type NavItem = {
-  id: string
+  path: string
   label: string
 }
 
 type NavbarProps = {
   items: NavItem[]
-  activeSection: string
-  onNavigate: (id: string) => void
+  currentPath: string
+  onNavigate: (path: string) => void
 }
 
-export function Navbar({ items, activeSection, onNavigate }: NavbarProps) {
+export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return currentPath === '/'
+    }
+    return currentPath.startsWith(path)
+  }
+
   return (
     <header className="sticky top-3 z-40 mb-8 border border-cyan-200/20 bg-slate-950/75 px-4 py-3 backdrop-blur-xl md:px-5">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/70 to-transparent" />
@@ -34,12 +41,12 @@ export function Navbar({ items, activeSection, onNavigate }: NavbarProps) {
         <nav className="hidden items-center gap-2 lg:flex">
           {items.map((item) => (
             <button
-              key={item.id}
+              key={item.path}
               type="button"
-              onClick={() => onNavigate(item.id)}
+              onClick={() => onNavigate(item.path)}
               className={cn(
                 'nav-link-chip',
-                activeSection === item.id && 'border-cyan-200/60 bg-cyan-300/12 text-cyan-100',
+                isActive(item.path) && 'border-cyan-200/60 bg-cyan-300/12 text-cyan-100',
               )}
             >
               {item.label}
@@ -65,13 +72,13 @@ export function Navbar({ items, activeSection, onNavigate }: NavbarProps) {
             </SheetHeader>
             <div className="flex flex-col gap-2">
               {items.map((item) => (
-                <SheetClose asChild key={item.id}>
+                <SheetClose asChild key={item.path}>
                   <button
                     type="button"
-                    onClick={() => onNavigate(item.id)}
+                    onClick={() => onNavigate(item.path)}
                     className={cn(
                       'w-full rounded-lg border border-cyan-200/20 bg-slate-900/70 px-3 py-2 text-left text-sm text-slate-100',
-                      activeSection === item.id && 'border-cyan-200/60 text-cyan-100',
+                      isActive(item.path) && 'border-cyan-200/60 text-cyan-100',
                     )}
                   >
                     {item.label}

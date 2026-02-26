@@ -313,6 +313,65 @@ body {
   border-color: rgba(152, 218, 255, 0.5);
 }
 
+.project-rail {
+  display: flex;
+  gap: 0.95rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  padding: 0.25rem 0.2rem 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(130, 210, 255, 0.38) rgba(6, 18, 34, 0.45);
+}
+
+.project-rail::-webkit-scrollbar {
+  height: 9px;
+}
+
+.project-rail::-webkit-scrollbar-track {
+  background: rgba(7, 18, 35, 0.45);
+  border-radius: 999px;
+}
+
+.project-rail::-webkit-scrollbar-thumb {
+  background: rgba(130, 210, 255, 0.38);
+  border-radius: 999px;
+}
+
+.project-rail-item {
+  flex: 0 0 min(92vw, 29rem);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.rail-arrow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(151, 218, 255, 0.36);
+  background: rgba(7, 21, 39, 0.78);
+  color: #c9e8ff;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.rail-arrow-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(151, 218, 255, 0.62);
+  color: #ecf8ff;
+}
+
+.rail-arrow-button:focus-visible {
+  outline: 2px solid rgba(133, 218, 255, 0.72);
+  outline-offset: 2px;
+}
+
 .field-group {
   display: grid;
   gap: 0.42rem;
@@ -428,6 +487,18 @@ body {
     font-size: 0.7rem;
     letter-spacing: 0.11em;
     padding: 0.62rem 0.54rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .project-rail-item {
+    flex-basis: min(72vw, 31rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-rail-item {
+    flex-basis: min(56vw, 32rem);
   }
 }
 

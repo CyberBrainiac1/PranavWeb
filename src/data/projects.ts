@@ -37,8 +37,8 @@ export const projects: Project[] = [
     rev: 'REV 2',
     spec: 'STATUS / ACTIVE',
     links: [
-      { label: 'Blog Build Log', href: '#experiments' },
-      { label: 'Project Focus', href: '#projects' },
+      { label: 'Blog Build Log', href: '#/experiments' },
+      { label: 'Project Focus', href: '#/projects' },
     ],
     details: [
       {
