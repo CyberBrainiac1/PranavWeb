@@ -4,10 +4,10 @@ export const profileInfo = {
   summary:
     'Hardware-focused robotics builder working across mechanisms, CAD, prototyping, and practical system integration.',
   aboutParagraphs: [
-    'Hi, I’m Pranav, a high-school robotics builder based near San Jose. I founded the FTC team Evergreen Dragons because I wanted a team culture built around ownership, fast learning, and real execution.',
-    'I’m most at home on the hardware side: designing mechanisms in SolidWorks and Onshape, prototyping parts quickly, testing under real constraints, and refining each revision until it feels reliable instead of fragile.',
-    'Right now I’m focused on projects like my Sim Racing Wheel with force feedback and a DIY robotic hand. My goal is simple: build systems that are practical, upgradeable, and genuinely useful beyond a single demo.',
-    'I care about steady progress, clear thinking, and making things that perform when it actually counts.',
+    'I’m Pranav, a robotics builder from near San Jose. I started Evergreen Dragons to create a team that moves fast, learns hard, and builds with purpose.',
+    'What drives me is turning rough ideas into real machines you can trust. I care about strong design, clean mechanisms, and practical decisions that make a build better every version.',
+    'Right now I’m focused on my Sim Racing Wheel with force feedback and a DIY robotic hand. Both projects push me to balance precision, feel, and reliability.',
+    'I like work that is hands-on, honest, and useful. If it doesn’t hold up in the real world, it is not done yet.',
   ],
   contactServiceKey: '',
   links: {

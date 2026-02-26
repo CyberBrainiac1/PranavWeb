@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlertTriangle,
@@ -45,65 +45,67 @@ type ContactPageProps = {
 }
 
 function HomePage({
-  onViewProjects,
-  onContact,
-  onSeeBuild,
+  onOpenContactPage,
 }: {
-  onViewProjects: () => void
-  onContact: () => void
-  onSeeBuild: () => void
+  onOpenContactPage: () => void
 }) {
+  const scrollToContact = () => {
+    document.getElementById('home-contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <>
-      <Hero onViewProjects={onViewProjects} onContact={onContact} onSeeBuild={onSeeBuild} />
+      <Hero onContact={scrollToContact} />
 
       <Section
         id="about"
         label="FIG.02 / ABOUT"
         title="About Me"
-        subtitle="I care about building hardware that holds up in the real world, not just in one clean test."
+        subtitle="I build hardware that is practical, reliable, and built to keep improving."
       >
-        <div className="grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <article className="blueprint-panel about-copy">
-            {profileInfo.aboutParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </article>
+        <article className="blueprint-panel about-copy">
+          {profileInfo.aboutParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </article>
+      </Section>
 
-          <aside className="blueprint-panel space-y-3 sm:space-y-4">
-            <LabelTag text="CURRENT FOCUS" />
-            <h3 className="text-xl font-semibold text-white">What I care about in every build</h3>
-            <ul className="about-highlights space-y-2 text-sm text-slate-300">
-              <li>Designing mechanisms that stay reliable after real use.</li>
-              <li>Fast prototyping and testing so every version gets better.</li>
-              <li>Clear, upgrade-friendly systems instead of one-off builds.</li>
-              <li>Keeping performance high without overcomplicating things.</li>
-            </ul>
+      <Section
+        id="home-contact"
+        label="FIG.03 / CONTACT"
+        title="Let’s Connect"
+        subtitle="If you want to collaborate, ask questions, or just say hi, reach out."
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <a className="contact-button" href="mailto:emmadipranav@gmail.com">
+            <Mail size={16} /> Email
+          </a>
+          <a
+            className="contact-button"
+            href={profileInfo.links.linkedin}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Linkedin size={16} /> LinkedIn
+          </a>
+          <a
+            className="contact-button"
+            href={profileInfo.links.github}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Github size={16} /> GitHub
+          </a>
+        </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
-              <button
-                type="button"
-                onClick={onViewProjects}
-                className="btn-primary-mag w-full justify-center"
-              >
-                View Projects
-              </button>
-              <button
-                type="button"
-                onClick={onSeeBuild}
-                className="btn-outline-mag w-full justify-center"
-              >
-                See Sim Wheel
-              </button>
-              <button
-                type="button"
-                onClick={onContact}
-                className="btn-outline-mag w-full justify-center"
-              >
-                Contact
-              </button>
-            </div>
-          </aside>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={onOpenContactPage}
+            className="btn-outline-mag w-full justify-center sm:w-auto"
+          >
+            Open Full Contact Form
+          </button>
         </div>
       </Section>
     </>
@@ -281,10 +283,6 @@ function App() {
 
   const location = useLocation()
   const navigate = useNavigate()
-  const featuredProject = useMemo(
-    () => projects.find((project) => project.featured) ?? projects[0],
-    [],
-  )
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -352,11 +350,6 @@ function App() {
     }
   }
 
-  const openFeaturedFromHero = () => {
-    navigate('/projects')
-    setTimeout(() => setSelectedProject(featuredProject), 260)
-  }
-
   return (
     <div className="relative min-h-screen text-slate-100">
       <BlueprintBackground />
@@ -381,9 +374,7 @@ function App() {
                 path="/"
                 element={
                   <HomePage
-                    onViewProjects={() => navigate('/projects')}
-                    onContact={() => navigate('/contact')}
-                    onSeeBuild={openFeaturedFromHero}
+                    onOpenContactPage={() => navigate('/contact')}
                   />
                 }
               />

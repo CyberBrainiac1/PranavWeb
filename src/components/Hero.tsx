@@ -1,22 +1,19 @@
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
 import { CornerBracketsSVG } from './CornerBracketsSVG'
 import { LabelTag } from './LabelTag'
 
 type HeroProps = {
-  onViewProjects: () => void
   onContact: () => void
-  onSeeBuild: () => void
 }
 
-const headlineLines = ['ROBOTICS', 'BUILDER', 'MECH + CONTROL']
+const headlineLines = ['PRANAV', 'EMMADI', 'ROBOTICS BUILDER']
 
-export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
+export function Hero({ onContact }: HeroProps) {
   return (
     <section id="home" className="hero-shell relative overflow-hidden">
       <CornerBracketsSVG className="opacity-85" />
       <div className="measurement-strip" aria-hidden="true">
-        <span>FTC / FRC / MAKER</span>
+        <span>FTC / MAKER</span>
         <div className="measurement-ticks" />
       </div>
       <div className="relative z-[1] grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
@@ -38,48 +35,24 @@ export function Hero({ onViewProjects, onContact, onSeeBuild }: HeroProps) {
               </motion.span>
             ))}
           </h1>
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
-            <button
-              type="button"
-              onClick={onViewProjects}
-              className="btn-primary-mag w-full justify-center sm:w-auto"
-            >
-              View Projects
-            </button>
-            <button
-              type="button"
-              onClick={onContact}
-              className="btn-outline-mag w-full justify-center sm:w-auto"
-            >
-              Contact
-            </button>
-          </div>
         </div>
 
-        <div className="space-y-3.5 sm:space-y-4">
+        <div className="space-y-4 sm:space-y-5">
           <p className="hero-intro">
-            I&apos;m Pranav Emmadi. I build robots, test ideas quickly, and keep what actually
-            works in real conditions. I&apos;m based near San Jose.
+            I&apos;m Pranav Emmadi. I love building robots and hardware that actually works when
+            it matters. I&apos;m based near San Jose, and I care most about clean design, fast
+            testing, and real results.
           </p>
-          <motion.article
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.2 }}
-            className="featured-callout"
-          >
-            <LabelTag text="SPEC" />
-            <h2>Featured: Sim Racing Wheel + Force Feedback</h2>
-            <p>
-              This is my main build right now. I&apos;m focused on making it feel good to drive and
-              easy to upgrade over time.
+          <div className="blueprint-panel space-y-3">
+            <LabelTag text="CURRENT FOCUS" />
+            <p className="text-sm leading-relaxed text-slate-300">
+              Main build right now: Sim Racing Wheel + Force Feedback. I&apos;m tuning it to feel
+              smooth, responsive, and easy to keep upgrading.
             </p>
-            <button
-              type="button"
-              onClick={onSeeBuild}
-              className="inline-flex items-center gap-2 text-emerald-100"
-            >
-              See the Build <ArrowRight size={15} />
-            </button>
-          </motion.article>
+          </div>
+          <button type="button" onClick={onContact} className="btn-primary-mag w-full justify-center sm:w-auto">
+            Scroll to Contact
+          </button>
         </div>
       </div>
     </section>
