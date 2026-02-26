@@ -30,11 +30,11 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-3 z-40 mb-8 border border-emerald-200/20 bg-slate-950/75 px-4 py-3 backdrop-blur-xl md:px-5">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-200/70 to-transparent" />
+    <header className="sticky top-3 z-40 mb-8 border border-sky-200/20 bg-slate-950/75 px-4 py-3 backdrop-blur-xl md:px-5">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-sky-200/55" />
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-emerald-200/80">NAV / INDEX</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-sky-200/80">NAV / INDEX</p>
           <p className="font-display text-2xl leading-none text-white">Pranav Emmadi</p>
         </div>
 
@@ -46,7 +46,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
               onClick={() => onNavigate(item.path)}
               className={cn(
                 'nav-link-chip',
-                isActive(item.path) && 'border-emerald-200/60 bg-emerald-300/12 text-emerald-100',
+                isActive(item.path) && 'border-sky-200/60 bg-sky-300/12 text-sky-100',
               )}
             >
               {item.label}
@@ -55,7 +55,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
         </nav>
 
         <Sheet>
-          <SheetTrigger className="inline-flex rounded-lg border border-emerald-200/30 p-2 text-emerald-100 lg:hidden">
+          <SheetTrigger className="inline-flex rounded-lg border border-sky-200/30 p-2 text-sky-100 lg:hidden">
             <Menu size={18} />
             <span className="sr-only">Open menu</span>
           </SheetTrigger>
@@ -71,8 +71,8 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
                     type="button"
                     onClick={() => onNavigate(item.path)}
                     className={cn(
-                      'w-full rounded-lg border border-emerald-200/20 bg-slate-900/70 px-3 py-2 text-left text-sm text-slate-100',
-                      isActive(item.path) && 'border-emerald-200/60 text-emerald-100',
+                      'w-full rounded-lg border border-sky-200/20 bg-slate-900/70 px-3 py-2 text-left text-sm text-slate-100',
+                      isActive(item.path) && 'border-sky-200/60 text-sky-100',
                     )}
                   >
                     {item.label}

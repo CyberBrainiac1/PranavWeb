@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { type Project } from '../data/projects'
 import { Chip } from './Chip'
-import { CornerBracketsSVG } from './CornerBracketsSVG'
 import { LabelTag } from './LabelTag'
 
 type ProjectStoryScrollProps = {
@@ -38,7 +37,8 @@ export function ProjectStoryScroll({
     offset: ['start start', 'end end'],
   })
 
-  const x = useTransform(scrollYProgress, [0, 1], [0, -travelDistance])
+  const xRaw = useTransform(scrollYProgress, [0, 1], [0, -travelDistance])
+  const x = useSpring(xRaw, { stiffness: 92, damping: 24, mass: 0.55 })
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 1023px)')
@@ -89,7 +89,6 @@ export function ProjectStoryScroll({
       style={{ height: sectionHeight }}
     >
       <div ref={viewportRef} className="project-story-sticky">
-        <CornerBracketsSVG className="opacity-80" />
         <span className="project-story-side-word" aria-hidden="true">
           PROJECT FLOW
         </span>

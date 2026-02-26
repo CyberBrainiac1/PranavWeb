@@ -203,7 +203,7 @@ function SkillsPage() {
             <ul className="mt-3 space-y-2 text-sm text-slate-300">
               {module.items.map((item) => (
                 <li key={item} className="flex gap-2">
-                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-emerald-200" />
+                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-sky-200" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -222,7 +222,7 @@ function ContactPage({
 }: ContactPageProps) {
   const statusTone =
     status.kind === 'success'
-      ? 'border-emerald-200/40 bg-emerald-300/10 text-emerald-50'
+      ? 'border-sky-200/40 bg-sky-300/10 text-sky-50'
       : 'border-amber-200/35 bg-amber-300/10 text-amber-50'
 
   return (
@@ -432,10 +432,10 @@ function App() {
           </motion.div>
         </AnimatePresence>
 
-        <footer className="mt-8 border-t border-emerald-200/20 pt-4">
+        <footer className="mt-8 border-t border-sky-200/20 pt-4">
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.16em] text-slate-400">
             <p>© {new Date().getFullYear()} Pranav Emmadi</p>
-            <p className="font-mono text-emerald-100/80">Build / Iterate / Test</p>
+            <p className="font-mono text-sky-100/80">Build / Iterate / Test</p>
           </div>
         </footer>
       </main>

@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { CornerBracketsSVG } from './CornerBracketsSVG'
 import { LabelTag } from './LabelTag'
 
 type HeroProps = {
@@ -12,7 +11,6 @@ const headlineLines = ['PRANAV', 'EMMADI', 'ROBOTICS BUILDER']
 export function Hero({ onStartStory, onContact }: HeroProps) {
   return (
     <section id="home" className="hero-shell relative overflow-hidden">
-      <CornerBracketsSVG className="opacity-85" />
       <div className="measurement-strip" aria-hidden="true">
         <span>FTC / MAKER</span>
         <div className="measurement-ticks" />

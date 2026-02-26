@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { LabelTag } from './LabelTag'
-import { CornerBracketsSVG } from './CornerBracketsSVG'
 
 type SectionProps = {
   id: string
@@ -21,7 +20,6 @@ export function Section({ id, label, title, subtitle, children }: SectionProps) 
       transition={{ duration: 0.45, ease: 'easeOut' }}
       className="section-shell relative"
     >
-      <CornerBracketsSVG className="opacity-80" />
       <div className="relative z-[1] space-y-4">
         <LabelTag text={label} />
         <div className="space-y-2">
