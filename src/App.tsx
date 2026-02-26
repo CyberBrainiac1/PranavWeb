@@ -21,10 +21,12 @@ import { ProjectRail } from './components/ProjectRail'
 import { Section } from './components/Section'
 import { profileInfo } from './data/profile'
 import { projects, type Project } from './data/projects'
+import { skillModules } from './data/skills'
 
 const navItems = [
   { path: '/', label: 'Home' },
   { path: '/projects', label: 'Projects' },
+  { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
 ]
 
@@ -66,11 +68,13 @@ const writeStorage = (key: string, value: string) => {
 
 function HomePage({
   onViewProjects,
+  onViewSkills,
   onContact,
   onSeeBuild,
   onOpenProject,
 }: {
   onViewProjects: () => void
+  onViewSkills: () => void
   onContact: () => void
   onSeeBuild: () => void
   onOpenProject: (project: Project) => void
@@ -85,7 +89,7 @@ function HomePage({
         id="home-overview"
         label="FIG.02 / QUICK ROUTES"
         title="Simple Navigation"
-        subtitle="Three pages only: Home, Projects, and Contact."
+        subtitle="Four pages only: Home, Projects, Skills, and Contact."
       >
         <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))]">
           <article className="blueprint-panel space-y-3">
@@ -115,6 +119,21 @@ function HomePage({
               className="btn-outline-mag mt-1 w-full justify-center sm:w-auto"
             >
               Open Projects <ArrowRight size={14} />
+            </button>
+          </article>
+
+          <article className="blueprint-panel space-y-3">
+            <LabelTag text="SKILLS" />
+            <h3 className="text-xl font-semibold text-white">Core Skills</h3>
+            <p className="text-sm text-slate-300">
+              See the practical skills stack across design, fabrication, and electronics.
+            </p>
+            <button
+              type="button"
+              onClick={onViewSkills}
+              className="btn-outline-mag mt-1 w-full justify-center sm:w-auto"
+            >
+              Open Skills <ArrowRight size={14} />
             </button>
           </article>
 
@@ -193,6 +212,34 @@ function ProjectsPage({ onOpenProject }: { onOpenProject: (project: Project) => 
   )
 }
 
+function SkillsPage() {
+  return (
+    <Section
+      id="skills"
+      label="FIG.05 / SKILLS"
+      title="Skills"
+      subtitle="Core skills grouped into practical build modules."
+    >
+      <div className="grid gap-4 sm:gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
+        {skillModules.map((module) => (
+          <article key={module.id} className="blueprint-panel">
+            <LabelTag text={module.label} />
+            <h3 className="mt-3 text-xl font-semibold text-white">{module.title}</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              {module.items.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-emerald-200" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
 function ContactPage({
   onSubmit,
   status,
@@ -209,7 +256,7 @@ function ContactPage({
   return (
     <Section
       id="contact"
-      label="FIG.05 / CONTACT"
+      label="FIG.06 / CONTACT"
       title="Contact"
       subtitle="Send a message directly to inbox through the form service."
     >
@@ -427,6 +474,7 @@ function App() {
                 element={
                   <HomePage
                     onViewProjects={() => navigate('/projects')}
+                    onViewSkills={() => navigate('/skills')}
                     onContact={() => navigate('/contact')}
                     onSeeBuild={openFeaturedFromHero}
                     onOpenProject={setSelectedProject}
@@ -434,6 +482,7 @@ function App() {
                 }
               />
               <Route path="/projects" element={<ProjectsPage onOpenProject={setSelectedProject} />} />
+              <Route path="/skills" element={<SkillsPage />} />
               <Route
                 path="/contact"
                 element={
