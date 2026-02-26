@@ -37,7 +37,7 @@ export const projects: Project[] = [
     rev: 'REV 2',
     spec: 'STATUS / ACTIVE',
     links: [
-      { label: 'Blog Build Log', href: '#/experiments' },
+      { label: 'Blog Build Log', href: './blog/diy-sim-racing-rig-xiao-rp2040.html' },
       { label: 'Project Focus', href: '#/projects' },
     ],
     details: [
