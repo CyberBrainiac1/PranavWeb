@@ -40,19 +40,9 @@ const navItems = [
   { path: '/experiences', label: 'Experiences' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
-  { path: '/dev', label: 'Dev' },
 ]
 
-const scrollRouteOrder = [
-  '/home',
-  '/projects',
-  '/designed',
-  '/blog',
-  '/timeline',
-  '/experiences',
-  '/skills',
-  '/contact',
-]
+const scrollRouteOrder = navItems.map((item) => item.path)
 
 const DOWN_THRESHOLD = 0.9
 const UP_THRESHOLD = 0.1
@@ -72,6 +62,14 @@ function getCanonicalRoute(pathname: string) {
   if (pathname === '/') return '/home'
   if (pathname.startsWith('/blog/')) return '/blog'
   return pathname
+}
+
+function getAdjacentRoute(pathname: string, direction: 1 | -1) {
+  const routeIndex = scrollRouteOrder.indexOf(pathname)
+  if (routeIndex === -1) return null
+  const nextIndex = routeIndex + direction
+  if (nextIndex < 0 || nextIndex >= scrollRouteOrder.length) return null
+  return scrollRouteOrder[nextIndex]
 }
 
 type ContactStatus = {
@@ -138,7 +136,10 @@ function ProjectsPage() {
   const navigate = useNavigate()
   const featuredProject = projects.find((project) => project.featured) ?? projects[0]
   const handleBoundaryScroll = (direction: 1 | -1) => {
-    navigate(direction > 0 ? '/designed' : '/home')
+    const adjacentRoute = getAdjacentRoute('/projects', direction)
+    if (adjacentRoute) {
+      navigate(adjacentRoute)
+    }
   }
 
   return (

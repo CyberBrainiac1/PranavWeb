@@ -20,6 +20,13 @@ function toPublicMediaHref(filename: string) {
   return `${import.meta.env.BASE_URL}PicturesandVideos/${encodeURIComponent(filename)}`
 }
 
+function toWebPreviewFilename(filename: string) {
+  if (/\.(heic|heif)$/i.test(filename)) {
+    return filename.replace(/\.[^.]+$/i, '.jpg')
+  }
+  return filename
+}
+
 export function getProjectMediaItems(project: Project): ProjectMediaItem[] {
   const albumSection = project.details.find((section) => section.heading.toLowerCase().includes('album media'))
   if (!albumSection) return []
@@ -32,22 +39,24 @@ export function getProjectMediaItems(project: Project): ProjectMediaItem[] {
 
   return uniqueFilenames.map((filename) => {
     const extension = getExtension(filename)
+    const previewFilename = toWebPreviewFilename(filename)
+    const previewHref = toPublicMediaHref(previewFilename)
 
     if (VIDEO_EXTENSIONS.has(extension)) {
       return {
         filename,
         kind: 'video',
         previewable: true,
-        href: toPublicMediaHref(filename),
+        href: previewHref,
       }
     }
 
-    if (IMAGE_EXTENSIONS.has(extension)) {
+    if (IMAGE_EXTENSIONS.has(extension) || extension === 'heic' || extension === 'heif') {
       return {
         filename,
         kind: 'image',
         previewable: true,
-        href: toPublicMediaHref(filename),
+        href: previewHref,
       }
     }
 

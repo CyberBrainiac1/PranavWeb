@@ -17,6 +17,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
   const [hintVisible, setHintVisible] = useState(true)
   const [mobileLayout, setMobileLayout] = useState(false)
   const [mediaAspectMap, setMediaAspectMap] = useState<Record<string, number>>({})
+  const [mediaErrorMap, setMediaErrorMap] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -95,17 +96,29 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
 
   const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
     if (mobileLayout) return
+    const dominantDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX
+    if (Math.abs(dominantDelta) < 10) return
+    event.preventDefault()
+    handleWheelDelta(dominantDelta)
+  }
+
+  const handleNativeScroll = () => {
+    const track = trackRef.current
+    if (!track) return
+    targetScrollRef.current = track.scrollLeft
+    if (hintVisible && track.scrollLeft > 2) {
+      setHintVisible(false)
+    }
+  }
+
+  const handleWheelDelta = (dominantDelta: number) => {
     const track = trackRef.current
     if (!track) return
 
-    const dominantDelta =
-      Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX
-
-    if (Math.abs(dominantDelta) < 10) return
-
     const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth)
-    const atStart = track.scrollLeft <= 2
-    const atEnd = track.scrollLeft >= maxScroll - 2
+    const currentScroll = Math.max(track.scrollLeft, targetScrollRef.current)
+    const atStart = currentScroll <= 2
+    const atEnd = currentScroll >= maxScroll - 2
 
     if (dominantDelta > 0 && atEnd) {
       triggerBoundaryScroll(1)
@@ -117,22 +130,42 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
       return
     }
 
-    event.preventDefault()
     targetScrollRef.current = track.scrollLeft
-    queueHorizontalScroll(dominantDelta * 0.95)
+    queueHorizontalScroll(dominantDelta * 1.25)
+
     if (hintVisible) {
       setHintVisible(false)
     }
   }
 
-  const handleNativeScroll = () => {
-    const track = trackRef.current
-    if (!track) return
-    targetScrollRef.current = track.scrollLeft
-    if (hintVisible && track.scrollLeft > 2) {
-      setHintVisible(false)
+  useEffect(() => {
+    if (mobileLayout) return
+
+    const onWindowWheel = (event: globalThis.WheelEvent) => {
+      if (event.defaultPrevented) return
+      const targetElement = event.target instanceof HTMLElement ? event.target : null
+      if (targetElement?.closest('input, textarea, select, [contenteditable="true"]')) return
+
+      const track = trackRef.current
+      if (!track) return
+
+      const rect = track.getBoundingClientRect()
+      const visible = rect.bottom > window.innerHeight * 0.14 && rect.top < window.innerHeight * 0.86
+      if (!visible) return
+
+      const dominantDelta =
+        Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX
+
+      if (Math.abs(dominantDelta) < 10) return
+      event.preventDefault()
+      handleWheelDelta(dominantDelta)
     }
-  }
+
+    window.addEventListener('wheel', onWindowWheel, { passive: false })
+    return () => {
+      window.removeEventListener('wheel', onWindowWheel)
+    }
+  }, [hintVisible, mobileLayout])
 
   const renderProjectPanel = (project: Project, index: number) => {
     const mediaItems = getProjectMediaItems(project)
@@ -162,7 +195,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
               className={getMediaTileClassName(item.filename)}
               title={item.filename}
             >
-              {item.kind === 'image' && item.previewable ? (
+              {item.kind === 'image' && item.previewable && !mediaErrorMap[item.filename] ? (
                 <img
                   src={item.href}
                   alt={item.filename}
@@ -172,13 +205,18 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
                     if (!image.naturalWidth || !image.naturalHeight) return
                     const aspect = image.naturalWidth / image.naturalHeight
                     setMediaAspectMap((current) =>
-                      current[item.filename] === aspect
-                        ? current
-                        : { ...current, [item.filename]: aspect },
+                        current[item.filename] === aspect
+                          ? current
+                          : { ...current, [item.filename]: aspect },
+                    )
+                  }}
+                  onError={() => {
+                    setMediaErrorMap((current) =>
+                      current[item.filename] ? current : { ...current, [item.filename]: true },
                     )
                   }}
                 />
-              ) : item.kind === 'video' ? (
+              ) : item.kind === 'video' && !mediaErrorMap[item.filename] ? (
                 <video
                   src={item.href}
                   muted
@@ -189,14 +227,19 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
                     if (!video.videoWidth || !video.videoHeight) return
                     const aspect = video.videoWidth / video.videoHeight
                     setMediaAspectMap((current) =>
-                      current[item.filename] === aspect
-                        ? current
-                        : { ...current, [item.filename]: aspect },
+                        current[item.filename] === aspect
+                          ? current
+                          : { ...current, [item.filename]: aspect },
+                    )
+                  }}
+                  onError={() => {
+                    setMediaErrorMap((current) =>
+                      current[item.filename] ? current : { ...current, [item.filename]: true },
                     )
                   }}
                 />
               ) : (
-                <span>{item.filename}</span>
+                <span className="projects-panel-media-fallback">{item.filename}</span>
               )}
             </a>
           ))}
@@ -242,7 +285,9 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
     <section className="projects-horizontal" data-disable-route-scroll onWheel={handleWheel}>
       <div className="projects-track-header">
         <p className="micro-label">Project gallery</p>
-        {!mobileLayout && hintVisible ? <p className="projects-scroll-hint">scroll to explore -&gt;</p> : null}
+        {!mobileLayout && hintVisible ? (
+          <p className="projects-scroll-hint">scroll up or down to move sideways -&gt;</p>
+        ) : null}
       </div>
 
       {mobileLayout ? (

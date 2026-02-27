@@ -2354,9 +2354,9 @@ body {
   gap: 1rem;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-behavior: auto;
   overscroll-behavior-x: contain;
+  overscroll-behavior-y: contain;
   padding-bottom: 0.35rem;
   scrollbar-width: thin;
   scrollbar-color: rgba(158, 198, 245, 0.45) rgba(8, 25, 45, 0.22);
@@ -2378,8 +2378,6 @@ body {
 
 .projects-panel {
   flex: 0 0 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
   border: 1px solid rgba(170, 206, 255, 0.22);
   background: rgba(8, 25, 45, 0.38);
   border-radius: 0.82rem;
@@ -2448,19 +2446,25 @@ body {
 }
 
 .projects-panel-media-link {
-  display: block;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   border-radius: 0.62rem;
   border: 1px solid rgba(170, 206, 255, 0.2);
   background: rgba(9, 24, 43, 0.64);
+  aspect-ratio: 1 / 1;
 }
 
 .projects-panel-media-link.is-wide {
   grid-column: span 2;
+  aspect-ratio: 16 / 10;
 }
 
 .projects-panel-media-link.is-tall {
   grid-row: span 2;
+  aspect-ratio: 3 / 4;
 }
 
 .projects-panel-media-link.is-square {
@@ -2471,8 +2475,20 @@ body {
 .projects-panel-media-link video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: rgba(6, 17, 32, 0.88);
+}
+
+.projects-panel-media-fallback {
+  display: block;
+  padding: 0.55rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  color: rgba(193, 220, 255, 0.88);
+  word-break: break-word;
 }
 
 .project-dialog-media {
@@ -2498,19 +2514,24 @@ body {
 }
 
 .project-dialog-media-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   border-radius: 0.62rem;
   border: 1px solid rgba(170, 206, 255, 0.2);
   background: rgba(9, 24, 43, 0.64);
+  aspect-ratio: 1 / 1;
 }
 
 .project-dialog-media-link.is-wide {
   grid-column: span 2;
+  aspect-ratio: 16 / 10;
 }
 
 .project-dialog-media-link.is-tall {
   grid-row: span 2;
+  aspect-ratio: 3 / 4;
 }
 
 .project-dialog-media-link.is-square {
@@ -2521,8 +2542,9 @@ body {
 .project-dialog-media-link video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: rgba(6, 17, 32, 0.88);
 }
 
 .projects-panel-details summary {

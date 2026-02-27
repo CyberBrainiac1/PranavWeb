@@ -30,6 +30,7 @@ export function ProjectDetailsDialog({
   onOpenChange,
 }: ProjectDetailsDialogProps) {
   const [mediaAspectMap, setMediaAspectMap] = useState<Record<string, number>>({})
+  const [mediaErrorMap, setMediaErrorMap] = useState<Record<string, boolean>>({})
 
   if (!project) {
     return null
@@ -137,7 +138,7 @@ export function ProjectDetailsDialog({
                   className={getMediaTileClassName(item.filename)}
                   title={item.filename}
                 >
-                  {item.kind === 'image' && item.previewable ? (
+                  {item.kind === 'image' && item.previewable && !mediaErrorMap[item.filename] ? (
                     <img
                       src={item.href}
                       alt={item.filename}
@@ -152,8 +153,13 @@ export function ProjectDetailsDialog({
                             : { ...current, [item.filename]: aspect },
                         )
                       }}
+                      onError={() => {
+                        setMediaErrorMap((current) =>
+                          current[item.filename] ? current : { ...current, [item.filename]: true },
+                        )
+                      }}
                     />
-                  ) : item.kind === 'video' ? (
+                  ) : item.kind === 'video' && !mediaErrorMap[item.filename] ? (
                     <video
                       src={item.href}
                       muted
@@ -169,9 +175,14 @@ export function ProjectDetailsDialog({
                             : { ...current, [item.filename]: aspect },
                         )
                       }}
+                      onError={() => {
+                        setMediaErrorMap((current) =>
+                          current[item.filename] ? current : { ...current, [item.filename]: true },
+                        )
+                      }}
                     />
                   ) : (
-                    <span>{item.filename}</span>
+                    <span className="projects-panel-media-fallback">{item.filename}</span>
                   )}
                 </a>
               ))}
