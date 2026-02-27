@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">Blueprint Placeholder</title>
+  <desc id="desc">Placeholder image for blog content.</desc>
+  <rect width="1200" height="680" fill="#0a1d36"/>
+  <g stroke="#5f8ec9" stroke-opacity="0.25">
+    <path d="M0 80h1200M0 160h1200M0 240h1200M0 320h1200M0 400h1200M0 480h1200M0 560h1200M0 640h1200"/>
+    <path d="M120 0v680M240 0v680M360 0v680M480 0v680M600 0v680M720 0v680M840 0v680M960 0v680M1080 0v680"/>
+  </g>
+  <rect x="120" y="120" width="960" height="440" rx="20" fill="#0f2748" stroke="#8eb6ec" stroke-opacity="0.4"/>
+  <text x="600" y="320" fill="#cfe2ff" font-size="46" text-anchor="middle" font-family="monospace" letter-spacing="4">IMAGE PLACEHOLDER</text>
+  <text x="600" y="380" fill="#9ec0f5" font-size="22" text-anchor="middle" font-family="monospace" letter-spacing="2">[ADD] real build photo</text>
+</svg>

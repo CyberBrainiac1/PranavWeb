@@ -40,17 +40,20 @@ The contact form uses Web3Forms.
 Open the `Contact` page and use the **Ask Pranav Bot** panel.
 
 - Local mode: works immediately with built-in site facts.
-- AI mode: add your API key + endpoint + model in the panel.
+- AI mode: set endpoint/model/key with env vars or from hidden dev settings.
 
-OpenAI example:
-- Endpoint: `https://api.openai.com/v1/chat/completions`
-- Model: `gpt-4o-mini`
-- API key: your `sk-...` key
+### Bot env vars
 
-OpenRouter example:
-- Endpoint: `https://openrouter.ai/api/v1/chat/completions`
-- Model: provider/model slug you use
-- API key: your OpenRouter key
+Create `.env.local` (ignored by git):
+
+```bash
+VITE_BOT_ENDPOINT=https://ai.hackclub.com/proxy/v1/chat/completions
+VITE_BOT_MODEL=openai/gpt-oss-120b
+VITE_BOT_API_KEY=your_key_here
+```
+
+Important: this keeps keys out of the repository, but GitHub Pages is a static frontend, so any key shipped to the browser can still be extracted.  
+For true secret protection, use a backend proxy (server/worker) and keep the key there.
 
 Hack Club AI proxy example:
 - Endpoint: `https://ai.hackclub.com/proxy/v1/chat/completions`

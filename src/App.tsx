@@ -43,7 +43,6 @@ const navItems = [
   { path: '/timeline', label: 'Timeline' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
-  { path: '/dev', label: 'Dev' },
 ]
 
 const scrollRouteOrder = [
@@ -98,7 +97,6 @@ function HomePage({
   onOpenBoredPage,
   onOpenBlogPage,
   onOpenTimelinePage,
-  onOpenDevPage,
   onOpenFeaturedStory,
   onOpenContactPage,
 }: {
@@ -108,7 +106,6 @@ function HomePage({
   onOpenBoredPage: () => void
   onOpenBlogPage: () => void
   onOpenTimelinePage: () => void
-  onOpenDevPage: () => void
   onOpenFeaturedStory: () => void
   onOpenContactPage: () => void
 }) {
@@ -207,14 +204,6 @@ function HomePage({
             <p className="text-sm text-slate-300">Reach out directly.</p>
             <button type="button" onClick={onOpenContactPage} className="btn-outline-mag w-full justify-center sm:w-auto">
               Open Contact
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Dev</h3>
-            <p className="text-sm text-slate-300">Edit keys and runtime settings.</p>
-            <button type="button" onClick={onOpenDevPage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Dev
             </button>
           </article>
 
@@ -629,7 +618,7 @@ function App() {
       setContactStatus({
         kind: 'error',
         message:
-          'Contact form key is missing. Open the Dev tab and set your Web3Forms key.',
+          'Contact form key is missing. Click codex in the footer and set your Web3Forms key.',
       })
       return
     }
@@ -715,7 +704,6 @@ function App() {
                     onOpenBoredPage={() => navigate('/bored')}
                     onOpenBlogPage={() => navigate('/blog')}
                     onOpenTimelinePage={() => navigate('/timeline')}
-                    onOpenDevPage={() => navigate('/dev')}
                     onOpenFeaturedStory={() => navigate(`/blog/${FEATURED_BLOG_SLUG}`)}
                     onOpenContactPage={() => navigate('/contact')}
                   />
@@ -766,7 +754,15 @@ function App() {
             </div>
           </div>
           <p className="mt-2 text-right text-[11px] lowercase tracking-[0.08em] text-slate-500">
-            vibe coded by codex
+            vibe coded by{' '}
+            <button
+              type="button"
+              onClick={() => navigate('/dev')}
+              className="font-mono text-slate-400 transition hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/70"
+              aria-label="Open hidden dev settings"
+            >
+              codex
+            </button>
           </p>
         </footer>
       </main>

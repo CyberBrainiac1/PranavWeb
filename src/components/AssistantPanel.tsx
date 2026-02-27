@@ -268,7 +268,7 @@ export function AssistantPanel() {
       </div>
 
       <p className="text-sm text-slate-300">
-        Local mode works without any key. To manage keys and settings, use the Dev tab.
+        Local mode works without any key. For settings, click the codex word in the footer.
       </p>
 
       <div className="blueprint-panel">
@@ -277,12 +277,6 @@ export function AssistantPanel() {
           Endpoint: <span className="font-mono text-slate-200">{settings.endpoint}</span> |
           Model: <span className="font-mono text-slate-200">{settings.model}</span>
         </p>
-        <a
-          href="#/dev"
-          className="mt-2 inline-flex text-xs font-medium text-sky-100 transition hover:text-white"
-        >
-          Open Dev tab to change keys
-        </a>
       </div>
 
       <div className="max-h-72 space-y-2 overflow-y-auto rounded-lg border border-sky-200/20 bg-slate-950/45 p-3">

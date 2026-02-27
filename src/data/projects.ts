@@ -40,7 +40,7 @@ export const projects: Project[] = [
     spec: 'STATUS / ACTIVE',
     links: [
       { label: 'Full Build Log', href: '#/blog/diy-force-feedback-wheel-build-log' },
-      { label: 'CPR vs PPR Notes', href: '#/blog/cpr-vs-ppr-one-rule' },
+      { label: 'Setup + Troubleshooting Checklist', href: '#/blog/sim-wheel-setup-checklist' },
     ],
     details: simWheelProjectSections,
   },

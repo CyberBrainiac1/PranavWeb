@@ -1,0 +1,2 @@
+This is a placeholder for the signal flow diagram.
+Intended use: End-to-end signal flow showing: Physical rotation → Electrical pulses → Digital counts → USB HID reports → Windows OS → Game (BeamNG)
