@@ -50,6 +50,8 @@ const NAV_COOLDOWN_MS = 1400
 const SCROLL_DELTA_THRESHOLD = 20
 const WHEEL_NAV_TRIGGER_DELTA = 240
 const WHEEL_ACCUMULATION_RESET_MS = 260
+const HIDDEN_DEV_TAP_TARGET = 5
+const HIDDEN_DEV_TAP_WINDOW_MS = 1400
 
 function canUseRouteScrollTarget(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) return true
@@ -412,6 +414,8 @@ function App() {
   const lastScrollDirectionRef = useRef<1 | -1 | 0>(0)
   const wheelDeltaAccumulatorRef = useRef(0)
   const wheelAccumulatorTimestampRef = useRef(0)
+  const hiddenDevTapCountRef = useRef(0)
+  const hiddenDevTapTimeRef = useRef(0)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [mobileLayout, setMobileLayout] = useState(false)
 
@@ -656,6 +660,21 @@ function App() {
     }
   }
 
+  const handleHiddenDevTap = () => {
+    const now = Date.now()
+    if (now - hiddenDevTapTimeRef.current > HIDDEN_DEV_TAP_WINDOW_MS) {
+      hiddenDevTapCountRef.current = 0
+    }
+
+    hiddenDevTapTimeRef.current = now
+    hiddenDevTapCountRef.current += 1
+
+    if (hiddenDevTapCountRef.current >= HIDDEN_DEV_TAP_TARGET) {
+      hiddenDevTapCountRef.current = 0
+      navigate('/dev')
+    }
+  }
+
   return (
     <div className="relative min-h-screen text-slate-100">
       <BlueprintBackground />
@@ -735,9 +754,16 @@ function App() {
               <p className="font-mono text-sky-100/80">Build / Iterate / Test</p>
             </div>
           </div>
-          <p className="mt-2 text-right text-[11px] lowercase tracking-[0.08em] text-slate-500">
-            built with care
-          </p>
+          <div className="mt-2 text-right text-[11px] lowercase tracking-[0.08em] text-slate-500">
+            <button
+              type="button"
+              onClick={handleHiddenDevTap}
+              className="appearance-none bg-transparent p-0 text-inherit hover:text-slate-400 focus-visible:outline-none"
+              aria-label="Hidden settings access"
+            >
+              built with care
+            </button>
+          </div>
         </footer>
 
         {routeIndex >= 0 ? (
