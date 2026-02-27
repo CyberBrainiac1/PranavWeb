@@ -24,6 +24,7 @@ import { Section } from './components/Section'
 import { aboutTimelineEntries } from './data/aboutTimeline'
 import { boredIdeas } from './data/bored'
 import { designedItems } from './data/designed'
+import { experienceItems } from './data/experiences'
 import { profileInfo } from './data/profile'
 import { projects } from './data/projects'
 import { skillModules } from './data/skills'
@@ -36,6 +37,7 @@ const navItems = [
   { path: '/designed', label: 'Designed' },
   { path: '/blog', label: 'Blog' },
   { path: '/timeline', label: 'Timeline' },
+  { path: '/experiences', label: 'Experiences' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
 ]
@@ -46,6 +48,7 @@ const scrollRouteOrder = [
   '/designed',
   '/blog',
   '/timeline',
+  '/experiences',
   '/skills',
   '/contact',
 ]
@@ -226,11 +229,31 @@ function TimelinePage() {
   )
 }
 
+function ExperiencesPage() {
+  return (
+    <Section
+      id="experiences"
+      label="FIG.05 / EXPERIENCES"
+      title="Experiences"
+      subtitle="A few programs and events that shaped how I build."
+    >
+      <div className="list-section">
+        {experienceItems.map((item) => (
+          <article key={item.id} className="list-row">
+            <h3>{item.title}</h3>
+            <p>{item.blurb}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+  )
+}
+
 function BoredPage() {
   return (
     <Section
       id="bored"
-      label="FIG.05 / BORED LIST"
+      label="FIG.06 / BORED LIST"
       title="Things To Do When Bored"
       subtitle="Quick options when you want something fun, useful, or both."
     >
@@ -262,7 +285,7 @@ function DesignedPage() {
   return (
     <Section
       id="designed"
-      label="FIG.06 / DESIGNED"
+      label="FIG.07 / DESIGNED"
       title="Cool Things I Personally Designed"
       subtitle="A quick list of designs I am proud of."
     >
@@ -292,7 +315,7 @@ function ContactPage({
   return (
     <Section
       id="contact"
-      label="FIG.08 / CONTACT"
+      label="FIG.09 / CONTACT"
       title="Contact"
       subtitle="Send a message and I&apos;ll get it by email."
     >
@@ -636,6 +659,7 @@ function App() {
               <Route path="/designed" element={<DesignedPage />} />
               <Route path="/bored" element={<BoredPage />} />
               <Route path="/timeline" element={<TimelinePage />} />
+              <Route path="/experiences" element={<ExperiencesPage />} />
               <Route path="/skills" element={<SkillsPage />} />
               <Route path="/dev" element={<DevSettingsPage />} />
               <Route
