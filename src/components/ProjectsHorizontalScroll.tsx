@@ -16,6 +16,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
   const boundaryCooldownRef = useRef(0)
   const [hintVisible, setHintVisible] = useState(true)
   const [mobileLayout, setMobileLayout] = useState(false)
+  const [mediaAspectMap, setMediaAspectMap] = useState<Record<string, number>>({})
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -135,6 +136,13 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
 
   const renderProjectPanel = (project: Project, index: number) => {
     const mediaItems = getProjectMediaItems(project)
+    const getMediaTileClassName = (filename: string) => {
+      const aspect = mediaAspectMap[filename]
+      if (!aspect) return 'projects-panel-media-link'
+      if (aspect >= 1.45) return 'projects-panel-media-link is-wide'
+      if (aspect <= 0.78) return 'projects-panel-media-link is-tall'
+      return 'projects-panel-media-link is-square'
+    }
 
     return (
     <article key={project.id} className={`projects-panel ${project.featured ? 'is-featured' : ''}`}>
@@ -151,13 +159,42 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
               href={item.href}
               target="_blank"
               rel="noreferrer"
-              className="projects-panel-media-link"
+              className={getMediaTileClassName(item.filename)}
               title={item.filename}
             >
               {item.kind === 'image' && item.previewable ? (
-                <img src={item.href} alt={item.filename} loading="lazy" />
+                <img
+                  src={item.href}
+                  alt={item.filename}
+                  loading="lazy"
+                  onLoad={(event) => {
+                    const image = event.currentTarget
+                    if (!image.naturalWidth || !image.naturalHeight) return
+                    const aspect = image.naturalWidth / image.naturalHeight
+                    setMediaAspectMap((current) =>
+                      current[item.filename] === aspect
+                        ? current
+                        : { ...current, [item.filename]: aspect },
+                    )
+                  }}
+                />
               ) : item.kind === 'video' ? (
-                <video src={item.href} muted playsInline preload="metadata" />
+                <video
+                  src={item.href}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  onLoadedMetadata={(event) => {
+                    const video = event.currentTarget
+                    if (!video.videoWidth || !video.videoHeight) return
+                    const aspect = video.videoWidth / video.videoHeight
+                    setMediaAspectMap((current) =>
+                      current[item.filename] === aspect
+                        ? current
+                        : { ...current, [item.filename]: aspect },
+                    )
+                  }}
+                />
               ) : (
                 <span>{item.filename}</span>
               )}

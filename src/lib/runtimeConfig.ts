@@ -120,10 +120,7 @@ export function loadRuntimeConfig(): RuntimeConfig {
       githubUrl: (parsed.githubUrl ?? defaults.githubUrl).trim(),
       botEndpoint: (parsed.botEndpoint ?? defaults.botEndpoint).trim(),
       botModel: (parsed.botModel ?? defaults.botModel).trim(),
-      // If remember is off, keep using env/default key without persisting it.
-      botApiKey: parsed.botRememberKey
-        ? (parsed.botApiKey ?? '').trim()
-        : defaults.botApiKey,
+      botApiKey: (parsed.botApiKey ?? defaults.botApiKey).trim(),
       botRememberKey: Boolean(parsed.botRememberKey),
       botKnowledgeText: String(parsed.botKnowledgeText ?? defaults.botKnowledgeText).trim(),
     }

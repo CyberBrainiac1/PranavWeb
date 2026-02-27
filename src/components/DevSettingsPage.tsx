@@ -103,7 +103,7 @@ export function DevSettingsPage() {
     githubUrl: current.githubUrl.trim(),
     botEndpoint: current.botEndpoint.trim(),
     botModel: current.botModel.trim(),
-    botApiKey: current.botRememberKey ? current.botApiKey.trim() : '',
+    botApiKey: current.botApiKey.trim(),
     botRememberKey: current.botRememberKey,
     botKnowledgeText: current.botKnowledgeText.trim(),
   })

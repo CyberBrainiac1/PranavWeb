@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react'
+import { useState } from 'react'
 import { type Project } from '../data/projects'
 import { getProjectMediaItems } from '../lib/projectMedia'
 import {
@@ -28,11 +29,20 @@ export function ProjectDetailsDialog({
   open,
   onOpenChange,
 }: ProjectDetailsDialogProps) {
+  const [mediaAspectMap, setMediaAspectMap] = useState<Record<string, number>>({})
+
   if (!project) {
     return null
   }
 
   const mediaItems = getProjectMediaItems(project)
+  const getMediaTileClassName = (filename: string) => {
+    const aspect = mediaAspectMap[filename]
+    if (!aspect) return 'project-dialog-media-link'
+    if (aspect >= 1.45) return 'project-dialog-media-link is-wide'
+    if (aspect <= 0.78) return 'project-dialog-media-link is-tall'
+    return 'project-dialog-media-link is-square'
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -124,13 +134,42 @@ export function ProjectDetailsDialog({
                   href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="project-dialog-media-link"
+                  className={getMediaTileClassName(item.filename)}
                   title={item.filename}
                 >
                   {item.kind === 'image' && item.previewable ? (
-                    <img src={item.href} alt={item.filename} loading="lazy" />
+                    <img
+                      src={item.href}
+                      alt={item.filename}
+                      loading="lazy"
+                      onLoad={(event) => {
+                        const image = event.currentTarget
+                        if (!image.naturalWidth || !image.naturalHeight) return
+                        const aspect = image.naturalWidth / image.naturalHeight
+                        setMediaAspectMap((current) =>
+                          current[item.filename] === aspect
+                            ? current
+                            : { ...current, [item.filename]: aspect },
+                        )
+                      }}
+                    />
                   ) : item.kind === 'video' ? (
-                    <video src={item.href} muted playsInline preload="metadata" />
+                    <video
+                      src={item.href}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      onLoadedMetadata={(event) => {
+                        const video = event.currentTarget
+                        if (!video.videoWidth || !video.videoHeight) return
+                        const aspect = video.videoWidth / video.videoHeight
+                        setMediaAspectMap((current) =>
+                          current[item.filename] === aspect
+                            ? current
+                            : { ...current, [item.filename]: aspect },
+                        )
+                      }}
+                    />
                   ) : (
                     <span>{item.filename}</span>
                   )}

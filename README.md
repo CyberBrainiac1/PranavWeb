@@ -39,26 +39,20 @@ The contact form uses Web3Forms.
 
 Open the `Contact` page and use the **Ask Pranav Bot** panel.
 
-- Local mode: works immediately with built-in site facts.
-- AI mode: set endpoint/model/key with env vars or from hidden dev settings.
+- Bot works with built-in local facts by default.
+- Optional AI mode can be enabled with environment configuration.
 
-### Bot env vars
+### Bot env vars (optional)
 
 Create `.env.local` (ignored by git):
 
 ```bash
-VITE_BOT_ENDPOINT=https://ai.hackclub.com/proxy/v1/chat/completions
 VITE_BOT_MODEL=openai/gpt-oss-120b
 VITE_BOT_API_KEY=your_key_here
 ```
 
 Important: this keeps keys out of the repository, but GitHub Pages is a static frontend, so any key shipped to the browser can still be extracted.  
 For true secret protection, use a backend proxy (server/worker) and keep the key there.
-
-Hack Club AI proxy example:
-- Endpoint: `https://ai.hackclub.com/proxy/v1/chat/completions`
-- Model: `openai/gpt-oss-120b`
-- API key: your Hack Club proxy key
 
 To "train" it better, update your site data files:
 - `src/data/profile.ts`
@@ -67,26 +61,6 @@ To "train" it better, update your site data files:
 - `src/data/designed.ts`
 
 The bot response context is built from those files automatically.
-
-## Dev Tab (Password-Protected Settings)
-
-A `Dev` tab is available in the navbar. It lets you edit:
-
-- Web3Forms contact key
-- Bot endpoint
-- Bot model
-- Bot API key
-
-The lock is client-side (good for convenience, not strong security).
-
-To set a custom password:
-
-```bash
-# .env.local
-VITE_DEV_TAB_PASSWORD=your_password_here
-```
-
-If not set, fallback password is `changeme`.
 
 ## LinkedIn Timeline Import
 

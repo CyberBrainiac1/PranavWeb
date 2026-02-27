@@ -16,6 +16,7 @@ import { BlueprintBackground } from './components/BlueprintBackground'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
 import { AssistantPanel } from './components/AssistantPanel'
+import { DevSettingsPage } from './components/DevSettingsPage'
 import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
 import { ProjectsHorizontalScroll } from './components/ProjectsHorizontalScroll'
@@ -39,6 +40,7 @@ const navItems = [
   { path: '/experiences', label: 'Experiences' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
+  { path: '/dev', label: 'Dev' },
 ]
 
 const scrollRouteOrder = [
@@ -701,7 +703,7 @@ function App() {
               <Route path="/timeline" element={<TimelinePage />} />
               <Route path="/experiences" element={<ExperiencesPage />} />
               <Route path="/skills" element={<SkillsPage />} />
-              <Route path="/dev" element={<Navigate to="/home" replace />} />
+              <Route path="/dev" element={<DevSettingsPage />} />
               <Route
                 path="/contact"
                 element={

@@ -29,17 +29,32 @@ const starterMessages: ChatMessage[] = [
 function buildKnowledgeContext(config: RuntimeConfig) {
   const featured = projects.find((project) => project.featured) ?? projects[0]
   const projectSummary = projects
-    .map((project) => `- ${project.name}: ${project.summary}`)
+    .map(
+      (project) =>
+        `- ${project.name}: ${project.summary}\n  Tags: ${project.tags.join(', ')}\n  Details: ${project.details
+          .map((section) => `${section.heading}: ${section.bullets.join('; ')}`)
+          .join(' | ')}`,
+    )
     .join('\n')
   const skillSummary = skillModules
     .map((module) => `- ${module.title}: ${module.items.join(', ')}`)
     .join('\n')
   const designedSummary = designedItems.map((item) => `- ${item.title}: ${item.note}`).join('\n')
+  const aboutSummary = config.aboutParagraphs.map((paragraph) => `- ${paragraph}`).join('\n')
+  const storySummary = config.storyBeats
+    .map((beat) => `- ${beat.label}: ${beat.title} — ${beat.text}`)
+    .join('\n')
 
   return `
 Name: ${config.profileName}
 Location: ${config.profileLocation}
 Bio summary: ${config.profileSummary}
+
+About:
+${aboutSummary}
+
+Story beats:
+${storySummary}
 
 Important profile rule:
 - Do not describe Pranav as a heavy programmer.
@@ -67,41 +82,69 @@ ${config.botKnowledgeText || '[ADD]'}
 `.trim()
 }
 
-function getLocalAnswer(question: string, config: RuntimeConfig) {
-  const q = question.toLowerCase()
-  const featured = projects.find((project) => project.featured) ?? projects[0]
+function getLocalAnswer(question: string, config: RuntimeConfig, history: ChatMessage[]) {
+  const q = question.toLowerCase().trim()
+  const tokens = q
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length > 2)
 
-  if (q.includes('sim') || q.includes('wheel') || q.includes('force feedback')) {
-    return `The main focus is ${featured.name}. ${featured.summary}`
-  }
+  const scoredProjects = projects
+    .map((project) => {
+      const text = [
+        project.name,
+        project.summary,
+        project.tags.join(' '),
+        ...project.details.flatMap((section) => [section.heading, ...section.bullets]),
+      ]
+        .join(' ')
+        .toLowerCase()
 
-  if (q.includes('project')) {
-    const names = projects.slice(0, 5).map((project) => project.name).join(', ')
-    return `Top projects right now: ${names}.`
-  }
+      const score = tokens.reduce((total, token) => (text.includes(token) ? total + 1 : total), 0)
+      return { project, score }
+    })
+    .sort((a, b) => b.score - a.score)
 
-  if (q.includes('skill') || q.includes('cad') || q.includes('esp32') || q.includes('python')) {
-    return 'Core skills: CAD (SolidWorks + Onshape), prototyping, electronics, ESP32/Raspberry Pi work, and Python used a lot for testing and tuning.'
-  }
-
-  if (q.includes('design') || q.includes('designed')) {
-    const items = designedItems.map((item) => item.title).join(', ')
-    return `Designed highlights: ${items}.`
-  }
-
-  if (q.includes('team') || q.includes('ftc') || q.includes('frc')) {
-    return 'Teams include FTC Evergreen Dragons and FRC 2854 Prototypes.'
-  }
+  const matchedProjects = scoredProjects.filter((entry) => entry.score > 0).slice(0, 2)
+  const recentUserPrompt = [...history]
+    .reverse()
+    .find((message) => message.role === 'user')
+    ?.text.toLowerCase()
 
   if (q.includes('contact') || q.includes('email') || q.includes('reach')) {
-    return `Best contact is ${config.contactEmail}. You can also use LinkedIn and GitHub from the contact section.`
+    return `Best way to reach me is ${config.contactEmail}. You can also use LinkedIn (${config.linkedinUrl}) or GitHub (${config.githubUrl}).`
   }
 
-  if (q.includes('programming') || q.includes('coding') || q.includes('code')) {
-    return 'He keeps that side simple, knows the basics, and uses a lot of Python when needed.'
+  if (q.includes('who are you') || q.includes('about you') || q.includes('introduce')) {
+    return `${config.profileName} is a robotics builder based in ${config.profileLocation}. ${config.profileSummary}`
   }
 
-  return 'I can help with projects, skills, designed builds, teams, and contact info. Ask me one of those and I can give a cleaner answer.'
+  if (q.includes('skill') || q.includes('tools') || q.includes('tech stack')) {
+    const topSkills = skillModules
+      .slice(0, 3)
+      .map((module) => `${module.title}: ${module.items.join(', ')}`)
+      .join(' | ')
+    return `Core strengths are ${topSkills}.`
+  }
+
+  if (matchedProjects.length > 0) {
+    const top = matchedProjects[0].project
+    const second = matchedProjects[1]?.project
+    const topNext = top.details[0]?.bullets?.[0] ?? 'Still iterating and improving each revision.'
+    return second
+      ? `Closest match is ${top.name}: ${top.summary} Next step: ${topNext} Another related project is ${second.name}.`
+      : `Closest match is ${top.name}: ${top.summary} Next step: ${topNext}`
+  }
+
+  if (recentUserPrompt && (recentUserPrompt.includes('project') || recentUserPrompt.includes('build'))) {
+    const featured = projects.find((project) => project.featured) ?? projects[0]
+    return `If you want, I can go deeper on ${featured.name}. Quick summary: ${featured.summary}`
+  }
+
+  const quickProjects = projects
+    .slice(0, 4)
+    .map((project) => project.name)
+    .join(', ')
+  return `Ask me about any specific project, and I can break down goals, hardware, and what I learned. Good starting points: ${quickProjects}.`
 }
 
 async function askApiAssistant(
@@ -169,7 +212,6 @@ export function AssistantPanel() {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
 
-  const modeLabel = settings.apiKey.trim() ? 'AI mode' : 'Local mode'
   const knowledgeContext = useMemo(() => buildKnowledgeContext(runtimeConfig), [runtimeConfig])
 
   useEffect(() => {
@@ -240,11 +282,11 @@ export function AssistantPanel() {
             [...messages, userMessage],
             knowledgeContext,
           )
-        : getLocalAnswer(question, runtimeConfig)
+        : getLocalAnswer(question, runtimeConfig, messages)
 
       setMessages((current) => [...current, { role: 'assistant', text: answer }])
     } catch (apiError) {
-      const fallbackAnswer = getLocalAnswer(question, runtimeConfig)
+      const fallbackAnswer = getLocalAnswer(question, runtimeConfig, messages)
       setMessages((current) => [
         ...current,
         { role: 'assistant', text: fallbackAnswer },
@@ -263,21 +305,13 @@ export function AssistantPanel() {
           <h3 className="text-lg font-semibold text-white">Ask Pranav Bot</h3>
         </div>
         <p className="inline-flex items-center gap-1 rounded-full border border-sky-200/35 px-2.5 py-1 text-xs text-sky-100/90">
-          <Sparkles size={13} /> {modeLabel}
+          <Sparkles size={13} /> Assistant
         </p>
       </div>
 
       <p className="text-sm text-slate-300">
-        Local mode works without any key. For settings, click the codex word in the footer.
+        Ask about projects, skills, teams, or contact info.
       </p>
-
-      <div className="blueprint-panel">
-        <p className="text-xs text-slate-300">
-          Current mode: <span className="font-semibold text-slate-100">{modeLabel}</span> |
-          Endpoint: <span className="font-mono text-slate-200">{settings.endpoint}</span> |
-          Model: <span className="font-mono text-slate-200">{settings.model}</span>
-        </p>
-      </div>
 
       <div className="max-h-72 space-y-2 overflow-y-auto rounded-lg border border-sky-200/20 bg-slate-950/45 p-3">
         {messages.map((message, index) => (
@@ -313,7 +347,7 @@ export function AssistantPanel() {
 
       {error ? (
         <p className="text-xs text-amber-200">
-          AI request failed, so I answered from local facts. Error: {error}
+          I answered from local facts.
         </p>
       ) : null}
     </div>
