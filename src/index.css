@@ -1081,17 +1081,56 @@ body {
   background: #07172b;
 }
 
+.blueprint-solid {
+  background: #06172a;
+}
+
 .blueprint-grid {
   background-image:
-    linear-gradient(rgba(136, 182, 255, 0.11) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(136, 182, 255, 0.11) 1px, transparent 1px),
-    linear-gradient(rgba(136, 182, 255, 0.2) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(136, 182, 255, 0.2) 1px, transparent 1px);
+    linear-gradient(rgba(126, 178, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 178, 255, 0.18) 1px, transparent 1px);
   background-size:
-    48px 48px,
-    48px 48px,
-    240px 240px,
-    240px 240px;
+    44px 44px,
+    44px 44px;
+}
+
+.blueprint-major-lines {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 220px,
+      rgba(146, 197, 255, 0.22) 220px,
+      rgba(146, 197, 255, 0.22) 221px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 220px,
+      rgba(146, 197, 255, 0.22) 220px,
+      rgba(146, 197, 255, 0.22) 221px
+    );
+  opacity: 0.72;
+}
+
+.blueprint-markers {
+  background-image:
+    radial-gradient(circle at center, rgba(167, 211, 255, 0.26) 1.4px, transparent 1.7px),
+    linear-gradient(rgba(166, 210, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(166, 210, 255, 0.18) 1px, transparent 1px);
+  background-size:
+    220px 220px,
+    220px 220px,
+    220px 220px;
+  background-position:
+    0 0,
+    110px 0,
+    0 110px;
+  opacity: 0.34;
+}
+
+.blueprint-vignette {
+  background: radial-gradient(circle at center, transparent 48%, rgba(2, 9, 20, 0.45) 100%);
 }
 
 .app-scroll {
