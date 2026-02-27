@@ -19,6 +19,7 @@ import { AssistantPanel } from './components/AssistantPanel'
 import { DevSettingsPage } from './components/DevSettingsPage'
 import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
+import { ProjectsHorizontalScroll } from './components/ProjectsHorizontalScroll'
 import { Section } from './components/Section'
 import { aboutTimelineEntries } from './data/aboutTimeline'
 import { boredIdeas } from './data/bored'
@@ -30,32 +31,41 @@ import { timeline as linkedinTimeline } from './data/timeline'
 import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
 
 const navItems = [
-  { path: '/', label: 'Home' },
+  { path: '/home', label: 'Home' },
   { path: '/projects', label: 'Projects' },
   { path: '/designed', label: 'Designed' },
   { path: '/blog', label: 'Blog' },
-  { path: '/bored', label: 'Bored' },
   { path: '/timeline', label: 'Timeline' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
 ]
 
 const scrollRouteOrder = [
-  '/',
+  '/home',
   '/projects',
   '/designed',
   '/blog',
-  '/bored',
   '/timeline',
   '/skills',
   '/contact',
 ]
 
+const DOWN_THRESHOLD = 0.9
+const UP_THRESHOLD = 0.1
+const NAV_COOLDOWN_MS = 950
+const SCROLL_DELTA_THRESHOLD = 16
+
 function canUseRouteScrollTarget(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) return true
   return !target.closest(
-    'input, textarea, select, [contenteditable="true"], .project-rail, [data-disable-route-scroll]',
+    'input, textarea, select, [contenteditable="true"], .projects-horizontal, [data-disable-route-scroll]',
   )
+}
+
+function getCanonicalRoute(pathname: string) {
+  if (pathname === '/') return '/home'
+  if (pathname.startsWith('/blog/')) return '/blog'
+  return pathname
 }
 
 type ContactStatus = {
@@ -121,84 +131,41 @@ function BlogPostRoute({ onBackToBlog }: { onBackToBlog: () => void }) {
 function ProjectsPage() {
   const navigate = useNavigate()
   const featuredProject = projects.find((project) => project.featured) ?? projects[0]
-  const otherProjects = projects.filter((project) => project.id !== featuredProject.id)
+  const handleBoundaryScroll = (direction: 1 | -1) => {
+    navigate(direction > 0 ? '/designed' : '/home')
+  }
 
   return (
     <Section
       id="projects"
       label="FIG.02 / PROJECTS"
       title="Projects"
-      subtitle="A clean list of what I am building and testing."
+      subtitle="A rolling view of what I am building right now."
     >
       <article className="project-featured">
-        <p className="micro-label">Featured project</p>
+        <p className="micro-label">Featured</p>
         <h3>{featuredProject.name}</h3>
         <p>{featuredProject.summary}</p>
         <p className="project-focus-line">
-          Current focus: Sim Racing Wheel + Force Feedback - tuning feel and fixing input mapping.
+          This one has most of my attention right now. I keep tuning feel and cleaning up input behavior.
         </p>
-
         <div className="minimal-action-row">
           <button
             type="button"
             onClick={() => navigate('/blog/diy-force-feedback-wheel-build-log')}
             className="btn-primary-mag"
           >
-            Read Build Log
+            Read build log
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/contact')}
-            className="btn-outline-mag"
-          >
+          <button type="button" onClick={() => navigate('/contact')} className="btn-outline-mag">
             Contact
           </button>
-        </div>
-
-        <div className="project-accordion-list">
-          {featuredProject.details.map((section, index) => (
-            <details key={`${featuredProject.id}-${section.heading}`} className="project-accordion-item" open={index === 0}>
-              <summary>{section.heading}</summary>
-              <ul>
-                {section.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-            </details>
-          ))}
         </div>
       </article>
 
       <div className="content-divider" />
 
-      <div className="project-list-clean">
-        {otherProjects.map((project) => (
-          <article key={project.id} className="project-list-row">
-            <div className="space-y-2">
-              <h4>{project.name}</h4>
-              <p>{project.summary}</p>
-              <p className="project-row-tags">{project.tags.join(' · ')}</p>
-            </div>
-            {project.links?.length ? (
-              <div className="project-row-links">
-                {project.links.map((link) => {
-                  const isExternal = link.href.startsWith('http')
-                  return (
-                    <a
-                      key={`${project.id}-${link.href}`}
-                      href={link.href}
-                      target={isExternal ? '_blank' : undefined}
-                      rel={isExternal ? 'noreferrer' : undefined}
-                    >
-                      {link.label}
-                    </a>
-                  )
-                })}
-              </div>
-            ) : null}
-          </article>
-        ))}
-      </div>
+      <ProjectsHorizontalScroll projects={projects} onBoundaryScroll={handleBoundaryScroll} />
     </Section>
   )
 }
@@ -325,7 +292,7 @@ function ContactPage({
   return (
     <Section
       id="contact"
-      label="FIG.06 / CONTACT"
+      label="FIG.08 / CONTACT"
       title="Contact"
       subtitle="Send a message and I&apos;ll get it by email."
     >
@@ -416,52 +383,74 @@ function App() {
   const [runtimeConfig, setRuntimeConfig] = useState(() => loadRuntimeConfig())
   const routeScrollCooldownRef = useRef(0)
   const lastScrollDirectionRef = useRef<1 | -1 | 0>(0)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   const location = useLocation()
   const navigate = useNavigate()
+  const canonicalRoute = getCanonicalRoute(location.pathname)
+  const routeIndex = scrollRouteOrder.indexOf(canonicalRoute)
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [location.pathname])
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const syncPreference = () => {
+      setPrefersReducedMotion(media.matches)
+    }
+    syncPreference()
+    media.addEventListener('change', syncPreference)
+    return () => {
+      media.removeEventListener('change', syncPreference)
+    }
+  }, [])
 
   useEffect(() => {
-    const currentIndex = scrollRouteOrder.indexOf(location.pathname)
-    if (currentIndex === -1) return
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+  }, [location.pathname, prefersReducedMotion])
 
-    const tryNavigateByScrollEdge = () => {
+  useEffect(() => {
+    if (prefersReducedMotion || routeIndex === -1) return
+
+    const tryNavigateByThreshold = () => {
       const direction = lastScrollDirectionRef.current
       if (!direction) return
 
       const now = Date.now()
       if (now < routeScrollCooldownRef.current) return
 
-      const atTop = window.scrollY <= 4
-      const atBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 4
-
       let nextPath = ''
-      if (direction > 0 && atBottom && currentIndex < scrollRouteOrder.length - 1) {
-        nextPath = scrollRouteOrder[currentIndex + 1]
-      }
-      if (direction < 0 && atTop && currentIndex > 0) {
-        nextPath = scrollRouteOrder[currentIndex - 1]
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
+
+      if (maxScroll <= 18) {
+        if (direction > 0 && routeIndex < scrollRouteOrder.length - 1) {
+          nextPath = scrollRouteOrder[routeIndex + 1]
+        }
+        if (direction < 0 && routeIndex > 0) {
+          nextPath = scrollRouteOrder[routeIndex - 1]
+        }
+      } else {
+        const progress = window.scrollY / maxScroll
+        if (direction > 0 && progress >= DOWN_THRESHOLD && routeIndex < scrollRouteOrder.length - 1) {
+          nextPath = scrollRouteOrder[routeIndex + 1]
+        }
+        if (direction < 0 && progress <= UP_THRESHOLD && routeIndex > 0) {
+          nextPath = scrollRouteOrder[routeIndex - 1]
+        }
       }
 
-      if (!nextPath || nextPath === location.pathname) return
-      routeScrollCooldownRef.current = now + 700
+      if (!nextPath || nextPath === canonicalRoute) return
+      routeScrollCooldownRef.current = now + NAV_COOLDOWN_MS
       navigate(nextPath)
     }
 
     const onWheel = (event: WheelEvent) => {
       if (!canUseRouteScrollTarget(event.target)) return
-      if (Math.abs(event.deltaY) < 10) return
+      if (Math.abs(event.deltaY) < SCROLL_DELTA_THRESHOLD) return
       lastScrollDirectionRef.current = event.deltaY > 0 ? 1 : -1
-      tryNavigateByScrollEdge()
+      tryNavigateByThreshold()
     }
 
     const onScroll = () => {
-      tryNavigateByScrollEdge()
+      tryNavigateByThreshold()
     }
 
     let touchStartY: number | null = null
@@ -475,9 +464,9 @@ function App() {
       if (touchStartY === null) return
       const currentY = event.touches[0]?.clientY ?? touchStartY
       const delta = touchStartY - currentY
-      if (Math.abs(delta) < 18) return
+      if (Math.abs(delta) < SCROLL_DELTA_THRESHOLD) return
       lastScrollDirectionRef.current = delta > 0 ? 1 : -1
-      tryNavigateByScrollEdge()
+      tryNavigateByThreshold()
     }
 
     const onTouchEnd = () => {
@@ -498,7 +487,7 @@ function App() {
       window.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('touchend', onTouchEnd)
     }
-  }, [location.pathname, navigate])
+  }, [canonicalRoute, navigate, prefersReducedMotion, routeIndex])
 
   useEffect(() => {
     const syncRuntimeConfig = () => {
@@ -616,14 +605,14 @@ function App() {
           <motion.div
             className="route-page"
             key={location.pathname}
-            initial={{ opacity: 0, x: 12 }}
+            initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 12 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -12 }}
-            transition={{ duration: 0.24, ease: 'easeOut' }}
+            exit={{ opacity: 0, x: prefersReducedMotion ? 0 : -12 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.24, ease: 'easeOut' }}
           >
             <Routes location={location}>
               <Route
-                path="/"
+                path="/home"
                 element={
                   <HomePage
                     profile={renderProfile}
@@ -634,6 +623,7 @@ function App() {
                   />
                 }
               />
+              <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route
                 path="/blog"
@@ -690,6 +680,12 @@ function App() {
             </button>
           </p>
         </footer>
+
+        {routeIndex >= 0 ? (
+          <div className="route-progress-indicator" aria-hidden="true">
+            {String(routeIndex + 1).padStart(2, '0')} / {String(scrollRouteOrder.length).padStart(2, '0')}
+          </div>
+        ) : null}
       </main>
 
     </div>

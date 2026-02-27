@@ -25,7 +25,7 @@ export function Hero({
 }: HeroProps) {
   const homeParagraphs =
     aboutParagraphs.length > 0
-      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim())
+      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim()).slice(0, 4)
       : []
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
 
