@@ -414,7 +414,7 @@ export function DevSettingsPage() {
               onChange={(event) =>
                 setConfig((current) => ({ ...current, botModel: event.target.value }))
               }
-              placeholder="openai/gpt-oss-120b"
+              placeholder="qwen/qwen3-vl-235b-a22b-instruct"
             />
           </label>
           <label className="field-group">

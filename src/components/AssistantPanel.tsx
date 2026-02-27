@@ -22,7 +22,7 @@ const MESSAGES_STORAGE_KEY = 'pranav_bot_messages_v1'
 const starterMessages: ChatMessage[] = [
   {
     role: 'assistant',
-    text: 'Hey, I am the site bot. Ask me about projects, skills, teams, or contact info.',
+    text: 'Hey! I can answer questions about Pranav, his projects, and also general robotics/build questions.',
   },
 ]
 
@@ -84,6 +84,7 @@ ${config.botKnowledgeText || '[ADD]'}
 
 function getLocalAnswer(question: string, config: RuntimeConfig, history: ChatMessage[]) {
   const q = question.toLowerCase().trim()
+  const isGeneralQuestion = /\b(what is|explain|compare|difference|how does|how do|why is)\b/.test(q)
   const tokens = q
     .split(/[^a-z0-9]+/)
     .filter((token) => token.length > 2)
@@ -114,6 +115,14 @@ function getLocalAnswer(question: string, config: RuntimeConfig, history: ChatMe
     return `Best way to reach me is ${config.contactEmail}. You can also use LinkedIn (${config.linkedinUrl}) or GitHub (${config.githubUrl}).`
   }
 
+  if (q.includes('ftc') || q.includes('frc') || q.includes('team')) {
+    return 'Pranav has worked with FTC Evergreen Dragons and FRC 2854 prototypes, mostly on practical mechanism and build iteration work.'
+  }
+
+  if (q.includes('python') || q.includes('coding') || q.includes('programming')) {
+    return 'He uses coding as a tool for testing and control work, with a lot of Python and practical embedded integration when needed.'
+  }
+
   if (q.includes('who are you') || q.includes('about you') || q.includes('introduce')) {
     return `${config.profileName} is a robotics builder based in ${config.profileLocation}. ${config.profileSummary}`
   }
@@ -124,6 +133,18 @@ function getLocalAnswer(question: string, config: RuntimeConfig, history: ChatMe
       .map((module) => `${module.title}: ${module.items.join(', ')}`)
       .join(' | ')
     return `Core strengths are ${topSkills}.`
+  }
+
+  if (isGeneralQuestion && q.includes('pid')) {
+    return 'PID control means Proportional, Integral, Derivative control. In robotics it helps drive motors/actuators toward a target smoothly: P reacts to current error, I corrects long-term offset, and D damps oscillation. Practical tuning usually starts with P, then a little D, then I if needed.'
+  }
+
+  if (isGeneralQuestion && q.includes('brushed') && q.includes('brushless')) {
+    return 'Brushed motors are simpler and cheaper but wear faster due to brushes and usually have lower efficiency. Brushless motors are more efficient, quieter, and longer-lasting, but need an electronic controller. For higher performance and reliability, brushless is usually better; for simple low-cost builds, brushed can still work.'
+  }
+
+  if (isGeneralQuestion && (q.includes('control') || q.includes('motor') || q.includes('robotics'))) {
+    return 'Good robotics control usually comes from tight sensing, clean mechanical alignment, and iterative tuning. If you want, I can break this down for your exact use case (wheel, arm, hand, or drivetrain).'
   }
 
   if (matchedProjects.length > 0) {
@@ -144,7 +165,7 @@ function getLocalAnswer(question: string, config: RuntimeConfig, history: ChatMe
     .slice(0, 4)
     .map((project) => project.name)
     .join(', ')
-  return `Ask me about any specific project, and I can break down goals, hardware, and what I learned. Good starting points: ${quickProjects}.`
+  return `I can answer this better with GPT mode enabled, but I can still help from local data. Try asking about a specific build, skill area, or decision Pranav made. Good starting points: ${quickProjects}.`
 }
 
 async function askApiAssistant(
@@ -159,8 +180,10 @@ async function askApiAssistant(
       role: 'system',
       content:
         `You are the website assistant for ${assistantName}. ` +
-        'Only use facts from the context below. Be concise and casual. ' +
-        'If a detail is missing, respond with [ADD].\n\n' +
+        'Be concise, friendly, and direct. ' +
+        'Use the context below as source-of-truth for personal/profile/project details. ' +
+        'If the user asks a general question that is not about the profile, answer it normally using general knowledge. ' +
+        'If a personal/project detail is missing from context, say you are not sure and suggest checking the relevant project section.\n\n' +
         `Context:\n${knowledgeContext}`,
     },
     ...messages.slice(-6).map((message) => ({
@@ -179,7 +202,7 @@ async function askApiAssistant(
     body: JSON.stringify({
       model: settings.model,
       messages: payloadMessages,
-      temperature: 0.3,
+      temperature: 0.45,
     }),
   })
 
@@ -194,6 +217,11 @@ async function askApiAssistant(
   }
 
   return answer
+}
+
+export const assistantTestUtils = {
+  buildKnowledgeContext,
+  getLocalAnswer,
 }
 
 export function AssistantPanel() {
