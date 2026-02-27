@@ -2326,6 +2326,11 @@ body {
   scroll-snap-align: none !important;
 }
 
+.route-page > .section-shell,
+.route-page > .minimal-home-shell {
+  min-height: calc(100vh - 9.5rem);
+}
+
 .projects-horizontal {
   position: relative;
 }
@@ -2349,7 +2354,9 @@ body {
   gap: 0.9rem;
   overflow-x: auto;
   overflow-y: hidden;
+  scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
   padding-bottom: 0.35rem;
   scrollbar-width: thin;
   scrollbar-color: rgba(158, 198, 245, 0.45) rgba(8, 25, 45, 0.22);
@@ -2472,6 +2479,11 @@ body {
 }
 
 @media (max-width: 900px) {
+  .route-page > .section-shell,
+  .route-page > .minimal-home-shell {
+    min-height: auto;
+  }
+
   .app-scroll {
     max-width: 100%;
     padding-left: 1rem;

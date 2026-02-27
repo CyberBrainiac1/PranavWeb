@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type WheelEvent } from 'react'
 import type { Project } from '../data/projects'
+import { getProjectMediaItems } from '../lib/projectMedia'
 
 type ProjectsHorizontalScrollProps = {
   projects: Project[]
@@ -68,7 +69,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
         return
       }
 
-      track.scrollLeft = current + distance * 0.2
+      track.scrollLeft = current + distance * 0.14
       rafRef.current = window.requestAnimationFrame(animate)
     }
 
@@ -117,7 +118,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
 
     event.preventDefault()
     targetScrollRef.current = track.scrollLeft
-    queueHorizontalScroll(dominantDelta * 1.1)
+    queueHorizontalScroll(dominantDelta * 0.95)
     if (hintVisible) {
       setHintVisible(false)
     }
@@ -132,12 +133,38 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
     }
   }
 
-  const renderProjectPanel = (project: Project, index: number) => (
+  const renderProjectPanel = (project: Project, index: number) => {
+    const mediaItems = getProjectMediaItems(project)
+
+    return (
     <article key={project.id} className={`projects-panel ${project.featured ? 'is-featured' : ''}`}>
       <p className="projects-panel-index">{String(index + 1).padStart(2, '0')}</p>
       <h4>{project.name}</h4>
       <p>{project.summary}</p>
       <p className="projects-panel-tags">{project.tags.join(' · ')}</p>
+
+      {mediaItems.length ? (
+        <div className="projects-panel-media-grid">
+          {mediaItems.slice(0, 4).map((item) => (
+            <a
+              key={`${project.id}-${item.filename}`}
+              href={item.href}
+              target="_blank"
+              rel="noreferrer"
+              className="projects-panel-media-link"
+              title={item.filename}
+            >
+              {item.kind === 'image' && item.previewable ? (
+                <img src={item.href} alt={item.filename} loading="lazy" />
+              ) : item.kind === 'video' ? (
+                <video src={item.href} muted playsInline preload="metadata" />
+              ) : (
+                <span>{item.filename}</span>
+              )}
+            </a>
+          ))}
+        </div>
+      ) : null}
 
       {project.links?.length ? (
         <div className="projects-panel-links">
@@ -171,10 +198,11 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
         ))}
       </details>
     </article>
-  )
+    )
+  }
 
   return (
-    <section className="projects-horizontal" data-disable-route-scroll>
+    <section className="projects-horizontal" data-disable-route-scroll onWheel={handleWheel}>
       <div className="projects-track-header">
         <p className="micro-label">Project gallery</p>
         {!mobileLayout && hintVisible ? <p className="projects-scroll-hint">scroll to explore -&gt;</p> : null}
@@ -186,7 +214,6 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
         <div
           ref={trackRef}
           className="projects-track"
-          onWheel={handleWheel}
           onScroll={handleNativeScroll}
         >
           {projects.map((project, index) => renderProjectPanel(project, index))}

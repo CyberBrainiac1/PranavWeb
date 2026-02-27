@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react'
 import { type Project } from '../data/projects'
+import { getProjectMediaItems } from '../lib/projectMedia'
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,8 @@ export function ProjectDetailsDialog({
   if (!project) {
     return null
   }
+
+  const mediaItems = getProjectMediaItems(project)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -110,6 +113,32 @@ export function ProjectDetailsDialog({
             </Accordion>
           </TabsContent>
         </Tabs>
+
+        {mediaItems.length ? (
+          <div className="project-dialog-media">
+            <p className="project-dialog-media-title">Album media</p>
+            <div className="project-dialog-media-grid">
+              {mediaItems.map((item) => (
+                <a
+                  key={`${project.id}-${item.filename}`}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="project-dialog-media-link"
+                  title={item.filename}
+                >
+                  {item.kind === 'image' && item.previewable ? (
+                    <img src={item.href} alt={item.filename} loading="lazy" />
+                  ) : item.kind === 'video' ? (
+                    <video src={item.href} muted playsInline preload="metadata" />
+                  ) : (
+                    <span>{item.filename}</span>
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         {project.links?.length ? (
           <div className="mt-5 flex flex-wrap gap-2">

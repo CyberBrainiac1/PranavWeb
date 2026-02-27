@@ -1,5 +1,3 @@
-import { simWheelProjectSections } from './simWheelStory'
-
 export type ProjectStatus = 'featured' | 'active' | 'team' | 'in-progress'
 
 export type ProjectSection = {
@@ -29,218 +27,301 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    id: 'sim-racing-wheel-force-feedback',
-    name: 'Sim Racing Wheel / Force Feedback',
+    id: 'custom-steering-wheel-and-pedals',
+    name: 'Custom Steering Wheel and Pedals',
     summary:
-      'DIY steering wheel + pedals project focused on getting realistic in-game behavior and better force feedback feel over each revision.',
+      'I designed my own steering wheel using a magnetic encoder and iterated pedals from a cardboard prototype to a spring-based design.',
     status: 'featured',
     featured: true,
-    tags: ['Sim Racing', 'Force Feedback', 'Arduino Leonardo', 'BTS7960', 'Encoder A/B'],
-    rev: 'REV 2',
+    tags: ['Age 14', 'Sim Racing', 'Magnetic Encoder', 'Pedals', 'Hardware Iteration'],
+    rev: 'REV 3',
     spec: 'STATUS / ACTIVE',
     links: [
-      { label: 'Full Build Log', href: '#/blog/diy-force-feedback-wheel-build-log' },
-      { label: 'Setup + Troubleshooting Checklist', href: '#/blog/sim-wheel-setup-checklist' },
+      {
+        label: 'Drive Video',
+        href: 'https://drive.google.com/open?id=1iPe4Rb0EEIpZD5XJL82ytoZZppYTnPQk',
+      },
+      {
+        label: 'Build Blog',
+        href: 'https://cyberbrainiac1.github.io/PranavWeb/blog/diy-sim-racing-rig-xiao-rp2040.html',
+      },
+      {
+        label: 'Onshape CAD',
+        href: 'https://cad.onshape.com/documents/c546baa31de9795688852c30/w/9018c2c298b2b7ded205473a/e/647760204ad10df7fbbe13da',
+      },
     ],
-    details: simWheelProjectSections,
+    details: [
+      {
+        heading: 'Build notes',
+        bullets: [
+          'Designed around a magnetic encoder for high steering precision, but still saw occasional glitches.',
+          'Pedals started as cardboard + rotary encoder + rubber band, then moved to a spring-based mechanism.',
+          'This project taught me a lot, but I am currently prioritizing other builds.',
+        ],
+      },
+      {
+        heading: 'Album media',
+        bullets: [
+          'v1steeringwheel.HEIC',
+          'v1JankyPedal.HEIC',
+          'differentAngleWheel.JPG',
+          'BackSteeringold.HEIC',
+          'SeeedStudioXiaoPictureWithWires.HEIC',
+        ],
+      },
+    ],
   },
   {
-    id: 'ftc-shooter-evergreen-dragons',
-    name: 'FTC Shooter (Evergreen Dragons)',
+    id: 'makeblock-rover-first-robot',
+    name: 'Makeblock Rover (First Robot)',
     summary:
-      'Shooter mechanism work under FTC Evergreen Dragons. Core architecture is still being documented into a full system writeup.',
-    status: 'team',
-    tags: ['FTC', 'Shooter', 'Evergreen Dragons', 'In Progress'],
+      'When I was 5, my dad bought me my first robot, a Makeblock rover. It sparked my interest in robotics and tech.',
+    status: 'active',
+    tags: ['Age 5', 'First Robot', 'Makeblock', 'Early Inspiration'],
     rev: 'REV 1',
     spec: 'STATUS / ACTIVE',
     details: [
       {
-        heading: 'Current state',
+        heading: 'Why it matters',
         bullets: [
-          'This shooter is part of my FTC Evergreen Dragons mechanism work.',
-          'I do not have final published specs yet for wheel count, flywheel/compression setup, hood angle method, motor type, gear ratio, feeder/indexer, or sensors.',
-          'I am collecting notes and visual references so I can turn it into one clean full system description.',
+          'This was the project that started everything for me in robotics.',
+          'It directly shaped the way I think about building and learning hardware.',
         ],
       },
       {
-        heading: 'Spec sheet to finalize [ADD]',
+        heading: 'Album media',
+        bullets: ['pranav5yearoldsRobot.HEIC'],
+      },
+    ],
+  },
+  {
+    id: 'hackpack-turret-domino-robot',
+    name: 'Hackpack Turret + Domino Robot Merge',
+    summary:
+      'I combined the Hackpack turret and domino robot into one build by keeping wiring mostly identical and sharing the IR sensor across both Arduinos.',
+    status: 'active',
+    tags: ['Age 13', 'Arduino', 'Hackpack', 'Mechanical Integration'],
+    rev: 'REV 2',
+    spec: 'STATUS / ACTIVE',
+    details: [
+      {
+        heading: 'Build notes',
         bullets: [
-          '[ADD] Shooter architecture (single wheel / dual wheel / other).',
-          '[ADD] RPM targets by distance and game situation.',
-          '[ADD] Angle control method and calibration routine.',
-          '[ADD] Feed/index timing and jam-handling behavior.',
-          '[ADD] Tuning notes that can be reused for awards or documentation.',
+          'Kept the original wiring mostly the same while combining both systems.',
+          'Connected one IR sensor to both Arduinos at the same time.',
+          'Drilled into the domino base and mounted the bottom roller servo by screws.',
         ],
+      },
+      {
+        heading: 'Code files',
+        bullets: ['IRTurrentTank - Pranav Emmadi.ino', 'DominoTank - Pranav Emmadi.ino'],
+      },
+      {
+        heading: 'Album media',
+        bullets: ['Hackpackturrentmergedwithdominorobot.HEIC'],
+      },
+    ],
+  },
+  {
+    id: 'warriorhacks-raspberry-pi-camera-robot',
+    name: 'Raspberry Pi Camera Robot (Warrior Hacks)',
+    summary:
+      'At Warrior Hacks, we built a robot that streamed live camera feed into a React site and mirrored movement live to a remote viewer.',
+    status: 'team',
+    tags: ['Age 13', 'Warrior Hacks', 'Raspberry Pi', 'React', 'Live Feed'],
+    rev: 'REV 1',
+    spec: 'STATUS / TEAM',
+    links: [
+      { label: 'Demo Link 1', href: 'https://drive.google.com/open?id=1bUCc7GvZcgvsVUWT02nAGBww4vK33WMo' },
+      { label: 'Demo Link 2', href: 'https://drive.google.com/open?id=1kVfyQnRgwfbjXKmHHkez-WTtG5ISwznM' },
+    ],
+    details: [
+      {
+        heading: 'Hackathon context',
+        bullets: [
+          'Built during the first Warrior Hacks event.',
+          'Robot streamed camera feed while driving in real time.',
+          'Focus was practical integration between robot hardware and web interface.',
+        ],
+      },
+      {
+        heading: 'Album media',
+        bullets: [
+          'WarriorHacksRobot(1).HEIC',
+          'warriorHacks.HEIC',
+          'warriorhacksrobot.HEIC',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'warriorhacks-self-moving-jumpscare-robot',
+    name: 'Self-Moving Camera Robot (Warrior Hacks)',
+    summary:
+      'For Warrior Hacks, we made a robot that moved randomly, jump-scared users, and streamed live video; I focused on hardware build + code deployment.',
+    status: 'team',
+    tags: ['Age 13', 'Warrior Hacks', 'Hardware Build', 'Live Feed'],
+    rev: 'REV 1',
+    spec: 'STATUS / TEAM',
+    links: [
+      { label: 'Demo Link 1', href: 'https://drive.google.com/open?id=1jzz8oYpikwi1FvEgFAC-9nIh_m_VL33U' },
+      { label: 'Demo Link 2', href: 'https://drive.google.com/open?id=128mxgnd2c3FBa2JfEH2KGC7HNQFsv9zT' },
+    ],
+    details: [
+      {
+        heading: 'Build role',
+        bullets: [
+          'Handled hardware assembly and getting the software running end-to-end on robot hardware.',
+          'Focused on making behavior actually run in live demo conditions.',
+        ],
+      },
+      {
+        heading: 'Album media',
+        bullets: ['IMG_5525.HEIC', 'IMG_5526.HEIC'],
+      },
+    ],
+  },
+  {
+    id: 'pcb-usb-hub-and-hackercard',
+    name: 'PCB USB Hub + HackerCard',
+    summary:
+      'I built a USB hub PCB through Hack Club OnBoard, which sparked my interest to design and build a HackerCard too.',
+    status: 'active',
+    tags: ['Age 12/13', 'PCB Design', 'Hack Club', 'USB Hub', 'HackerCard'],
+    rev: 'REV 1',
+    spec: 'STATUS / ACTIVE',
+    details: [
+      {
+        heading: 'Build notes',
+        bullets: [
+          'USB hub PCB was the entry point project that pushed me deeper into PCB workflow.',
+          'Followed up by building a HackerCard as the next fabrication and design step.',
+        ],
+      },
+      {
+        heading: 'Album media',
+        bullets: ['USBPCB.HEIC', 'HackerCard.HEIC', 'FirstRobotPCB.HEIC'],
+      },
+    ],
+  },
+  {
+    id: 'adjust-fidget',
+    name: 'Adjust Fidget',
+    summary:
+      'Built a focused fidget project and documented it in a public repository.',
+    status: 'active',
+    tags: ['Age 13', 'Open Source', 'Iteration'],
+    rev: 'REV 1',
+    spec: 'STATUS / ACTIVE',
+    links: [
+      { label: 'GitHub README', href: 'https://github.com/CyberBrainiac1/adjustFidget/blob/main/README.md' },
+    ],
+    details: [
+      {
+        heading: 'Project notes',
+        bullets: [
+          'Built as a smaller focused project to improve build quality and repeatability.',
+          'Documentation lives in the GitHub README.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'fan-9v-battery-and-motors',
+    name: 'DIY Fan (9V + Two Motors)',
+    summary:
+      'I made an early fan using a 9V battery, two motors, a salvaged rod from an old printer, and lots of tape.',
+    status: 'active',
+    tags: ['Age 8', 'Early Build', 'Motors', 'DIY'],
+    rev: 'REV 1',
+    spec: 'STATUS / ACTIVE',
+    details: [
+      {
+        heading: 'Build notes',
+        bullets: [
+          'Used parts I already had and improvised structure from salvaged components.',
+          'Simple but important project for learning motor wiring and mechanical balance.',
+        ],
+      },
+      {
+        heading: 'Album media',
+        bullets: ['JankyPranav7YearsFan.HEIC'],
+      },
+    ],
+  },
+  {
+    id: 'better-complex-fan',
+    name: 'Better Fan (Onshape + 12V Motors)',
+    summary:
+      'I redesigned the fan in Onshape around small 12V DC motors to improve fit, structure, and print quality.',
+    status: 'active',
+    tags: ['Age 13', 'Onshape', '3D Printing', '12V Motors'],
+    rev: 'REV 2',
+    spec: 'STATUS / ACTIVE',
+    details: [
+      {
+        heading: 'Build notes',
+        bullets: [
+          'Designed to exact motor dimensions in CAD before fabrication.',
+          'Used this build to improve print-fit workflow and real-world assembly quality.',
+        ],
+      },
+      {
+        heading: 'Album media',
+        bullets: ['TopFullFan.HEIC', 'SideFullFan.HEIC', 'BackFullFan.HEIC', 'DIYFanTpMOdel.MOV'],
       },
     ],
   },
   {
     id: 'diy-robotic-hand',
-    name: 'DIY Robotic Hand',
+    name: 'Robotic Hand',
     summary:
-      'DIY robotic hand project focused on replicating human hand movement with practical build documentation.',
+      'I designed a robotic hand for Hack Club + AMD prototype work, fully rebuilt from CAD and published with a dedicated repository.',
     status: 'active',
-    tags: ['Robotic Hand', 'Mechanics', '3D Printing'],
+    tags: ['Age 14', 'Robotic Hand', 'CAD', 'Prototype'],
     rev: 'REV 2',
     spec: 'STATUS / ACTIVE',
     links: [{ label: 'GitHub Repo', href: 'https://github.com/CyberBrainiac1/RoboticHand' }],
     details: [
       {
-        heading: 'Project goal',
+        heading: 'Build notes',
         bullets: [
-          'The main goal is a DIY robotic hand that can replicate human hand movements.',
-          'This is both a physical build and a documented engineering project.',
-          'I am keeping the documentation focused on design decisions, mechanics, and control behavior.',
+          'I built an earlier version first, then redesigned this version fully in CAD.',
+          'Focused on qualifying as a serious prototype with better structure and documentation.',
         ],
       },
       {
-        heading: 'Design exploration',
+        heading: 'Album media',
         bullets: [
-          'I have been exploring differential mechanisms for fingers and/or wrist-style motion sharing.',
-          'I am gathering 3D-printable model references plus practical design tips for tolerances, material choice, assembly order, and load handling.',
-          '[ADD] Final DOF layout, tendon/actuation route, and control hardware stack.',
-        ],
-      },
-      {
-        heading: 'Validation path [ADD]',
-        bullets: [
-          '[ADD] Test protocol and repeatable benchmark metrics.',
-          '[ADD] Final figures, diagrams, and build notes for documentation.',
-          '[ADD] Next build milestone after validation checks.',
+          'RoboticHandWorking.mp4',
+          'RoboticHandMoving.MOV',
+          'workingonRobotHand.HEIC',
+          'WorkingonRobothand(1).HEIC',
         ],
       },
     ],
   },
   {
-    id: 'robotic-arm-build',
-    name: 'Robotic Arm',
+    id: 'solder-buddy',
+    name: 'Solder Buddy',
     summary:
-      'Separate ongoing robotic arm build currently in servo channel mapping and joint verification stages.',
-    status: 'active',
-    tags: ['Robotic Arm', 'Servo Mapping', 'Control Testing'],
-    rev: 'REV 1',
-    spec: 'STATUS / ACTIVE',
-    details: [
-      {
-        heading: 'Current stage',
-        bullets: [
-          'I have been doing servo channel mapping and testing joint-by-joint to confirm PWM channel assignments.',
-          'For the claw/gripper, I tested or considered a continuous rotation servo.',
-          'That claw choice is important because continuous rotation behaves differently from a position-hold servo.',
-        ],
-      },
-      {
-        heading: 'Control context',
-        bullets: [
-          'I usually use Raspberry Pi with Python when I need control examples and testing flow.',
-          'I also have ESP32 + 28BYJ-48 stepper experience using Dabble Gamepad, which may be reused for teleop.',
-          '[ADD] Final arm controller architecture and wiring map.',
-        ],
-      },
-      {
-        heading: 'Next validation [ADD]',
-        bullets: [
-          '[ADD] Joint limits and repeatability checks.',
-          '[ADD] Gripper approach (continuous rotation vs positional) after reliability testing.',
-          '[ADD] End-to-end movement routine for demos.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 'ftc-evergreen-dragons',
-    name: 'FTC Evergreen Dragons',
-    summary:
-      'I build competitive robots with FTC Evergreen Dragons, with heavy focus on practical mechanism design and rapid testing.',
+      'At the AMD x Hack Club hackathon, my team trained AI models with SO101 robot arms to pick one of three tools from the ground.',
     status: 'team',
-    tags: ['FTC', 'Mechanisms', 'CAD', 'Integration'],
+    tags: ['Age 14', 'Hackathon', 'Robot Arm', 'AI Models'],
     rev: 'REV 1',
     spec: 'STATUS / TEAM',
-    details: [
-      {
-        heading: 'Focus',
-        bullets: [
-          'Turn ideas into parts we can actually build and test quickly.',
-          'Update designs based on what happens on real hardware, not just CAD.',
-          'Shooter mechanism work is one active subsystem under this team effort.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 'frc-2854-prototypes',
-    name: 'FRC 2854 Prototypes',
-    summary:
-      'Prototype work with FRC 2854 to test mechanism ideas and see what is worth building further.',
-    status: 'team',
-    tags: ['FRC', 'Prototype', 'Mechanics'],
-    rev: 'REV 1',
-    spec: 'STATUS / TEAM',
-    details: [
-      {
-        heading: 'Focus',
-        bullets: [
-          'Try different mechanism options and figure out what fits.',
-          'Keep notes on what works before making things more complex.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 'esp32-control-projects',
-    name: 'ESP32 Control Projects',
-    summary:
-      'ESP32 projects where I connect sensors and drivers, then tune behavior for robot tasks.',
-    status: 'active',
-    tags: ['ESP32', 'Sensors', 'Control'],
-    rev: 'REV 1',
-    spec: 'STATUS / ACTIVE',
-    details: [
-      {
-        heading: 'What I worked on',
-        bullets: [
-          'Sensor readout and filtering with real hardware noise.',
-          'Tuning control loops so behavior stays consistent across versions.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 'maker-tools-solderbuddy',
-    name: 'Maker Tools / SolderBuddy',
-    summary:
-      'Small bench helper tools, including SolderBuddy from the AMD x Hack Club Prototype Hackathon.',
-    status: 'active',
-    tags: ['Tools', 'Hackathon', 'Bench Workflow'],
-    rev: 'REV 1',
-    spec: 'STATUS / ACTIVE',
     links: [{ label: 'GitHub Repo', href: 'https://github.com/CyberBrainiac1/SolderBuddy' }],
     details: [
       {
-        heading: 'What I worked on',
+        heading: 'Hackathon notes',
         bullets: [
-          'Make soldering and wiring sessions smoother and faster.',
-          'Keep tools compact, easy to use, and easy to remake.',
+          'Team trained three AI models for tool selection behavior.',
+          'Integrated robot-arm execution with real-world object pickup tasks.',
         ],
       },
-    ],
-  },
-  {
-    id: 'quadruped',
-    name: 'Quadruped',
-    summary:
-      'In-progress quadruped where I am testing layout ideas and control tradeoffs.',
-    status: 'in-progress',
-    tags: ['Quadruped', 'In Progress', 'Control'],
-    rev: 'REV 0',
-    spec: 'STATUS / IN PROGRESS',
-    details: [
       {
-        heading: 'What I worked on',
-        bullets: [
-          'Early layout testing before locking in a final drivetrain.',
-          'Learning stability and control from small test cycles.',
-        ],
+        heading: 'Album media',
+        bullets: ['TestingRobotArm.HEIC'],
       },
     ],
   },

@@ -16,7 +16,6 @@ import { BlueprintBackground } from './components/BlueprintBackground'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
 import { AssistantPanel } from './components/AssistantPanel'
-import { DevSettingsPage } from './components/DevSettingsPage'
 import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
 import { ProjectsHorizontalScroll } from './components/ProjectsHorizontalScroll'
@@ -55,8 +54,10 @@ const scrollRouteOrder = [
 
 const DOWN_THRESHOLD = 0.9
 const UP_THRESHOLD = 0.1
-const NAV_COOLDOWN_MS = 950
-const SCROLL_DELTA_THRESHOLD = 16
+const NAV_COOLDOWN_MS = 1400
+const SCROLL_DELTA_THRESHOLD = 20
+const WHEEL_NAV_TRIGGER_DELTA = 240
+const WHEEL_ACCUMULATION_RESET_MS = 260
 
 function canUseRouteScrollTarget(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) return true
@@ -406,6 +407,8 @@ function App() {
   const [runtimeConfig, setRuntimeConfig] = useState(() => loadRuntimeConfig())
   const routeScrollCooldownRef = useRef(0)
   const lastScrollDirectionRef = useRef<1 | -1 | 0>(0)
+  const wheelDeltaAccumulatorRef = useRef(0)
+  const wheelAccumulatorTimestampRef = useRef(0)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [mobileLayout, setMobileLayout] = useState(false)
 
@@ -451,7 +454,10 @@ function App() {
   }, [location.pathname, prefersReducedMotion, mobileLayout])
 
   useEffect(() => {
-    if (prefersReducedMotion || mobileLayout || routeIndex === -1) return
+    if (prefersReducedMotion || mobileLayout || routeIndex === -1 || canonicalRoute === '/projects') return
+
+    wheelDeltaAccumulatorRef.current = 0
+    wheelAccumulatorTimestampRef.current = 0
 
     const tryNavigateByThreshold = () => {
       const direction = lastScrollDirectionRef.current
@@ -488,7 +494,22 @@ function App() {
     const onWheel = (event: WheelEvent) => {
       if (!canUseRouteScrollTarget(event.target)) return
       if (Math.abs(event.deltaY) < SCROLL_DELTA_THRESHOLD) return
-      lastScrollDirectionRef.current = event.deltaY > 0 ? 1 : -1
+
+      const now = Date.now()
+      const direction: 1 | -1 = event.deltaY > 0 ? 1 : -1
+      const previousDirection = wheelDeltaAccumulatorRef.current > 0 ? 1 : wheelDeltaAccumulatorRef.current < 0 ? -1 : 0
+
+      if (now - wheelAccumulatorTimestampRef.current > WHEEL_ACCUMULATION_RESET_MS || (previousDirection !== 0 && previousDirection !== direction)) {
+        wheelDeltaAccumulatorRef.current = 0
+      }
+
+      wheelAccumulatorTimestampRef.current = now
+      wheelDeltaAccumulatorRef.current += event.deltaY
+
+      if (Math.abs(wheelDeltaAccumulatorRef.current) < WHEEL_NAV_TRIGGER_DELTA) return
+
+      lastScrollDirectionRef.current = direction
+      wheelDeltaAccumulatorRef.current = 0
       tryNavigateByThreshold()
     }
 
@@ -577,8 +598,7 @@ function App() {
     if (!contactServiceKey) {
       setContactStatus({
         kind: 'error',
-        message:
-          'Contact form key is missing. Click codex in the footer and set your Web3Forms key.',
+        message: 'Contact form is not available right now. Please use email or LinkedIn below.',
       })
       return
     }
@@ -637,7 +657,7 @@ function App() {
     <div className="relative min-h-screen text-slate-100">
       <BlueprintBackground />
 
-      <main className="app-scroll mx-auto w-full max-w-[92rem] px-3 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-10 xl:px-12">
+      <main className="app-scroll mx-auto w-full max-w-[104rem] px-3 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-10 xl:px-12">
         <Navbar
           items={navItems}
           currentPath={location.pathname}
@@ -651,7 +671,7 @@ function App() {
             initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 12 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: prefersReducedMotion ? 0 : -12 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.24, ease: 'easeOut' }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.4, ease: 'easeOut' }}
           >
             <Routes location={location}>
               <Route
@@ -681,7 +701,7 @@ function App() {
               <Route path="/timeline" element={<TimelinePage />} />
               <Route path="/experiences" element={<ExperiencesPage />} />
               <Route path="/skills" element={<SkillsPage />} />
-              <Route path="/dev" element={<DevSettingsPage />} />
+              <Route path="/dev" element={<Navigate to="/home" replace />} />
               <Route
                 path="/contact"
                 element={
@@ -713,15 +733,7 @@ function App() {
             </div>
           </div>
           <p className="mt-2 text-right text-[11px] lowercase tracking-[0.08em] text-slate-500">
-            vibe coded by{' '}
-            <button
-              type="button"
-              onClick={() => navigate('/dev')}
-              className="font-mono text-slate-400 transition hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/70"
-              aria-label="Open hidden dev settings"
-            >
-              codex
-            </button>
+            built with care
           </p>
         </footer>
 
