@@ -407,6 +407,7 @@ function App() {
   const routeScrollCooldownRef = useRef(0)
   const lastScrollDirectionRef = useRef<1 | -1 | 0>(0)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [mobileLayout, setMobileLayout] = useState(false)
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -427,11 +428,30 @@ function App() {
   }, [])
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
-  }, [location.pathname, prefersReducedMotion])
+    if (typeof window === 'undefined') return
+    const widthMedia = window.matchMedia('(max-width: 900px)')
+    const pointerMedia = window.matchMedia('(pointer: coarse)')
+
+    const syncMobileLayout = () => {
+      setMobileLayout(widthMedia.matches || pointerMedia.matches)
+    }
+
+    syncMobileLayout()
+    widthMedia.addEventListener('change', syncMobileLayout)
+    pointerMedia.addEventListener('change', syncMobileLayout)
+
+    return () => {
+      widthMedia.removeEventListener('change', syncMobileLayout)
+      pointerMedia.removeEventListener('change', syncMobileLayout)
+    }
+  }, [])
 
   useEffect(() => {
-    if (prefersReducedMotion || routeIndex === -1) return
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion || mobileLayout ? 'auto' : 'smooth' })
+  }, [location.pathname, prefersReducedMotion, mobileLayout])
+
+  useEffect(() => {
+    if (prefersReducedMotion || mobileLayout || routeIndex === -1) return
 
     const tryNavigateByThreshold = () => {
       const direction = lastScrollDirectionRef.current
@@ -510,7 +530,7 @@ function App() {
       window.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('touchend', onTouchEnd)
     }
-  }, [canonicalRoute, navigate, prefersReducedMotion, routeIndex])
+  }, [canonicalRoute, navigate, prefersReducedMotion, mobileLayout, routeIndex])
 
   useEffect(() => {
     const syncRuntimeConfig = () => {

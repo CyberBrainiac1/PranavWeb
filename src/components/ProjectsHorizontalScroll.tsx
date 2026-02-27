@@ -14,6 +14,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
   const rafRef = useRef<number | null>(null)
   const boundaryCooldownRef = useRef(0)
   const [hintVisible, setHintVisible] = useState(true)
+  const [mobileLayout, setMobileLayout] = useState(false)
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -25,6 +26,25 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
       if (rafRef.current !== null) {
         window.cancelAnimationFrame(rafRef.current)
       }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const widthMedia = window.matchMedia('(max-width: 900px)')
+    const pointerMedia = window.matchMedia('(pointer: coarse)')
+
+    const syncMobileLayout = () => {
+      setMobileLayout(widthMedia.matches || pointerMedia.matches)
+    }
+
+    syncMobileLayout()
+    widthMedia.addEventListener('change', syncMobileLayout)
+    pointerMedia.addEventListener('change', syncMobileLayout)
+
+    return () => {
+      widthMedia.removeEventListener('change', syncMobileLayout)
+      pointerMedia.removeEventListener('change', syncMobileLayout)
     }
   }, [])
 
@@ -72,6 +92,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
   }
 
   const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (mobileLayout) return
     const track = trackRef.current
     if (!track) return
 
@@ -111,63 +132,66 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
     }
   }
 
+  const renderProjectPanel = (project: Project, index: number) => (
+    <article key={project.id} className={`projects-panel ${project.featured ? 'is-featured' : ''}`}>
+      <p className="projects-panel-index">{String(index + 1).padStart(2, '0')}</p>
+      <h4>{project.name}</h4>
+      <p>{project.summary}</p>
+      <p className="projects-panel-tags">{project.tags.join(' · ')}</p>
+
+      {project.links?.length ? (
+        <div className="projects-panel-links">
+          {project.links.map((link) => {
+            const isExternal = link.href.startsWith('http')
+            return (
+              <a
+                key={`${project.id}-${link.href}`}
+                href={link.href}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noreferrer' : undefined}
+              >
+                {link.label}
+              </a>
+            )
+          })}
+        </div>
+      ) : null}
+
+      <details className="projects-panel-details">
+        <summary>Details</summary>
+        {project.details.slice(0, 2).map((section) => (
+          <div key={`${project.id}-${section.heading}`} className="projects-panel-detail-block">
+            <p>{section.heading}</p>
+            <ul>
+              {section.bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </details>
+    </article>
+  )
+
   return (
     <section className="projects-horizontal" data-disable-route-scroll>
       <div className="projects-track-header">
         <p className="micro-label">Project gallery</p>
-        {hintVisible ? <p className="projects-scroll-hint">scroll to explore -&gt;</p> : null}
+        {!mobileLayout && hintVisible ? <p className="projects-scroll-hint">scroll to explore -&gt;</p> : null}
       </div>
 
-      <div
-        ref={trackRef}
-        className="projects-track"
-        onWheel={handleWheel}
-        onScroll={handleNativeScroll}
-      >
-        {projects.map((project, index) => (
-          <article
-            key={project.id}
-            className={`projects-panel ${project.featured ? 'is-featured' : ''}`}
-          >
-            <p className="projects-panel-index">{String(index + 1).padStart(2, '0')}</p>
-            <h4>{project.name}</h4>
-            <p>{project.summary}</p>
-            <p className="projects-panel-tags">{project.tags.join(' · ')}</p>
-
-            {project.links?.length ? (
-              <div className="projects-panel-links">
-                {project.links.map((link) => {
-                  const isExternal = link.href.startsWith('http')
-                  return (
-                    <a
-                      key={`${project.id}-${link.href}`}
-                      href={link.href}
-                      target={isExternal ? '_blank' : undefined}
-                      rel={isExternal ? 'noreferrer' : undefined}
-                    >
-                      {link.label}
-                    </a>
-                  )
-                })}
-              </div>
-            ) : null}
-
-            <details className="projects-panel-details">
-              <summary>Details</summary>
-              {project.details.slice(0, 2).map((section) => (
-                <div key={`${project.id}-${section.heading}`} className="projects-panel-detail-block">
-                  <p>{section.heading}</p>
-                  <ul>
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </details>
-          </article>
-        ))}
-      </div>
+      {mobileLayout ? (
+        <div className="projects-stack">{projects.map((project, index) => renderProjectPanel(project, index))}</div>
+      ) : (
+        <div
+          ref={trackRef}
+          className="projects-track"
+          onWheel={handleWheel}
+          onScroll={handleNativeScroll}
+        >
+          {projects.map((project, index) => renderProjectPanel(project, index))}
+        </div>
+      )}
     </section>
   )
 }
