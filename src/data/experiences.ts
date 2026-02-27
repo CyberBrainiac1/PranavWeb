@@ -9,7 +9,7 @@ export const experienceItems: ExperienceItem[] = [
     id: 'maker-faire',
     title: 'Maker Faire',
     blurb:
-      'I got to share projects in a real maker environment and learn how to explain design decisions to different people clearly.',
+      'I visited Maker Faire and got to see a lot of real builds up close, which gave me ideas for my own designs.',
   },
   {
     id: 'stanford-seeme',
