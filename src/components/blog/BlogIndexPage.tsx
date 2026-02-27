@@ -1,6 +1,5 @@
 import { ArrowRight } from 'lucide-react'
 import { blogPosts, formatBlogDate } from '../../data/blog'
-import { LabelTag } from '../LabelTag'
 import { Section } from '../Section'
 
 type BlogIndexPageProps = {
@@ -13,36 +12,19 @@ export function BlogIndexPage({ onOpenPost }: BlogIndexPageProps) {
       id="blog"
       label="FIG.07 / BLOG"
       title="Blog"
-      subtitle="Long-form build logs, notes, and lessons from projects in progress."
+      subtitle="Build logs and notes written as a calm reading list."
     >
-      <div className="grid gap-4">
-        {blogPosts.map((post, index) => (
-          <article key={post.slug} className="blog-index-card">
-            <div className="flex flex-wrap items-center gap-2">
-              {index === 0 ? <LabelTag text="LATEST" /> : null}
-              <LabelTag text={formatBlogDate(post.date)} />
-              <LabelTag text={`${post.readingMinutes} MIN READ`} />
-            </div>
-
+      <div className="blog-list">
+        {blogPosts.map((post) => (
+          <article key={post.slug} className="blog-list-item">
+            <p className="blog-list-meta">
+              {formatBlogDate(post.date)} · {post.readingMinutes} min read
+            </p>
             <h3>{post.title}</h3>
             <p>{post.summary}</p>
-
-            {post.tags.length ? (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <span key={`${post.slug}-${tag}`} className="blog-tag-chip">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            <button
-              type="button"
-              className="blog-index-open"
-              onClick={() => onOpenPost(post.slug)}
-            >
-              Read Post <ArrowRight size={15} />
+            {post.tags.length ? <p className="blog-list-tags">{post.tags.join(' · ')}</p> : null}
+            <button type="button" className="blog-index-open" onClick={() => onOpenPost(post.slug)}>
+              Read post <ArrowRight size={15} />
             </button>
           </article>
         ))}

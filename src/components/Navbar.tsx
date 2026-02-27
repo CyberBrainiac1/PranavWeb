@@ -30,23 +30,22 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-3 z-40 mb-8 border border-sky-200/20 bg-slate-950/75 px-4 py-3 backdrop-blur-xl md:px-5">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-sky-200/55" />
+    <header className="site-nav">
       <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-sky-200/80">NAV / INDEX</p>
-          <p className="font-display text-2xl leading-none text-white">Pranav Emmadi</p>
+        <div className="space-y-1">
+          <p className="nav-micro-label">NAV / INDEX</p>
+          <p className="nav-brand">Pranav Emmadi</p>
         </div>
 
-        <nav className="hidden items-center gap-2 lg:flex">
+        <nav className="hidden items-center gap-4 lg:flex">
           {items.map((item) => (
             <button
               key={item.path}
               type="button"
               onClick={() => onNavigate(item.path)}
               className={cn(
-                'nav-link-chip',
-                isActive(item.path) && 'nav-link-chip-active',
+                'nav-text-link',
+                isActive(item.path) && 'is-active',
               )}
             >
               {item.label}
@@ -55,7 +54,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
         </nav>
 
         <Sheet>
-          <SheetTrigger className="inline-flex rounded-lg border border-sky-200/30 p-2 text-sky-100 lg:hidden">
+          <SheetTrigger className="inline-flex rounded-md border border-sky-200/25 p-2 text-sky-100 lg:hidden">
             <Menu size={18} />
             <span className="sr-only">Open menu</span>
           </SheetTrigger>
@@ -64,15 +63,15 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
               <SheetTitle>Navigation</SheetTitle>
               <SheetDescription>NAV / INDEX</SheetDescription>
             </SheetHeader>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 pt-2">
               {items.map((item) => (
                 <SheetClose asChild key={item.path}>
                   <button
                     type="button"
                     onClick={() => onNavigate(item.path)}
                     className={cn(
-                      'w-full rounded-lg border border-sky-200/20 bg-slate-900/70 px-3 py-2 text-left text-sm text-slate-100',
-                      isActive(item.path) && 'border-sky-200/80 bg-sky-300/15 text-sky-100',
+                      'w-full rounded-md border border-sky-200/20 px-3 py-2 text-left text-sm text-slate-100',
+                      isActive(item.path) && 'border-sky-200/70 text-sky-100',
                     )}
                   >
                     {item.label}

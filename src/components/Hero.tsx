@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 
 type HeroProps = {
   name: string
+  location: string
   introText: string
   aboutParagraphs: string[]
   links: { linkedin: string; github: string }
@@ -13,6 +14,7 @@ type HeroProps = {
 
 export function Hero({
   name,
+  location,
   introText,
   aboutParagraphs,
   links,
@@ -21,7 +23,10 @@ export function Hero({
   onOpenSkills,
   onContact,
 }: HeroProps) {
-  const homeParagraphs = aboutParagraphs.length ? aboutParagraphs : [introText]
+  const homeParagraphs =
+    aboutParagraphs.length > 0
+      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim())
+      : []
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
 
   return (
@@ -35,6 +40,8 @@ export function Hero({
           </div>
 
           <h1 className="minimal-profile-name">{name}</h1>
+          <p className="minimal-profile-role">Robotics builder</p>
+          <p className="minimal-profile-location">{location}</p>
 
           <nav aria-label="Home quick links">
             <ul className="minimal-link-list">
@@ -94,6 +101,19 @@ export function Hero({
           {homeParagraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+
+          <p className="minimal-focus-line">
+            Current focus: Sim Racing Wheel + Force Feedback - tuning feel and fixing input mapping.
+          </p>
+
+          <div className="minimal-action-row">
+            <button type="button" onClick={onOpenProjects} className="btn-primary-mag">
+              View Projects
+            </button>
+            <button type="button" onClick={onContact} className="btn-outline-mag">
+              Contact
+            </button>
+          </div>
 
           <p className="minimal-signoff">
             If you want to connect, head to the Contact tab and send me a message.

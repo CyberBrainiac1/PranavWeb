@@ -18,18 +18,13 @@ import { BlogPostPage } from './components/blog/BlogPostPage'
 import { AssistantPanel } from './components/AssistantPanel'
 import { DevSettingsPage } from './components/DevSettingsPage'
 import { Hero } from './components/Hero'
-import { LabelTag } from './components/LabelTag'
 import { Navbar } from './components/Navbar'
-import { ProjectCard } from './components/ProjectCard'
-import { ProjectDetailsDialog } from './components/ProjectDetailsDialog'
-import { ProjectRail } from './components/ProjectRail'
 import { Section } from './components/Section'
-import { FEATURED_BLOG_SLUG } from './data/blog'
 import { aboutTimelineEntries } from './data/aboutTimeline'
 import { boredIdeas } from './data/bored'
 import { designedItems } from './data/designed'
 import { profileInfo } from './data/profile'
-import { projects, type Project } from './data/projects'
+import { projects } from './data/projects'
 import { skillModules } from './data/skills'
 import { timeline as linkedinTimeline } from './data/timeline'
 import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
@@ -106,6 +101,7 @@ function HomePage({
   return (
     <Hero
       name={profile.name}
+      location={profile.location}
       introText={profile.heroIntroText}
       aboutParagraphs={profile.aboutParagraphs}
       links={profile.links}
@@ -122,49 +118,86 @@ function BlogPostRoute({ onBackToBlog }: { onBackToBlog: () => void }) {
   return <BlogPostPage slug={slug} onBackToBlog={onBackToBlog} />
 }
 
-function ProjectsPage({ onOpenProject }: { onOpenProject: (project: Project) => void }) {
+function ProjectsPage() {
   const navigate = useNavigate()
   const featuredProject = projects.find((project) => project.featured) ?? projects[0]
-  const railProjects = projects.filter((project) => project.id !== featuredProject.id)
+  const otherProjects = projects.filter((project) => project.id !== featuredProject.id)
 
   return (
     <Section
       id="projects"
-      label="FIG.04 / PROJECT INDEX"
+      label="FIG.02 / PROJECTS"
       title="Projects"
-      subtitle="Main build first, then scroll through the rest."
+      subtitle="A clean list of what I am building and testing."
     >
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <ProjectCard project={featuredProject} onOpen={onOpenProject} />
+      <article className="project-featured">
+        <p className="micro-label">Featured project</p>
+        <h3>{featuredProject.name}</h3>
+        <p>{featuredProject.summary}</p>
+        <p className="project-focus-line">
+          Current focus: Sim Racing Wheel + Force Feedback - tuning feel and fixing input mapping.
+        </p>
 
-        <article className="blueprint-panel space-y-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <LabelTag text="FEATURED" />
-            <LabelTag text="REV 2" />
-          </div>
-          <h3 className="text-2xl font-semibold text-white">Sim Racing Wheel + Force Feedback</h3>
-          <p className="text-sm leading-relaxed text-slate-300">
-            This is the build I&apos;m spending the most time on right now.
-          </p>
+        <div className="minimal-action-row">
           <button
             type="button"
-            onClick={() => onOpenProject(featuredProject)}
-            className="btn-primary-mag w-full justify-center sm:w-auto"
-          >
-            Open Featured Build
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate(`/blog/${FEATURED_BLOG_SLUG}`)}
-            className="btn-outline-mag w-full justify-center sm:w-auto"
+            onClick={() => navigate('/blog/diy-force-feedback-wheel-build-log')}
+            className="btn-primary-mag"
           >
             Read Build Log
           </button>
-        </article>
-      </div>
+          <button
+            type="button"
+            onClick={() => navigate('/contact')}
+            className="btn-outline-mag"
+          >
+            Contact
+          </button>
+        </div>
 
-      <div className="mt-5">
-        <ProjectRail projects={railProjects} onOpen={onOpenProject} />
+        <div className="project-accordion-list">
+          {featuredProject.details.map((section, index) => (
+            <details key={`${featuredProject.id}-${section.heading}`} className="project-accordion-item" open={index === 0}>
+              <summary>{section.heading}</summary>
+              <ul>
+                {section.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
+      </article>
+
+      <div className="content-divider" />
+
+      <div className="project-list-clean">
+        {otherProjects.map((project) => (
+          <article key={project.id} className="project-list-row">
+            <div className="space-y-2">
+              <h4>{project.name}</h4>
+              <p>{project.summary}</p>
+              <p className="project-row-tags">{project.tags.join(' · ')}</p>
+            </div>
+            {project.links?.length ? (
+              <div className="project-row-links">
+                {project.links.map((link) => {
+                  const isExternal = link.href.startsWith('http')
+                  return (
+                    <a
+                      key={`${project.id}-${link.href}`}
+                      href={link.href}
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noreferrer' : undefined}
+                    >
+                      {link.label}
+                    </a>
+                  )
+                })}
+              </div>
+            ) : null}
+          </article>
+        ))}
       </div>
     </Section>
   )
@@ -174,21 +207,18 @@ function SkillsPage() {
   return (
     <Section
       id="skills"
-      label="FIG.05 / SKILLS"
+      label="FIG.03 / SKILLS"
       title="Skills"
-      subtitle="The main skills I use across my projects."
+      subtitle="Core tools and habits I use across builds."
     >
-      <div className="grid gap-4 sm:gap-5 color-grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
+      <div className="skills-minimal-grid">
         {skillModules.map((module) => (
-          <article key={module.id} className="blueprint-panel">
-            <LabelTag text={module.label} />
-            <h3 className="mt-3 text-xl font-semibold text-white">{module.title}</h3>
-            <ul className="mt-3 space-y-2 text-sm text-slate-300">
+          <article key={module.id} className="skills-block">
+            <p className="micro-label">{module.label}</p>
+            <h3>{module.title}</h3>
+            <ul>
               {module.items.map((item) => (
-                <li key={item} className="flex gap-2">
-                  <span className="mt-[9px] h-1.5 w-1.5 rounded-full bg-sky-200" />
-                  <span>{item}</span>
-                </li>
+                <li key={item}>{item}</li>
               ))}
             </ul>
           </article>
@@ -209,17 +239,19 @@ function TimelinePage() {
   return (
     <Section
       id="timeline"
-      label="FIG.07 / TIMELINE"
+      label="FIG.04 / TIMELINE"
       title="Timeline"
-      subtitle="A quick look at what I have built and where I am going next."
+      subtitle="A simple timeline of what I have worked on so far."
     >
-      <div className="timeline-grid">
+      <div className="timeline-clean">
         {entries.map((entry, index) => (
-          <article key={`${entry.date}-${entry.title}-${index}`} className="timeline-item blueprint-panel">
-            <p className="timeline-date">{entry.date}</p>
-            <h3 className="timeline-title">{entry.title}</h3>
-            <p className="timeline-org">{entry.organization}</p>
-            <p className="timeline-notes">{entry.notes}</p>
+          <article key={`${entry.date}-${entry.title}-${index}`} className="timeline-clean-item">
+            <p className="timeline-clean-date">{entry.date}</p>
+            <div>
+              <h3>{entry.title}</h3>
+              <p className="timeline-clean-org">{entry.organization}</p>
+              <p className="timeline-clean-note">{entry.notes}</p>
+            </div>
           </article>
         ))}
       </div>
@@ -231,26 +263,26 @@ function BoredPage() {
   return (
     <Section
       id="bored"
-      label="FIG.08 / BORED LIST"
+      label="FIG.05 / BORED LIST"
       title="Things To Do When Bored"
       subtitle="Quick options when you want something fun, useful, or both."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 color-grid">
+      <div className="list-section">
         {boredIdeas.map((idea) => (
-          <article key={idea.id} className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">{idea.title}</h3>
-            <p className="text-sm text-slate-300">{idea.description}</p>
+          <article key={idea.id} className="list-row">
+            <h3>{idea.title}</h3>
+            <p>{idea.description}</p>
             {idea.link ? (
               <a
                 href={idea.link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-slate-100 transition hover:text-white"
+                className="inline-flex items-center gap-2 text-sm"
               >
                 Open <ExternalLink size={14} />
               </a>
             ) : (
-              <p className="text-xs text-slate-400">No link needed. Just start.</p>
+              <p className="text-xs opacity-70">No link needed. Just start.</p>
             )}
           </article>
         ))}
@@ -263,15 +295,15 @@ function DesignedPage() {
   return (
     <Section
       id="designed"
-      label="FIG.09 / DESIGNED"
+      label="FIG.06 / DESIGNED"
       title="Cool Things I Personally Designed"
       subtitle="A quick list of designs I am proud of."
     >
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 color-grid">
+      <div className="list-section">
         {designedItems.map((item) => (
-          <article key={item.id} className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-            <p className="text-sm text-slate-300">{item.note}</p>
+          <article key={item.id} className="list-row">
+            <h3>{item.title}</h3>
+            <p>{item.note}</p>
           </article>
         ))}
       </div>
@@ -376,7 +408,6 @@ function ContactPage({
 }
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [contactStatus, setContactStatus] = useState<ContactStatus>({
     kind: 'idle',
     message: '',
@@ -489,7 +520,7 @@ function App() {
         : ['PRANAV EMMADI', 'ROBOTICS BUILDER'],
     heroIntroText:
       runtimeConfig.heroIntroText ||
-      'I’m Pranav Emmadi. I love building robots and hardware that actually works when it matters.',
+      'I’m Pranav Emmadi, a robotics builder near San Jose. I like building things that work outside perfect demos.',
     aboutParagraphs:
       runtimeConfig.aboutParagraphs.length
         ? runtimeConfig.aboutParagraphs
@@ -585,10 +616,10 @@ function App() {
           <motion.div
             className="route-page"
             key={location.pathname}
-            initial={{ opacity: 0, x: 34 }}
+            initial={{ opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -34 }}
-            transition={{ duration: 0.32, ease: 'easeOut' }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
           >
             <Routes location={location}>
               <Route
@@ -603,7 +634,7 @@ function App() {
                   />
                 }
               />
-              <Route path="/projects" element={<ProjectsPage onOpenProject={setSelectedProject} />} />
+              <Route path="/projects" element={<ProjectsPage />} />
               <Route
                 path="/blog"
                 element={<BlogIndexPage onOpenPost={(slug) => navigate(`/blog/${slug}`)} />}
@@ -661,15 +692,6 @@ function App() {
         </footer>
       </main>
 
-      <ProjectDetailsDialog
-        project={selectedProject}
-        open={Boolean(selectedProject)}
-        onOpenChange={(open) => {
-          if (!open) {
-            setSelectedProject(null)
-          }
-        }}
-      />
     </div>
   )
 }
