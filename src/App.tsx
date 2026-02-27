@@ -93,130 +93,27 @@ type RenderProfile = {
 function HomePage({
   profile,
   onOpenProjectsPage,
-  onOpenDesignedPage,
-  onOpenBoredPage,
   onOpenBlogPage,
-  onOpenTimelinePage,
-  onOpenFeaturedStory,
+  onOpenSkillsPage,
   onOpenContactPage,
 }: {
   profile: RenderProfile
   onOpenProjectsPage: () => void
-  onOpenDesignedPage: () => void
-  onOpenBoredPage: () => void
   onOpenBlogPage: () => void
-  onOpenTimelinePage: () => void
-  onOpenFeaturedStory: () => void
+  onOpenSkillsPage: () => void
   onOpenContactPage: () => void
 }) {
   return (
-    <>
-      <Hero
-        onOpenProjects={onOpenProjectsPage}
-        onOpenFeaturedStory={onOpenFeaturedStory}
-        onContact={onOpenContactPage}
-        headlineLines={profile.heroHeadlineLines}
-        introText={profile.heroIntroText}
-      />
-
-      <Section
-        id="build-story"
-        label="FIG.02 / ABOUT"
-        title="My Build Story"
-        subtitle="Simple process: build, test, learn, improve."
-      >
-        <div className="story-flow-grid">
-          <article className="blueprint-panel about-copy story-main-copy">
-            {profile.aboutParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </article>
-
-          {profile.storyBeats.map((beat, index) => (
-            <motion.article
-              key={beat.title}
-              className="story-flow-card"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.35, delay: index * 0.08, ease: 'easeOut' }}
-            >
-              <span className="story-flow-rotate" aria-hidden="true">
-                {beat.label}
-              </span>
-              <p className="story-flow-index">0{index + 1}</p>
-              <h3>{beat.title}</h3>
-              <p>{beat.text}</p>
-            </motion.article>
-          ))}
-        </div>
-      </Section>
-
-      <Section
-        id="home-pages"
-        label="FIG.03 / PAGES"
-        title="Explore"
-        subtitle="Scroll and jump into any page."
-      >
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 color-grid">
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Projects</h3>
-            <p className="text-sm text-slate-300">See my build list and open details.</p>
-            <button type="button" onClick={onOpenProjectsPage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Projects
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Designed</h3>
-            <p className="text-sm text-slate-300">Things I personally designed.</p>
-            <button type="button" onClick={onOpenDesignedPage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Designed
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Bored List</h3>
-            <p className="text-sm text-slate-300">Fun and useful stuff to do fast.</p>
-            <button type="button" onClick={onOpenBoredPage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Bored List
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Blog</h3>
-            <p className="text-sm text-slate-300">Build logs and long-form notes.</p>
-            <button type="button" onClick={onOpenBlogPage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Blog
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Timeline</h3>
-            <p className="text-sm text-slate-300">A quick timeline of my journey so far.</p>
-            <button type="button" onClick={onOpenTimelinePage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Timeline
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Contact</h3>
-            <p className="text-sm text-slate-300">Reach out directly.</p>
-            <button type="button" onClick={onOpenContactPage} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Open Contact
-            </button>
-          </article>
-
-          <article className="blueprint-panel space-y-2.5">
-            <h3 className="text-lg font-semibold text-white">Featured Log</h3>
-            <p className="text-sm text-slate-300">Deep Sim Wheel writeup.</p>
-            <button type="button" onClick={onOpenFeaturedStory} className="btn-outline-mag w-full justify-center sm:w-auto">
-              Read Sim Wheel Log
-            </button>
-          </article>
-        </div>
-      </Section>
-    </>
+    <Hero
+      name={profile.name}
+      introText={profile.heroIntroText}
+      aboutParagraphs={profile.aboutParagraphs}
+      links={profile.links}
+      onOpenProjects={onOpenProjectsPage}
+      onOpenBlog={onOpenBlogPage}
+      onOpenSkills={onOpenSkillsPage}
+      onContact={onOpenContactPage}
+    />
   )
 }
 
@@ -700,11 +597,8 @@ function App() {
                   <HomePage
                     profile={renderProfile}
                     onOpenProjectsPage={() => navigate('/projects')}
-                    onOpenDesignedPage={() => navigate('/designed')}
-                    onOpenBoredPage={() => navigate('/bored')}
                     onOpenBlogPage={() => navigate('/blog')}
-                    onOpenTimelinePage={() => navigate('/timeline')}
-                    onOpenFeaturedStory={() => navigate(`/blog/${FEATURED_BLOG_SLUG}`)}
+                    onOpenSkillsPage={() => navigate('/skills')}
                     onOpenContactPage={() => navigate('/contact')}
                   />
                 }

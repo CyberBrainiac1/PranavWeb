@@ -1,79 +1,104 @@
 import { motion } from 'framer-motion'
-import { LabelTag } from './LabelTag'
 
 type HeroProps = {
-  onOpenProjects: () => void
-  onOpenFeaturedStory: () => void
-  onContact: () => void
-  headlineLines: string[]
+  name: string
   introText: string
+  aboutParagraphs: string[]
+  links: { linkedin: string; github: string }
+  onOpenProjects: () => void
+  onOpenBlog: () => void
+  onOpenSkills: () => void
+  onContact: () => void
 }
 
 export function Hero({
-  onOpenProjects,
-  onOpenFeaturedStory,
-  onContact,
-  headlineLines,
+  name,
   introText,
+  aboutParagraphs,
+  links,
+  onOpenProjects,
+  onOpenBlog,
+  onOpenSkills,
+  onContact,
 }: HeroProps) {
-  const safeHeadlineLines = headlineLines.length ? headlineLines : ['PRANAV EMMADI', 'ROBOTICS BUILDER']
+  const homeParagraphs = aboutParagraphs.length ? aboutParagraphs : [introText]
+  const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
 
   return (
-    <section id="home" className="hero-shell relative overflow-hidden">
-      <div className="relative z-[1] grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <div className="space-y-5">
-          <div className="flex items-center">
-            <LabelTag text="Home" />
+    <section id="home" className="minimal-home-shell">
+      <div className="minimal-home-grid">
+        <aside className="minimal-profile-col">
+          <div className="minimal-dot-row" aria-hidden="true">
+            <span className="minimal-dot minimal-dot-amber" />
+            <span className="minimal-dot minimal-dot-lime" />
+            <span className="minimal-dot minimal-dot-magenta" />
           </div>
-          <h1 className="space-y-1">
-            {safeHeadlineLines.map((line, index) => (
-              <motion.span
-                key={line}
-                className="headline-line glitch-line block"
-                data-text={line}
-                initial={{ opacity: 0, y: 14, filter: 'blur(4px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ delay: 0.14 * index, duration: 0.45, ease: 'easeOut' }}
-              >
-                {line}
-              </motion.span>
-            ))}
-          </h1>
-        </div>
 
-        <div className="space-y-4 sm:space-y-5">
-          <p className="hero-intro">{introText}</p>
-          <div className="blueprint-panel space-y-3">
-            <LabelTag text="Current Focus" />
-            <p className="text-sm leading-relaxed text-slate-300">
-              Main build right now: Sim Racing Wheel + Force Feedback. I&apos;m tuning it to feel
-              smooth, responsive, and easy to keep upgrading.
-            </p>
-            <button
-              type="button"
-              onClick={onOpenFeaturedStory}
-              className="btn-outline-mag w-full justify-center sm:w-auto"
-            >
-              Read Wheel Build Log
-            </button>
+          <h1 className="minimal-profile-name">{name}</h1>
+
+          <nav aria-label="Home quick links">
+            <ul className="minimal-link-list">
+              <li>
+                <button type="button" onClick={onOpenProjects} className="minimal-link">
+                  Projects
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={onOpenSkills} className="minimal-link">
+                  Skills
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={onOpenBlog} className="minimal-link">
+                  Blog
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={onContact} className="minimal-link">
+                  Contact
+                </button>
+              </li>
+              <li>
+                <a className="minimal-link" href={links.linkedin} target="_blank" rel="noreferrer">
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a className="minimal-link" href={links.github} target="_blank" rel="noreferrer">
+                  GitHub
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <div className="minimal-profile-photo">
+            <img
+              src={profileImageSrc}
+              alt={`${name} profile`}
+              loading="lazy"
+              onError={(event) => {
+                ;(event.currentTarget as HTMLImageElement).style.display = 'none'
+              }}
+            />
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <button
-              type="button"
-              onClick={onOpenProjects}
-              className="btn-primary-mag w-full justify-center sm:w-auto"
-            >
-              View Projects
-            </button>
-            <button
-              type="button"
-              onClick={onContact}
-              className="btn-outline-mag w-full justify-center sm:w-auto"
-            >
-              Contact
-            </button>
-          </div>
-        </div>
+        </aside>
+
+        <motion.article
+          className="minimal-copy-col"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.42, ease: 'easeOut' }}
+        >
+          <p className="minimal-lede">{introText}</p>
+
+          {homeParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+
+          <p className="minimal-signoff">
+            If you want to connect, head to the Contact tab and send me a message.
+          </p>
+        </motion.article>
       </div>
     </section>
   )
