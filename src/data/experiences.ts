@@ -21,7 +21,7 @@ export const experienceItems: ExperienceItem[] = [
     id: 'bwsi-saturday',
     title: 'BWSI Saturday Program (Ongoing)',
     blurb:
-      'I am currently part of the Saturday track, where I keep building skills around robotics systems and structured iteration.',
+      'I am currently in the "Yes! You Can Program Autonomous Cars" track, where I keep building skills around autonomy and structured iteration.',
   },
   {
     id: 'intuitive-surgical',
