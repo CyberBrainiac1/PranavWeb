@@ -127,5 +127,34 @@
             </form>
         </footer>
     </div>
+    <script>
+        (function () {
+            const SCROLL_DEBOUNCE_MS = 600;
+            const grid = document.querySelector('.project-grid');
+            if (!grid) return;
+            const cards = Array.from(grid.querySelectorAll('.project-card'));
+            let currentIndex = 0;
+            let isScrolling = false;
+
+            function scrollToIndex(index) {
+                if (index < 0 || index >= cards.length) return;
+                currentIndex = index;
+                cards[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
+
+            grid.addEventListener('wheel', function (e) {
+                e.preventDefault();
+                if (isScrolling) return;
+                if (e.deltaY === 0 && e.deltaX === 0) return;
+                isScrolling = true;
+                if (e.deltaY > 0 || e.deltaX > 0) {
+                    scrollToIndex(currentIndex + 1);
+                } else {
+                    scrollToIndex(currentIndex - 1);
+                }
+                setTimeout(function () { isScrolling = false; }, SCROLL_DEBOUNCE_MS);
+            }, { passive: false });
+        }());
+    </script>
 </body>
 </html>
