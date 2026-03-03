@@ -674,11 +674,21 @@ body {
 }
 
 .project-grid {
-    display: grid;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     gap: 18px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.project-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .project-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
     display: grid;
     gap: 14px;
     padding: 18px;
