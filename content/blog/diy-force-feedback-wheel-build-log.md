@@ -1,138 +1,104 @@
 ---
-title: Building a DIY Force Feedback Wheel: What Worked, What Broke, What I’m Fixing Next
+title: "Force Feedback Build Log: From Custom Firmware to EMC Lite"
 date: 2026-02-26
-tags: [Sim Racing, Force Feedback, Arduino Leonardo, Build Log]
-summary: A full timeline of my DIY wheel build, from BeamNG and Assetto Corsa setup to encoder math bugs, axis issues, and what I’m testing next.
+tags: [Sim Racing, Force Feedback, Arduino Leonardo, EMC Lite, Build Log]
+summary: How I went from writing my own FFB firmware on an Arduino Leonardo to switching to EMC Lite — the full path including the code I tested along the way.
 ---
 
-## Why I started this project
+## Starting point
 
-I built this because I wanted my own steering wheel for sim racing, not just to play, but to understand what makes a setup actually feel right.  
-I started in BeamNG, then moved into Assetto Corsa. The goal was simple at first: make the wheel and pedals behave correctly in game.
+I already had a working steering wheel and pedals from earlier versions of this project. The wheel used a magnetic encoder and a XIAO RP2040 for USB HID input, and it worked fine for steering. But there was no force feedback — the wheel just spun freely. I wanted the wheel to push back when the car hit a curb or lost grip, like a real steering rack.
 
-Then the project got deeper.  
-It was not just "does it move?" anymore. It became:
+So I started building a force feedback system. The hardware: an Arduino Leonardo for USB communication, a BTS7960 H-bridge motor driver, and a 12V brushed DC motor with a quadrature encoder on the shaft.
 
-- Is axis direction correct?
-- Are controls binding the way they should?
-- Does the reported angle match real angle?
-- Does force feedback feel predictable?
+## Writing my own firmware
 
-I also want to try a fully maxed-out sim setup in person. I want that reference point so I know what "great" should feel like, not just what is "working."
+My first approach was to write everything from scratch on the Arduino Leonardo. The Leonardo natively supports USB HID, so the PC sees it as a game controller without extra drivers.
 
-## Core stack I’m using right now
+I started with encoder reading. The motor had an incremental quadrature encoder (A/B channels), and I needed accurate position tracking. Here's the interrupt-based counting code I used:
 
-My current base stack:
+```cpp
+volatile long encoderCount = 0;
 
-- Arduino Leonardo (USB HID)
-- BTS7960 H-bridge motor driver
-- Quadrature incremental encoder (A/B)
+void encoderISR_A() {
+  bool a = digitalRead(ENCODER_A);
+  bool b = digitalRead(ENCODER_B);
+  encoderCount += (a == b) ? 1 : -1;
+}
 
-I also explored EMC Lite wiring/config, looked into EMC Pro availability, and checked FFBeast ideas to see what could improve a Leonardo-based FFB path.
-
-Long term, I want an EMC Lite-like standalone tuning app (desktop `.exe` style) so I can tweak wheel settings quickly without reflashing every small change.
-
-## Motor and drivetrain direction (current plan)
-
-I’m working toward a dual-motor layout:
-
-- Two 12V brushed DC planetary gearmotors
-- Both geared into one shared shaft
-- Both commanded together to sum torque
-
-From earlier reference notes, this is in the ~312 RPM class at gearbox output.  
-Final coupling details are still `[ADD]`.
-
-## The math lesson that kept coming back
-
-The one rule that I now treat as non-negotiable:
-
-```python
-# full quadrature decoding
-cpr = ppr * 4
+void setup() {
+  pinMode(ENCODER_A, INPUT_PULLUP);
+  pinMode(ENCODER_B, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(ENCODER_A), encoderISR_A, CHANGE);
+}
 ```
 
-In my case, I referenced 537.7 PPR at output shaft. That means:
+Then converting counts to a steering angle:
 
-```python
-ppr = 537.7
-cpr = ppr * 4  # 2150.8
+```cpp
+const float PPR = 537.7;
+const float CPR = PPR * 4; // 2150.8 counts per revolution
+
+float steeringAngle = (encoderCount / CPR) * 360.0;
 ```
 
-That number affects everything. If CPR is wrong in any part of the chain, steering angle and in-game behavior drift fast.
+Getting CPR wrong breaks everything downstream. I had a session where 180 degrees of physical rotation showed as 379 degrees in software — I was using PPR where I needed CPR.
 
-::: note Why this mattered so much
-When angle looked wrong, it usually was not a "small tuning issue." It was almost always a counting/reference mismatch.
+## Testing the motor driver
+
+Once encoder reading worked, I moved to driving the motor. The BTS7960 takes a PWM signal for speed and two direction pins. I wrote a proportional controller to push the motor toward a target position:
+
+```cpp
+void applyForce(int targetCount) {
+  long error = targetCount - encoderCount;
+  int pwmValue = constrain(abs(error) * 2, 0, 255);
+
+  if (error > 0) {
+    analogWrite(MOTOR_PWM_R, pwmValue);
+    analogWrite(MOTOR_PWM_L, 0);
+  } else {
+    analogWrite(MOTOR_PWM_R, 0);
+    analogWrite(MOTOR_PWM_L, pwmValue);
+  }
+}
+```
+
+This worked for basic centering — the wheel returned to center on its own, and I could feel resistance when turning. But the feel was inconsistent. Sometimes soft, sometimes it vibrated at center, and occasionally it felt like something was blocking rotation when nothing was.
+
+## Where custom firmware hit a wall
+
+The real problem was the FFB protocol. Games like BeamNG and Assetto Corsa send force feedback commands over USB using the PID (Physical Interface Device) protocol. The game sends structured effects — constant force, spring, damper, friction — and the firmware has to interpret them and drive the motor.
+
+Implementing PID FFB from scratch on an Arduino is a lot of work. I got basic constant-force effects parsing, but handling multiple simultaneous effects, gain scaling, and timing made the firmware unreliable. I was spending more time debugging USB descriptor issues than improving how the wheel felt.
+
+I also had axis mapping issues on the game side. Assetto Corsa would sometimes refuse brake binding even when the input showed up in the Windows game controller panel. And force feel changed between sessions for no clear reason — sometimes my firmware, sometimes game config, hard to tell which.
+
+## Switching to EMC Lite
+
+After a few weeks I looked at what other builders were using. EMC Lite kept coming up — it handles the PID protocol, motor driving, encoder reading, and effect processing out of the box.
+
+The switch was straightforward. I flashed EMC Lite onto the Leonardo, kept the same wiring, and opened the desktop configurator. Within an afternoon I had working force feedback with spring, damper, and constant force effects. The configurator lets me adjust gains without reflashing, which was the other big advantage — I had wanted to build something like that but never got to it.
+
+::: note Why writing my own firmware first was still worth it
+The encoder ISR, motor driver code, and basic force loop gave me context for what EMC Lite is actually doing. When I adjust a parameter in the configurator now, I know what is changing at the hardware level.
 :::
 
-## Weird bug timeline (real problems I hit)
+## Current setup
 
-This is the part that took the most time:
+- Arduino Leonardo running EMC Lite firmware
+- BTS7960 H-bridge driver
+- 12V brushed DC planetary gearmotor (~3 Nm)
+- Quadrature encoder (537.7 PPR, 2150.8 CPR at full decode)
+- Wooden rig built from 2x4s
 
-1. I rotated 180° and saw around **379°** reported.
-2. Later, 180° showed around **21°**.
-3. Pedals showed activity in UI, but in-game behavior was still wrong.
-4. Controls were backwards at least once.
-5. Axis mapping got messy:
-   - Throttle should be **Z**
-   - Brake should be **Y**
-   - That was not always what the game accepted
-6. Assetto Corsa sometimes would not accept brake binding even when button press registered elsewhere.
-7. FFB feel changed session to session:
-   - Sometimes soft
-   - Sometimes it felt like something was stopping rotation (no physical block found)
-   - Sometimes it felt vibration-like
+I am working toward adding a second motor on the same shaft for more torque. Power delivery is the current problem — a single 12V supply sags when both motors pull at once.
 
-### Brake input snapshot I used
+## What I took away from this
 
-- Pressed = HIGH (button to 3V3)
-- Encoder pins on D2/D3
-- Brake button on D4
-
-## What I think is happening (hypotheses, not final conclusions)
-
-These are working hypotheses:
-
-- I may have measured/used the wrong shaft reference at some points.
-- CPR/PPR values may have been inconsistent between code and hardware assumptions.
-- Gear reduction may not have been fully included in final steering-angle mapping.
-- Partial quadrature decoding can collapse expected counts.
-- Axis inversion + game-specific bind behavior can make "working input" look broken.
-
-None of this is final truth yet. I’m treating each one as a testable cause.
-
-## What I’m testing next
-
-My next passes are structured:
-
-1. Repeat fixed-angle checks and log counts every run.
-2. Lock one CPR source and verify full quadrature decoding path.
-3. Re-test axis direction and bind order in both BeamNG and Assetto Corsa with the same checklist.
-4. Tune force response to reduce soft zones and vibration-like behavior.
-5. Publish a stable baseline profile `[ADD]`.
-
-## Build constraints and future upgrades
-
-The rig itself is intentionally constrained:
-
-- Wood-only
-- ONLY 2x4s
-- Mostly built with a drill
-
-That constraint keeps me honest and forces practical design choices.
-
-Future upgrades I’m actively looking at:
-
-- Handbrake ergonomic fist handle (`.STEP`)
-- Paddle shifters with limit switches (`.STEP` / SolidWorks)
-- Tensioner CAD parts
-- Repurposing old drill parts where useful
-- Possible ESP32 wireless path later
-
-::: tip Big picture
-The goal is not just to "have a wheel."  
-The goal is a system I understand deeply, can fix quickly, and can keep improving without rebuilding from zero every time.
-:::
+- Get encoder math right first. CPR vs PPR mixups waste hours.
+- A proportional controller is enough to validate hardware before touching the FFB protocol.
+- If a mature open-source firmware exists for your use case, use it. Save custom firmware for the parts that are actually unique to your build.
+- Axis mapping bugs and FFB bugs look the same from the driver seat. Test them separately.
 
 ![Wheel test notes placeholder](/blog/placeholders/placeholder-blueprint.svg)
 *Image placeholder: [ADD] wheel rig test photo / wiring snapshot*
