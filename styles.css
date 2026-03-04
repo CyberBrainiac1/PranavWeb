@@ -677,6 +677,7 @@ body {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     gap: 18px;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -698,7 +699,7 @@ body {
 }
 
 .project-image {
-    height: 190px;
+    height: 260px;
     border-radius: 14px;
     background: linear-gradient(130deg, rgba(92, 242, 214, 0.18), rgba(79, 179, 255, 0.18));
     border: 1px solid rgba(143, 188, 255, 0.18);
