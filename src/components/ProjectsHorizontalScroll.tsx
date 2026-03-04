@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type WheelEvent } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import useEmblaCarousel from 'embla-carousel-react'
 import type { Project } from '../data/projects'
 import { getProjectMediaItems } from '../lib/projectMedia'
 
@@ -10,9 +11,7 @@ type ProjectsHorizontalScrollProps = {
 const BOUNDARY_COOLDOWN_MS = 900
 
 export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: ProjectsHorizontalScrollProps) {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const targetScrollRef = useRef(0)
-  const rafRef = useRef<number | null>(null)
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', containScroll: 'trimSnaps', skipSnaps: false })
   const boundaryCooldownRef = useRef(0)
   const [hintVisible, setHintVisible] = useState(true)
   const [mobileLayout, setMobileLayout] = useState(false)
@@ -23,13 +22,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
     const timer = window.setTimeout(() => {
       setHintVisible(false)
     }, 5200)
-
-    return () => {
-      window.clearTimeout(timer)
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current)
-      }
-    }
+    return () => { window.clearTimeout(timer) }
   }, [])
 
   useEffect(() => {
@@ -51,121 +44,65 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
     }
   }, [])
 
-  const scheduleFrame = () => {
-    if (rafRef.current !== null) return
-
-    const animate = () => {
-      const track = trackRef.current
-      if (!track) {
-        rafRef.current = null
-        return
-      }
-
-      const current = track.scrollLeft
-      const target = targetScrollRef.current
-      const distance = target - current
-
-      if (Math.abs(distance) < 0.35) {
-        track.scrollLeft = target
-        rafRef.current = null
-        return
-      }
-
-      track.scrollLeft = current + distance * 0.14
-      rafRef.current = window.requestAnimationFrame(animate)
-    }
-
-    rafRef.current = window.requestAnimationFrame(animate)
-  }
-
-  const queueHorizontalScroll = (delta: number) => {
-    const track = trackRef.current
-    if (!track) return
-
-    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth)
-    targetScrollRef.current = Math.min(maxScroll, Math.max(0, targetScrollRef.current + delta))
-    scheduleFrame()
-  }
-
-  const triggerBoundaryScroll = (direction: 1 | -1) => {
+  const triggerBoundaryScroll = useCallback((direction: 1 | -1) => {
     const now = Date.now()
     if (now < boundaryCooldownRef.current) return
     boundaryCooldownRef.current = now + BOUNDARY_COOLDOWN_MS
     onBoundaryScroll(direction)
-  }
-
-  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
-    if (mobileLayout) return
-    const dominantDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX
-    if (Math.abs(dominantDelta) < 10) return
-    event.preventDefault()
-    handleWheelDelta(dominantDelta)
-  }
-
-  const handleNativeScroll = () => {
-    const track = trackRef.current
-    if (!track) return
-    targetScrollRef.current = track.scrollLeft
-    if (hintVisible && track.scrollLeft > 2) {
-      setHintVisible(false)
-    }
-  }
-
-  const handleWheelDelta = (dominantDelta: number) => {
-    const track = trackRef.current
-    if (!track) return
-
-    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth)
-    const currentScroll = Math.max(track.scrollLeft, targetScrollRef.current)
-    const atStart = currentScroll <= 2
-    const atEnd = currentScroll >= maxScroll - 2
-
-    if (dominantDelta > 0 && atEnd) {
-      triggerBoundaryScroll(1)
-      return
-    }
-
-    if (dominantDelta < 0 && atStart) {
-      triggerBoundaryScroll(-1)
-      return
-    }
-
-    targetScrollRef.current = track.scrollLeft
-    queueHorizontalScroll(dominantDelta * 1.25)
-
-    if (hintVisible) {
-      setHintVisible(false)
-    }
-  }
+  }, [onBoundaryScroll])
 
   useEffect(() => {
-    if (mobileLayout) return
+    if (!emblaApi) return
+    const onSelect = () => {
+      if (hintVisible) setHintVisible(false)
+    }
+    emblaApi.on('select', onSelect)
+    return () => { emblaApi.off('select', onSelect) }
+  }, [emblaApi, hintVisible])
 
-    const onWindowWheel = (event: globalThis.WheelEvent) => {
-      if (event.defaultPrevented) return
+  useEffect(() => {
+    if (mobileLayout || !emblaApi) return
+
+    const rootNode = emblaApi.rootNode()
+
+    const onWheel = (event: globalThis.WheelEvent) => {
       const targetElement = event.target instanceof HTMLElement ? event.target : null
       if (targetElement?.closest('input, textarea, select, [contenteditable="true"]')) return
 
-      const track = trackRef.current
-      if (!track) return
-
-      const rect = track.getBoundingClientRect()
+      const rect = rootNode.getBoundingClientRect()
       const visible = rect.bottom > window.innerHeight * 0.14 && rect.top < window.innerHeight * 0.86
       if (!visible) return
 
       const dominantDelta =
         Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX
-
       if (Math.abs(dominantDelta) < 10) return
+
       event.preventDefault()
-      handleWheelDelta(dominantDelta)
+
+      const canScrollNext = emblaApi.canScrollNext()
+      const canScrollPrev = emblaApi.canScrollPrev()
+
+      if (dominantDelta > 0 && !canScrollNext) {
+        triggerBoundaryScroll(1)
+        return
+      }
+      if (dominantDelta < 0 && !canScrollPrev) {
+        triggerBoundaryScroll(-1)
+        return
+      }
+
+      if (dominantDelta > 0) {
+        emblaApi.scrollNext()
+      } else {
+        emblaApi.scrollPrev()
+      }
+
+      if (hintVisible) setHintVisible(false)
     }
 
-    window.addEventListener('wheel', onWindowWheel, { passive: false })
-    return () => {
-      window.removeEventListener('wheel', onWindowWheel)
-    }
-  }, [hintVisible, mobileLayout])
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => { window.removeEventListener('wheel', onWheel) }
+  }, [emblaApi, mobileLayout, hintVisible, triggerBoundaryScroll])
 
   const renderProjectPanel = (project: Project, index: number) => {
     const mediaItems = getProjectMediaItems(project)
@@ -282,7 +219,7 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
   }
 
   return (
-    <section className="projects-horizontal" data-disable-route-scroll onWheel={handleWheel}>
+    <section className="projects-horizontal" data-disable-route-scroll>
       <div className="projects-track-header">
         <p className="micro-label">Project gallery</p>
         {!mobileLayout && hintVisible ? (
@@ -293,12 +230,10 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
       {mobileLayout ? (
         <div className="projects-stack">{projects.map((project, index) => renderProjectPanel(project, index))}</div>
       ) : (
-        <div
-          ref={trackRef}
-          className="projects-track"
-          onScroll={handleNativeScroll}
-        >
-          {projects.map((project, index) => renderProjectPanel(project, index))}
+        <div className="projects-embla" ref={emblaRef}>
+          <div className="projects-track">
+            {projects.map((project, index) => renderProjectPanel(project, index))}
+          </div>
         </div>
       )}
     </section>

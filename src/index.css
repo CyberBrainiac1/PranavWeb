@@ -2349,31 +2349,13 @@ body {
   color: rgba(171, 206, 255, 0.84);
 }
 
+.projects-embla {
+  overflow: hidden;
+}
+
 .projects-track {
   display: flex;
   gap: 1rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: auto;
-  overscroll-behavior-x: contain;
-  overscroll-behavior-y: contain;
-  padding-bottom: 0.35rem;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(158, 198, 245, 0.45) rgba(8, 25, 45, 0.22);
-}
-
-.projects-track::-webkit-scrollbar {
-  height: 8px;
-}
-
-.projects-track::-webkit-scrollbar-track {
-  background: rgba(8, 25, 45, 0.2);
-  border-radius: 999px;
-}
-
-.projects-track::-webkit-scrollbar-thumb {
-  background: rgba(158, 198, 245, 0.52);
-  border-radius: 999px;
 }
 
 .projects-panel {
