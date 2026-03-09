@@ -182,7 +182,11 @@ export function ProjectsHorizontalScroll({ projects, onBoundaryScroll }: Project
       <p className="projects-panel-index">{String(index + 1).padStart(2, '0')}</p>
       <h4>{project.name}</h4>
       <p>{project.summary}</p>
-      <p className="projects-panel-tags">{project.tags.join(' · ')}</p>
+      <div className="projects-panel-tags">
+        {project.tags.map((tag) => (
+          <span key={tag} className="tag">{tag}</span>
+        ))}
+      </div>
 
       {mediaItems.length ? (
         <div className="projects-panel-media-grid">

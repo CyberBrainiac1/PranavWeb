@@ -2,9 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlertTriangle,
-  BookOpenText,
   CheckCircle2,
-  ExternalLink,
   Github,
   Linkedin,
   Loader2,
@@ -15,16 +13,13 @@ import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 're
 import { BlueprintBackground } from './components/BlueprintBackground'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
-import { AssistantPanel } from './components/AssistantPanel'
 import { DevSettingsPage } from './components/DevSettingsPage'
 import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
 import { ProjectsHorizontalScroll } from './components/ProjectsHorizontalScroll'
 import { Section } from './components/Section'
 import { aboutTimelineEntries } from './data/aboutTimeline'
-import { boredIdeas } from './data/bored'
 import { designedItems } from './data/designed'
-import { experienceItems } from './data/experiences'
 import { profileInfo } from './data/profile'
 import { projects } from './data/projects'
 import { skillModules } from './data/skills'
@@ -34,19 +29,17 @@ import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
 const navItems = [
   { path: '/home', label: 'Home' },
   { path: '/projects', label: 'Projects' },
-  { path: '/designed', label: 'Designed' },
   { path: '/blog', label: 'Blog' },
   { path: '/timeline', label: 'Timeline' },
-  { path: '/experiences', label: 'Experiences' },
   { path: '/skills', label: 'Skills' },
   { path: '/contact', label: 'Contact' },
 ]
 
 const scrollRouteOrder = navItems.map((item) => item.path)
 
-const DOWN_THRESHOLD = 0.9
+const DOWN_THRESHOLD = 0.88
 const UP_THRESHOLD = 0.1
-const NAV_COOLDOWN_MS = 1400
+const NAV_COOLDOWN_MS = 950
 const SCROLL_DELTA_THRESHOLD = 20
 const WHEEL_NAV_TRIGGER_DELTA = 240
 const WHEEL_ACCUMULATION_RESET_MS = 260
@@ -147,9 +140,9 @@ function ProjectsPage() {
   return (
     <Section
       id="projects"
-      label="FIG.02 / PROJECTS"
+      label="PROJECTS"
       title="Projects"
-      subtitle="A rolling view of what I am building right now."
+      subtitle="A rolling view of what I'm building right now."
     >
       <article className="project-featured">
         <p className="micro-label">Featured</p>
@@ -158,15 +151,15 @@ function ProjectsPage() {
         <p className="project-focus-line">
           This one has most of my attention right now. I keep tuning feel and cleaning up input behavior.
         </p>
-        <div className="minimal-action-row">
+        <div className="home-action-row">
           <button
             type="button"
             onClick={() => navigate('/blog/diy-force-feedback-wheel-build-log')}
-            className="btn-primary-mag"
+            className="btn-primary"
           >
             Read build log
           </button>
-          <button type="button" onClick={() => navigate('/contact')} className="btn-outline-mag">
+          <button type="button" onClick={() => navigate('/contact')} className="btn-outline">
             Contact
           </button>
         </div>
@@ -183,21 +176,20 @@ function SkillsPage() {
   return (
     <Section
       id="skills"
-      label="FIG.03 / SKILLS"
+      label="SKILLS"
       title="Skills"
       subtitle="Core tools and habits I use across builds."
     >
-      <div className="skills-minimal-grid">
+      <div className="skills-grid">
         {skillModules.map((module) => (
-          <article key={module.id} className="skills-block">
-            <p className="micro-label">{module.label}</p>
+          <div key={module.id} className="skills-group">
             <h3>{module.title}</h3>
             <ul>
               {module.items.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
-          </article>
+          </div>
         ))}
       </div>
     </Section>
@@ -215,71 +207,18 @@ function TimelinePage() {
   return (
     <Section
       id="timeline"
-      label="FIG.04 / TIMELINE"
+      label="TIMELINE"
       title="Timeline"
-      subtitle="A simple timeline of what I have worked on so far."
+      subtitle="A simple timeline of what I've worked on so far."
+      narrow
     >
-      <div className="timeline-clean">
+      <div className="timeline-list">
         {entries.map((entry, index) => (
-          <article key={`${entry.date}-${entry.title}-${index}`} className="timeline-clean-item">
-            <p className="timeline-clean-date">{entry.date}</p>
-            <div>
-              <h3>{entry.title}</h3>
-              <p className="timeline-clean-org">{entry.organization}</p>
-              <p className="timeline-clean-note">{entry.notes}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
-function ExperiencesPage() {
-  return (
-    <Section
-      id="experiences"
-      label="FIG.05 / EXPERIENCES"
-      title="Experiences"
-      subtitle="A few programs and events that shaped how I build."
-    >
-      <div className="list-section">
-        {experienceItems.map((item) => (
-          <article key={item.id} className="list-row">
-            <h3>{item.title}</h3>
-            <p>{item.blurb}</p>
-          </article>
-        ))}
-      </div>
-    </Section>
-  )
-}
-
-function BoredPage() {
-  return (
-    <Section
-      id="bored"
-      label="FIG.06 / BORED LIST"
-      title="Things To Do When Bored"
-      subtitle="Quick options when you want something fun, useful, or both."
-    >
-      <div className="list-section">
-        {boredIdeas.map((idea) => (
-          <article key={idea.id} className="list-row">
-            <h3>{idea.title}</h3>
-            <p>{idea.description}</p>
-            {idea.link ? (
-              <a
-                href={idea.link}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-sm"
-              >
-                Open <ExternalLink size={14} />
-              </a>
-            ) : (
-              <p className="text-xs opacity-70">No link needed. Just start.</p>
-            )}
+          <article key={`${entry.date}-${entry.title}-${index}`} className="timeline-item">
+            <p className="timeline-date">{entry.date}</p>
+            <h3>{entry.title}</h3>
+            <p className="timeline-org">{entry.organization}</p>
+            <p className="timeline-note">{entry.notes}</p>
           </article>
         ))}
       </div>
@@ -291,9 +230,10 @@ function DesignedPage() {
   return (
     <Section
       id="designed"
-      label="FIG.07 / DESIGNED"
-      title="Cool Things I Personally Designed"
-      subtitle="A quick list of designs I am proud of."
+      label="DESIGNED"
+      title="Things I Designed"
+      subtitle="A quick list of designs I'm proud of."
+      narrow
     >
       <div className="list-section">
         {designedItems.map((item) => (
@@ -313,29 +253,24 @@ function ContactPage({
   sending,
   profile,
 }: ContactPageProps) {
-  const statusTone =
-    status.kind === 'success'
-      ? 'border-sky-200/40 bg-sky-300/10 text-sky-50'
-      : 'border-amber-200/35 bg-amber-300/10 text-amber-50'
-
   return (
     <Section
       id="contact"
-      label="FIG.09 / CONTACT"
+      label="CONTACT"
       title="Contact"
-      subtitle="Send a message and I&apos;ll get it by email."
+      subtitle="Send a message and I'll get it by email."
     >
-      <div className="grid gap-4 lg:gap-5 xl:grid-cols-[minmax(16rem,0.9fr)_minmax(0,1.1fr)]">
-        <div className="blueprint-panel space-y-3 sm:space-y-4">
-          <p className="text-sm text-slate-300">
+      <div className="contact-grid">
+        <div className="contact-info">
+          <p>
             Best way to reach me is this form. You can also use the direct links below.
           </p>
-          <div className="grid gap-3">
-            <a className="contact-button" href={`mailto:${profile.contactEmail}`}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <a className="contact-link" href={`mailto:${profile.contactEmail}`}>
               <Mail size={16} /> Email
             </a>
             <a
-              className="contact-button"
+              className="contact-link"
               href={profile.links.linkedin}
               target="_blank"
               rel="noreferrer"
@@ -343,7 +278,7 @@ function ContactPage({
               <Linkedin size={16} /> LinkedIn
             </a>
             <a
-              className="contact-button"
+              className="contact-link"
               href={profile.links.github}
               target="_blank"
               rel="noreferrer"
@@ -351,12 +286,12 @@ function ContactPage({
               <Github size={16} /> GitHub
             </a>
           </div>
-          <p className="text-xs text-slate-400">
+          <p style={{ fontSize: 14, fontFamily: 'var(--font-sans)' }}>
             Based near San Jose. I usually reply fastest through email.
           </p>
         </div>
 
-        <form onSubmit={onSubmit} className="blueprint-panel min-w-0 space-y-3 sm:space-y-4">
+        <form onSubmit={onSubmit} className="contact-form">
           <label className="field-group">
             <span>Name</span>
             <input className="field" name="name" required placeholder="Name" />
@@ -368,10 +303,11 @@ function ContactPage({
           <label className="field-group">
             <span>Message</span>
             <textarea
-              className="field min-h-28 resize-y sm:min-h-36"
+              className="field"
               name="message"
               required
               placeholder="Message"
+              style={{ minHeight: 120, resize: 'vertical' }}
             />
           </label>
 
@@ -379,26 +315,25 @@ function ContactPage({
 
           <button
             type="submit"
-            className="btn-primary-mag w-full justify-center sm:w-auto"
+            className="btn-primary"
             disabled={sending}
+            style={{ alignSelf: 'flex-start' }}
           >
             {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
             {sending ? 'Sending...' : 'Send Message'}
           </button>
 
           {status.kind !== 'idle' ? (
-            <div className={`rounded-xl border p-3 text-sm ${statusTone}`}>
-              <p className="flex items-center gap-2 font-medium">
+            <div className={`contact-status ${status.kind === 'success' ? 'contact-status-success' : 'contact-status-error'}`}>
+              <p style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500 }}>
                 {status.kind === 'success' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
                 {status.kind === 'success' ? 'Message sent' : 'Send failed'}
               </p>
-              <p className="mt-1 text-xs text-slate-200">{status.message}</p>
+              <p style={{ marginTop: 4, fontSize: 13 }}>{status.message}</p>
             </div>
           ) : null}
         </form>
       </div>
-
-      <AssistantPanel />
     </Section>
   )
 }
@@ -580,7 +515,7 @@ function App() {
         : ['PRANAV EMMADI', 'ROBOTICS BUILDER'],
     heroIntroText:
       runtimeConfig.heroIntroText ||
-      'I’m Pranav Emmadi, a robotics builder near San Jose. I like building things that work outside perfect demos.',
+      'I build robots and hardware projects, and I care a lot about making things work outside perfect demos. Most of what I learn comes from building, breaking, testing, and fixing.',
     aboutParagraphs:
       runtimeConfig.aboutParagraphs.length
         ? runtimeConfig.aboutParagraphs
@@ -676,23 +611,22 @@ function App() {
   }
 
   return (
-    <div className="relative min-h-screen text-slate-100">
+    <div className="relative min-h-screen">
       <BlueprintBackground />
 
-      <main className="app-scroll mx-auto w-full max-w-[104rem] px-3 pb-16 pt-4 sm:px-6 sm:pb-20 lg:px-10 xl:px-12">
-        <Navbar
-          items={navItems}
-          currentPath={location.pathname}
-          onNavigate={(path) => navigate(path)}
-        />
+      <Navbar
+        items={navItems}
+        currentPath={location.pathname}
+        onNavigate={(path) => navigate(path)}
+      />
 
+      <main>
         <AnimatePresence mode="wait">
           <motion.div
-            className="route-page"
             key={location.pathname}
-            initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: prefersReducedMotion ? 0 : -12 }}
+            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -8 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.4, ease: 'easeOut' }}
           >
             <Routes location={location}>
@@ -719,9 +653,7 @@ function App() {
                 element={<BlogPostRoute onBackToBlog={() => navigate('/blog')} />}
               />
               <Route path="/designed" element={<DesignedPage />} />
-              <Route path="/bored" element={<BoredPage />} />
               <Route path="/timeline" element={<TimelinePage />} />
-              <Route path="/experiences" element={<ExperiencesPage />} />
               <Route path="/skills" element={<SkillsPage />} />
               <Route path="/dev" element={<DevSettingsPage />} />
               <Route
@@ -739,40 +671,39 @@ function App() {
             </Routes>
           </motion.div>
         </AnimatePresence>
-
-        <footer className="mt-8 border-t border-sky-200/20 pt-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.16em] text-slate-400">
-            <p>© {new Date().getFullYear()} {renderProfile.name}</p>
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={() => navigate('/blog')}
-                className="inline-flex items-center gap-1 font-mono text-sky-100/85 transition hover:text-sky-50"
-              >
-                <BookOpenText size={14} /> Blog
-              </button>
-              <p className="font-mono text-sky-100/80">Build / Iterate / Test</p>
-            </div>
-          </div>
-          <div className="mt-2 text-right text-[11px] lowercase tracking-[0.08em] text-slate-500">
-            <button
-              type="button"
-              onClick={handleHiddenDevTap}
-              className="appearance-none bg-transparent p-0 text-inherit hover:text-slate-400 focus-visible:outline-none"
-              aria-label="Hidden settings access"
-            >
-              built with care
-            </button>
-          </div>
-        </footer>
-
-        {routeIndex >= 0 ? (
-          <div className="route-progress-indicator" aria-hidden="true">
-            {String(routeIndex + 1).padStart(2, '0')} / {String(scrollRouteOrder.length).padStart(2, '0')}
-          </div>
-        ) : null}
       </main>
 
+      <footer className="site-footer">
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <p>© {new Date().getFullYear()} {renderProfile.name}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              type="button"
+              onClick={() => navigate('/blog')}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
+            >
+              Blog
+            </button>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>Build · Iterate · Test</p>
+          </div>
+        </div>
+        <div style={{ marginTop: 8, textAlign: 'right' }}>
+          <button
+            type="button"
+            onClick={handleHiddenDevTap}
+            style={{ appearance: 'none', background: 'transparent', padding: 0, border: 'none', fontSize: 11, color: 'var(--border-stronger)', cursor: 'default' }}
+            aria-label="Hidden settings access"
+          >
+            built with care
+          </button>
+        </div>
+      </footer>
+
+      {routeIndex >= 0 ? (
+        <div className="route-progress-indicator" aria-hidden="true">
+          {String(routeIndex + 1).padStart(2, '0')} / {String(scrollRouteOrder.length).padStart(2, '0')}
+        </div>
+      ) : null}
     </div>
   )
 }

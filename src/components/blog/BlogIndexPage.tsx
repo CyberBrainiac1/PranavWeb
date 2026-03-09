@@ -10,9 +10,10 @@ export function BlogIndexPage({ onOpenPost }: BlogIndexPageProps) {
   return (
     <Section
       id="blog"
-      label="FIG.07 / BLOG"
+      label="BLOG"
       title="Blog"
       subtitle="Build logs and notes written as a calm reading list."
+      narrow
     >
       <div className="blog-list">
         {blogPosts.map((post) => (
@@ -20,9 +21,15 @@ export function BlogIndexPage({ onOpenPost }: BlogIndexPageProps) {
             <p className="blog-list-meta">
               {formatBlogDate(post.date)} · {post.readingMinutes} min read
             </p>
-            <h3>{post.title}</h3>
+            <h3 onClick={() => onOpenPost(post.slug)}>{post.title}</h3>
             <p>{post.summary}</p>
-            {post.tags.length ? <p className="blog-list-tags">{post.tags.join(' · ')}</p> : null}
+            {post.tags.length ? (
+              <div className="blog-list-tags">
+                {post.tags.map((tag) => (
+                  <span key={tag} className="tag">{tag}</span>
+                ))}
+              </div>
+            ) : null}
             <button type="button" className="blog-index-open" onClick={() => onOpenPost(post.slug)}>
               Read post <ArrowRight size={15} />
             </button>

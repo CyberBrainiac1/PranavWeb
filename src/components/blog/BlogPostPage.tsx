@@ -11,14 +11,14 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
 
   if (!post) {
     return (
-      <section className="section-shell">
-        <div className="space-y-4">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-sky-200">/blog/{slug}</p>
-          <h2 className="section-title">Post Not Found</h2>
-          <p className="text-sm text-slate-300">
+      <section className="page-shell-narrow">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <p className="micro-label">/blog/{slug}</p>
+          <h2>Post Not Found</h2>
+          <p style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'var(--text-secondary)' }}>
             This post does not exist in the current build.
           </p>
-          <button type="button" className="btn-outline-mag w-full sm:w-auto" onClick={onBackToBlog}>
+          <button type="button" className="btn-outline" onClick={onBackToBlog}>
             Back To Blog
           </button>
         </div>
@@ -31,12 +31,12 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
   }
 
   return (
-    <section className="section-shell">
+    <section className="page-shell-narrow">
       <div className="blog-path-row">
         <button type="button" className="blog-back-button" onClick={onBackToBlog}>
           <ArrowLeft size={15} /> Blog
         </button>
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-sky-200/90">/blog/{post.slug}</p>
+        <p className="micro-label">/blog/{post.slug}</p>
       </div>
 
       <header className="blog-post-header">
@@ -45,7 +45,7 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
         <div className="blog-post-meta">
           <span>{formatBlogDate(post.date)}</span>
           <span className="blog-meta-divider">|</span>
-          <span className="inline-flex items-center gap-1">
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
             <Clock3 size={14} /> {post.readingMinutes} min read
           </span>
         </div>

@@ -20,65 +20,37 @@ export function Hero({
   links,
   onOpenProjects,
   onOpenBlog,
-  onOpenSkills,
   onContact,
 }: HeroProps) {
   const homeParagraphs =
     aboutParagraphs.length > 0
-      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim()).slice(0, 4)
+      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim()).slice(0, 3)
       : []
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
 
   return (
-    <section id="home" className="minimal-home-shell">
-      <div className="minimal-home-grid">
-        <aside className="minimal-profile-col">
-          <div className="minimal-dot-row" aria-hidden="true">
-            <span className="minimal-dot minimal-dot-amber" />
-            <span className="minimal-dot minimal-dot-lime" />
-            <span className="minimal-dot minimal-dot-magenta" />
-          </div>
-
-          <h1 className="minimal-profile-name">{name}</h1>
-          <p className="minimal-profile-role">Robotics builder</p>
-          <p className="minimal-profile-location">{location}</p>
+    <section id="home" className="page-shell">
+      <div className="home-grid">
+        <aside className="home-sidebar">
+          <p className="micro-label">NAV / INDEX</p>
+          <h1 className="home-sidebar-name">{name}</h1>
+          <p className="home-sidebar-role">Robotics builder · {location}</p>
 
           <nav aria-label="Home quick links">
-            <ul className="minimal-link-list">
+            <ul className="home-sidebar-links">
               <li>
-                <button type="button" onClick={onOpenProjects} className="minimal-link">
-                  Projects
-                </button>
+                <button type="button" onClick={onOpenBlog}>Blog</button>
               </li>
               <li>
-                <button type="button" onClick={onOpenSkills} className="minimal-link">
-                  Skills
-                </button>
+                <a href={links.github} target="_blank" rel="noreferrer">GitHub</a>
               </li>
               <li>
-                <button type="button" onClick={onOpenBlog} className="minimal-link">
-                  Blog
-                </button>
-              </li>
-              <li>
-                <button type="button" onClick={onContact} className="minimal-link">
-                  Contact
-                </button>
-              </li>
-              <li>
-                <a className="minimal-link" href={links.linkedin} target="_blank" rel="noreferrer">
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a className="minimal-link" href={links.github} target="_blank" rel="noreferrer">
-                  GitHub
-                </a>
+                <a href={links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
               </li>
             </ul>
           </nav>
 
-          <div className="minimal-profile-photo">
+          <div className="home-sidebar-photo">
             <img
               src={profileImageSrc}
               alt={`${name} profile`}
@@ -91,33 +63,32 @@ export function Hero({
         </aside>
 
         <motion.article
-          className="minimal-copy-col"
+          className="home-content"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.42, ease: 'easeOut' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <p className="minimal-lede">{introText}</p>
+          <p className="home-lede">{introText}</p>
 
           {homeParagraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
 
-          <p className="minimal-focus-line">
-            Current focus: Sim Racing Wheel + Force Feedback - tuning feel and fixing input mapping.
-          </p>
+          <div className="current-focus-row">
+            <p className="micro-label">CURRENT FOCUS</p>
+            <p>
+              Sim Racing Wheel + Force Feedback — tuning feel, fixing input mapping, and pushing the build further.
+            </p>
+          </div>
 
-          <div className="minimal-action-row">
-            <button type="button" onClick={onOpenProjects} className="btn-primary-mag">
+          <div className="home-action-row">
+            <button type="button" onClick={onOpenProjects} className="btn-primary">
               View Projects
             </button>
-            <button type="button" onClick={onContact} className="btn-outline-mag">
+            <button type="button" onClick={onContact} className="btn-outline">
               Contact
             </button>
           </div>
-
-          <p className="minimal-signoff">
-            If you want to connect, head to the Contact tab and send me a message.
-          </p>
         </motion.article>
       </div>
     </section>
