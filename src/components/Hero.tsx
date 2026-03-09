@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Github, Linkedin, Mail } from 'lucide-react'
 
 type HeroProps = {
   name: string
@@ -12,84 +13,72 @@ type HeroProps = {
   onContact: () => void
 }
 
-export function Hero({
-  name,
-  location,
-  introText,
-  aboutParagraphs,
-  links,
-  onOpenProjects,
-  onOpenBlog,
-  onContact,
-}: HeroProps) {
-  const homeParagraphs =
-    aboutParagraphs.length > 0
-      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim()).slice(0, 3)
-      : []
+const scrollTo = (id: string) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
+
+export function Hero({ name, links }: HeroProps) {
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  }
+
   return (
-    <section id="home" className="page-shell">
-      <div className="home-grid">
-        <aside className="home-sidebar">
-          <p className="micro-label">NAV / INDEX</p>
-          <h1 className="home-sidebar-name">{name}</h1>
-          <p className="home-sidebar-role">Robotics builder · {location}</p>
+    <section id="home" className="cover-section">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
+      >
+        <motion.img
+          variants={itemVariants}
+          src={profileImageSrc}
+          alt={`${name} profile photo`}
+          className="cover-photo"
+          onError={(e) => {
+            ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+          }}
+        />
 
-          <nav aria-label="Home quick links">
-            <ul className="home-sidebar-links">
-              <li>
-                <button type="button" onClick={onOpenBlog}>Blog</button>
-              </li>
-              <li>
-                <a href={links.github} target="_blank" rel="noreferrer">GitHub</a>
-              </li>
-              <li>
-                <a href={links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-              </li>
-            </ul>
-          </nav>
+        <motion.h1 variants={itemVariants} className="cover-name">
+          {name}
+        </motion.h1>
 
-          <div className="home-sidebar-photo">
-            <img
-              src={profileImageSrc}
-              alt={`${name} profile`}
-              loading="lazy"
-              onError={(event) => {
-                ;(event.currentTarget as HTMLImageElement).style.display = 'none'
-              }}
-            />
-          </div>
-        </aside>
+        <motion.p variants={itemVariants} className="cover-subtitle">
+          Robotics Builder
+        </motion.p>
 
-        <motion.article
-          className="home-content"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-        >
-          <p className="home-lede">{introText}</p>
+        <motion.div variants={itemVariants} className="cover-socials">
+          <a href={links.linkedin} target="_blank" rel="noreferrer" className="cover-social-link">
+            <Linkedin size={16} /> LinkedIn
+          </a>
+          <a href={links.github} target="_blank" rel="noreferrer" className="cover-social-link">
+            <Github size={16} /> GitHub
+          </a>
+          <button type="button" className="cover-social-link" onClick={() => scrollTo('blog')}>
+            Blog
+          </button>
+          <a href="mailto:emmadipranav@gmail.com" className="cover-social-link">
+            <Mail size={16} /> Email
+          </a>
+        </motion.div>
+      </motion.div>
 
-          {homeParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-
-          <div className="current-focus-row">
-            <p className="micro-label">CURRENT FOCUS</p>
-            <p>
-              Sim Racing Wheel + Force Feedback — tuning feel, fixing input mapping, and pushing the build further.
-            </p>
-          </div>
-
-          <div className="home-action-row">
-            <button type="button" onClick={onOpenProjects} className="btn-primary">
-              View Projects
-            </button>
-            <button type="button" onClick={onContact} className="btn-outline">
-              Contact
-            </button>
-          </div>
-        </motion.article>
+      <div className="cover-scroll-cue" aria-hidden="true">
+        <div className="cover-scroll-dot" />
+        <div className="cover-scroll-dot" />
+        <div className="cover-scroll-dot" />
       </div>
     </section>
   )
