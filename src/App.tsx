@@ -13,6 +13,7 @@ import { ContactSection } from './components/ContactSection'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
 import { DevSettingsPage } from './components/DevSettingsPage'
+import { ProjectDetailPage } from './components/ProjectDetailPage'
 import { profileInfo } from './data/profile'
 import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
 
@@ -36,6 +37,11 @@ type RenderProfile = {
 function BlogPostRoute({ onBackToBlog }: { onBackToBlog: () => void }) {
   const { slug = '' } = useParams()
   return <BlogPostPage slug={slug} onBackToBlog={onBackToBlog} />
+}
+
+function ProjectDetailRoute() {
+  const { slug = '' } = useParams()
+  return <ProjectDetailPage slug={slug} />
 }
 
 function FooterMinimal({ name, onHiddenTap }: { name: string; onHiddenTap: () => void }) {
@@ -254,6 +260,14 @@ function App() {
             }
           />
           <Route path="/dev" element={<DevSettingsPage />} />
+          <Route
+            path="/projects/:slug"
+            element={
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <ProjectDetailRoute />
+              </div>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

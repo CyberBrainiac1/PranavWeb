@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import { projects } from '../data/projects'
 import { PREMIUM_EASE } from '../lib/motionConfig'
 
@@ -18,6 +20,7 @@ function lerp(current: number, target: number, factor: number): number {
 }
 
 export function HorizontalProjectsSection() {
+  const navigate = useNavigate()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const currentXRef = useRef(0)
@@ -127,15 +130,24 @@ export function HorizontalProjectsSection() {
                       <span key={tag} className="tag-chip">{tag}</span>
                     ))}
                   </div>
-                  {project.links && project.links.length > 0 && (
-                    <div className="horiz-panel-links">
-                      {project.links.slice(0, 2).map((link) => (
-                        <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="horiz-panel-link">
-                          {link.label} &rarr;
-                        </a>
-                      ))}
-                    </div>
-                  )}
+                  <div className="horiz-panel-footer">
+                    <button
+                      type="button"
+                      className="horiz-panel-open"
+                      onClick={() => navigate(`/projects/${project.slug ?? project.id}`)}
+                    >
+                      Details <ArrowRight size={13} aria-hidden="true" />
+                    </button>
+                    {project.links && project.links.length > 0 && (
+                      <div className="horiz-panel-links">
+                        {project.links.slice(0, 1).map((link) => (
+                          <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="horiz-panel-link">
+                            {link.label} &rarr;
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </article>
               ))}
             </div>

@@ -10,7 +10,7 @@ export function BlogIndexPage({ onOpenPost }: BlogIndexPageProps) {
     <div className="page-shell">
       <div className="blog-index-header">
         <p className="micro-label" style={{ marginBottom: '16px' }}>Writing / Index</p>
-        <h1 className="blog-index-title">Build logs and notes.</h1>
+        <h1 className="blog-index-title">Writing.</h1>
         <p className="blog-index-subtitle">
           Honest writing about building, breaking, and fixing things.
         </p>

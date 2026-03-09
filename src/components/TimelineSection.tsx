@@ -30,7 +30,6 @@ export function TimelineSection() {
         >
           <motion.div variants={itemVariants} className="section-header">
             <span className="section-label">Timeline</span>
-            <h2 className="section-title">Progression over time.</h2>
           </motion.div>
 
           <div className="timeline-track">
