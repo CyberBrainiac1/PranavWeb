@@ -11,18 +11,18 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
 
   if (!post) {
     return (
-      <section className="page-shell-narrow">
+      <div className="page-shell-narrow">
         <div className="blog-not-found">
           <p className="micro-label">/blog/{slug}</p>
           <h2>Post Not Found</h2>
-          <p className="section-subtitle">
-            This post does not exist in the current build.
+          <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>
+            This post doesn't exist in the current build.
           </p>
           <button type="button" className="btn-outline" onClick={onBackToBlog}>
-            Back To Blog
+            Back to Blog
           </button>
         </div>
-      </section>
+      </div>
     )
   }
 
@@ -31,50 +31,60 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
   }
 
   return (
-    <section className="page-shell-narrow">
+    <div className="page-shell-narrow">
       <div className="blog-path-row">
         <button type="button" className="blog-back-button" onClick={onBackToBlog}>
-          <ArrowLeft size={15} /> Blog
+          <ArrowLeft size={14} aria-hidden="true" /> Blog
         </button>
         <p className="micro-label">/blog/{post.slug}</p>
       </div>
 
-      <header className="blog-post-header">
+      <div className="blog-post-header">
+        {post.tags.length > 0 && (
+          <div className="blog-post-tags">
+            {post.tags.map((tag) => (
+              <span key={tag} className="tag-chip">{tag}</span>
+            ))}
+          </div>
+        )}
         <h1>{post.title}</h1>
-        <p>{post.summary}</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginTop: '12px', lineHeight: 1.6 }}>
+          {post.summary}
+        </p>
         <div className="blog-post-meta">
           <span>{formatBlogDate(post.date)}</span>
           <span className="blog-meta-divider">|</span>
           <span className="blog-post-meta-reading">
-            <Clock3 size={14} /> {post.readingMinutes} min read
+            <Clock3 size={13} aria-hidden="true" /> {post.readingMinutes} min read
           </span>
         </div>
-      </header>
-
-      <div className="blog-layout">
-        {post.toc.length ? (
-          <aside className="blog-toc">
-            <p className="blog-toc-title">Table Of Contents</p>
-            <nav>
-              <ul>
-                {post.toc.map((item) => (
-                  <li key={`${post.slug}-${item.id}`}>
-                    <button
-                      type="button"
-                      className={`blog-toc-link ${item.level === 3 ? 'blog-toc-link-sub' : ''}`}
-                      onClick={() => openTocItem(item.id)}
-                    >
-                      {item.text}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </aside>
-        ) : null}
-
-        <article className="blog-prose" dangerouslySetInnerHTML={{ __html: post.html }} />
       </div>
-    </section>
+
+      {post.toc.length > 0 && (
+        <div className="blog-toc">
+          <p className="blog-toc-title">Table of contents</p>
+          <nav aria-label="Table of contents">
+            <ul>
+              {post.toc.map((item) => (
+                <li key={`${post.slug}-${item.id}`}>
+                  <button
+                    type="button"
+                    className={`blog-toc-link${item.level === 3 ? ' blog-toc-link-sub' : ''}`}
+                    onClick={() => openTocItem(item.id)}
+                  >
+                    {item.text}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
+
+      <article
+        className="blog-prose"
+        dangerouslySetInnerHTML={{ __html: post.html }}
+      />
+    </div>
   )
 }

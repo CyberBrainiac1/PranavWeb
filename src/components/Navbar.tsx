@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
-import { cn } from '../lib/utils'
+
+const scrollTo = (id: string) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
 
 type NavItem = {
   path: string
@@ -13,87 +16,129 @@ type NavbarProps = {
   onNavigate: (path: string) => void
 }
 
-export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
+const sectionNavItems = [
+  { id: 'about', label: 'About' },
+  { id: 'featured', label: 'Featured' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'blog', label: 'Blog' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'contact', label: 'Contact' },
+]
+
+const NAVBAR_SCROLL_THRESHOLD = 40
+
+export function Navbar({ onNavigate }: NavbarProps) {
+  const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const isActive = (path: string) => {
-    if (path === '/') return currentPath === '/'
-    return currentPath.startsWith(path)
-  }
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > NAVBAR_SCROLL_THRESHOLD)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
-  const handleNav = (path: string) => {
-    onNavigate(path)
+  const handleSectionNav = (id: string) => {
     setMobileOpen(false)
+    scrollTo(id)
   }
 
   return (
-    <header className="site-nav" role="banner">
-      <div className="flex w-full items-center justify-between gap-3">
-        <div>
-          <p className="nav-micro-label">NAV / INDEX</p>
-          <button
-            type="button"
-            onClick={() => handleNav('/home')}
-            className="btn-reset nav-brand"
-          >
-            Pranav Emmadi
-          </button>
-        </div>
+    <header className={`navbar-minimal ${scrolled ? 'scrolled' : ''}`} role="banner">
+      <button
+        type="button"
+        className="navbar-brand btn-reset"
+        onClick={() => scrollTo('home')}
+      >
+        Pranav Emmadi
+      </button>
 
-        <nav className="hidden items-center gap-5 lg:flex" aria-label="Main navigation">
-          {items.map((item) => (
-            <button
-              key={item.path}
-              type="button"
-              onClick={() => handleNav(item.path)}
-              className={cn('nav-text-link', isActive(item.path) && 'is-active')}
-            >
-              {item.label}
-            </button>
+      <nav aria-label="Main navigation">
+        <ul className="navbar-links">
+          {sectionNavItems.map((item) => (
+            <li key={item.id}>
+              <button
+                type="button"
+                className="navbar-link"
+                onClick={() => handleSectionNav(item.id)}
+              >
+                {item.label}
+              </button>
+            </li>
           ))}
-        </nav>
+          <li>
+            <button
+              type="button"
+              className="navbar-link"
+              onClick={() => onNavigate('/blog')}
+            >
+              All Posts
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-        <button
-          type="button"
-          className="mobile-nav-btn lg:hidden"
-          onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation menu"
+      <button
+        type="button"
+        className="navbar-mobile-btn"
+        onClick={() => setMobileOpen(true)}
+        aria-label="Open navigation"
         >
-          <Menu size={18} />
-        </button>
-      </div>
+        <Menu size={18} />
+      </button>
 
-      {mobileOpen ? (
+      {mobileOpen && (
         <>
           <div className="mobile-nav-overlay" onClick={() => setMobileOpen(false)} />
           <div className="mobile-nav-panel" role="dialog" aria-label="Navigation menu">
             <div className="mobile-nav-header">
-              <p className="nav-micro-label">NAV / INDEX</p>
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  color: 'var(--text-muted)',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                NAV
+              </span>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="mobile-nav-btn"
-                aria-label="Close navigation menu"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--text-primary)',
+                  padding: '4px',
+                }}
               >
                 <X size={18} />
               </button>
             </div>
-            <nav aria-label="Main navigation">
-              {items.map((item) => (
-                <button
-                  key={item.path}
-                  type="button"
-                  onClick={() => handleNav(item.path)}
-                  className={cn('mobile-nav-link', isActive(item.path) && 'is-active')}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
+            {sectionNavItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className="mobile-nav-link"
+                onClick={() => handleSectionNav(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              className="mobile-nav-link"
+              onClick={() => {
+                setMobileOpen(false)
+                onNavigate('/blog')
+              }}
+            >
+              All Posts
+            </button>
           </div>
         </>
-      ) : null}
+      )}
     </header>
   )
 }
-

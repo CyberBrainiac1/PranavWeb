@@ -1,6 +1,5 @@
 import { ArrowRight } from 'lucide-react'
 import { blogPosts, formatBlogDate } from '../../data/blog'
-import { Section } from '../Section'
 
 type BlogIndexPageProps = {
   onOpenPost: (slug: string) => void
@@ -8,34 +7,40 @@ type BlogIndexPageProps = {
 
 export function BlogIndexPage({ onOpenPost }: BlogIndexPageProps) {
   return (
-    <Section
-      id="blog"
-      label="BLOG"
-      title="Blog"
-      subtitle="Build logs and notes written as a calm reading list."
-      narrow
-    >
+    <div className="page-shell">
+      <div className="blog-index-header">
+        <p className="micro-label" style={{ marginBottom: '16px' }}>Writing / Index</p>
+        <h1 className="blog-index-title">Build logs and notes.</h1>
+        <p className="blog-index-subtitle">
+          Honest writing about building, breaking, and fixing things.
+        </p>
+      </div>
+
       <div className="blog-list">
         {blogPosts.map((post) => (
           <article key={post.slug} className="blog-list-item">
             <p className="blog-list-meta">
-              {formatBlogDate(post.date)} · {post.readingMinutes} min read
+              {formatBlogDate(post.date)} &nbsp;&middot;&nbsp; {post.readingMinutes} min read
             </p>
             <h3 onClick={() => onOpenPost(post.slug)}>{post.title}</h3>
             <p>{post.summary}</p>
-            {post.tags.length ? (
+            {post.tags.length > 0 && (
               <ul className="blog-list-tags" aria-label="Tags">
                 {post.tags.map((tag) => (
-                  <li key={tag} className="tag">{tag}</li>
+                  <li key={tag} className="tag-chip">{tag}</li>
                 ))}
               </ul>
-            ) : null}
-            <button type="button" className="blog-index-open" onClick={() => onOpenPost(post.slug)}>
-              Read post <ArrowRight size={15} />
+            )}
+            <button
+              type="button"
+              className="blog-index-open"
+              onClick={() => onOpenPost(post.slug)}
+            >
+              Read post <ArrowRight size={14} aria-hidden="true" />
             </button>
           </article>
         ))}
       </div>
-    </Section>
+    </div>
   )
 }

@@ -1,4 +1,7 @@
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { Github, Linkedin, Mail } from 'lucide-react'
+import { PREMIUM_EASE } from '../lib/motionConfig'
 
 type HeroProps = {
   name: string
@@ -6,90 +9,121 @@ type HeroProps = {
   introText: string
   aboutParagraphs: string[]
   links: { linkedin: string; github: string }
+  contactEmail?: string
   onOpenProjects: () => void
   onOpenBlog: () => void
   onOpenSkills: () => void
   onContact: () => void
 }
 
-export function Hero({
-  name,
-  location,
-  introText,
-  aboutParagraphs,
-  links,
-  onOpenProjects,
-  onOpenBlog,
-  onContact,
-}: HeroProps) {
-  const homeParagraphs =
-    aboutParagraphs.length > 0
-      ? aboutParagraphs.filter((paragraph) => paragraph.trim() !== introText.trim()).slice(0, 3)
-      : []
+export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: HeroProps) {
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
+  const scrollCueRef = useRef<HTMLDivElement>(null)
+
+  // Hide scroll cue once user starts scrolling
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 80 && scrollCueRef.current) {
+        scrollCueRef.current.style.opacity = '0'
+        scrollCueRef.current.style.transition = 'opacity 500ms ease'
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.14, delayChildren: 0.1 },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 18 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: PREMIUM_EASE },
+    },
+  }
 
   return (
-    <section id="home" className="page-shell">
-      <div className="home-grid">
-        <aside className="home-sidebar">
-          <p className="micro-label">NAV / INDEX</p>
-          <h1 className="home-sidebar-name">{name}</h1>
-          <p className="home-sidebar-role">Robotics builder · {location}</p>
+    <section id="home" className="cover-section">
+      <motion.div
+        className="cover-inner"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Micro label */}
+        <motion.p variants={itemVariants} className="cover-micro">
+          Pranav Emmadi / Index
+        </motion.p>
 
-          <nav aria-label="Home quick links">
-            <ul className="home-sidebar-links">
-              <li>
-                <button type="button" onClick={onOpenBlog}>Blog</button>
-              </li>
-              <li>
-                <a href={links.github} target="_blank" rel="noreferrer">GitHub</a>
-              </li>
-              <li>
-                <a href={links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-              </li>
-            </ul>
-          </nav>
+        {/* Profile photo — softly rounded rectangle */}
+        <motion.img
+          variants={itemVariants}
+          src={profileImageSrc}
+          alt="Pranav Emmadi"
+          className="cover-photo"
+          onError={(e) => {
+            ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+          }}
+        />
 
-          <div className="home-sidebar-photo">
-            <img
-              src={profileImageSrc}
-              alt={`${name} profile`}
-              loading="lazy"
-              onError={(event) => {
-                ;(event.currentTarget as HTMLImageElement).style.display = 'none'
-              }}
-            />
-          </div>
-        </aside>
+        {/* Name */}
+        <motion.h1 variants={itemVariants} className="cover-name">
+          {name}
+        </motion.h1>
 
-        <motion.article
-          className="home-content"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-        >
-          <p className="home-lede">{introText}</p>
+        {/* Socials */}
+        <motion.div variants={itemVariants} className="cover-socials">
+          <a
+            href={links.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="cover-social-link"
+            aria-label="LinkedIn"
+          >
+            <Linkedin size={15} aria-hidden="true" />
+            LinkedIn
+          </a>
+          <a
+            href={links.github}
+            target="_blank"
+            rel="noreferrer"
+            className="cover-social-link"
+            aria-label="GitHub"
+          >
+            <Github size={15} aria-hidden="true" />
+            GitHub
+          </a>
+          <button
+            type="button"
+            className="cover-social-link"
+            onClick={() =>
+              document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })
+            }
+            aria-label="Jump to blog"
+          >
+            Blog
+          </button>
+          <a
+            href={`mailto:${contactEmail}`}
+            className="cover-social-link"
+            aria-label="Send email"
+          >
+            <Mail size={15} aria-hidden="true" />
+            Email
+          </a>
+        </motion.div>
+      </motion.div>
 
-          {homeParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-
-          <div className="current-focus-row">
-            <p className="micro-label">CURRENT FOCUS</p>
-            <p>
-              Sim Racing Wheel + Force Feedback — tuning feel, fixing input mapping, and pushing the build further.
-            </p>
-          </div>
-
-          <div className="home-action-row">
-            <button type="button" onClick={onOpenProjects} className="btn-primary">
-              View Projects
-            </button>
-            <button type="button" onClick={onContact} className="btn-outline">
-              Contact
-            </button>
-          </div>
-        </motion.article>
+      {/* Scroll cue — animated vertical line */}
+      <div ref={scrollCueRef} className="cover-scroll-cue" aria-hidden="true">
+        <div className="cover-scroll-line" />
       </div>
     </section>
   )
