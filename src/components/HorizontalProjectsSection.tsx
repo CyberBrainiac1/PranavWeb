@@ -58,7 +58,9 @@ export function HorizontalProjectsSection() {
   }, [prefersReducedMotion])
 
   const panelCount = projects.length
-  const wrapperHeight = `${Math.max(300, panelCount * 50)}vh`
+  // Each panel needs ~50vh of vertical scroll space to translate through
+  const SCROLL_HEIGHT_PER_PANEL_VH = 50
+  const wrapperHeight = `${Math.max(300, panelCount * SCROLL_HEIGHT_PER_PANEL_VH)}vh`
 
   return (
     <section id="projects">

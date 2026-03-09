@@ -7,6 +7,7 @@ type HeroProps = {
   introText: string
   aboutParagraphs: string[]
   links: { linkedin: string; github: string }
+  contactEmail?: string
   onOpenProjects: () => void
   onOpenBlog: () => void
   onOpenSkills: () => void
@@ -17,7 +18,7 @@ const scrollTo = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 }
 
-export function Hero({ name, links }: HeroProps) {
+export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: HeroProps) {
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
 
   const containerVariants = {
@@ -69,7 +70,7 @@ export function Hero({ name, links }: HeroProps) {
           <button type="button" className="cover-social-link" onClick={() => scrollTo('blog')}>
             Blog
           </button>
-          <a href="mailto:emmadipranav@gmail.com" className="cover-social-link">
+          <a href={`mailto:${contactEmail}`} className="cover-social-link">
             <Mail size={16} /> Email
           </a>
         </motion.div>

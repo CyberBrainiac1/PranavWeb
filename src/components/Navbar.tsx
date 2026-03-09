@@ -25,12 +25,14 @@ const sectionNavItems = [
   { id: 'contact', label: 'Contact' },
 ]
 
+const NAVBAR_SCROLL_THRESHOLD = 40
+
 export function Navbar({ onNavigate }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40)
+    const handleScroll = () => setScrolled(window.scrollY > NAVBAR_SCROLL_THRESHOLD)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])

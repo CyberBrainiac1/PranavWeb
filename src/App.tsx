@@ -102,6 +102,7 @@ function HomePage({
         introText={profile.heroIntroText}
         aboutParagraphs={profile.aboutParagraphs}
         links={profile.links}
+        contactEmail={profile.contactEmail}
         onOpenProjects={() => {}}
         onOpenBlog={() => navigate('/blog')}
         onOpenSkills={() => {}}
