@@ -1,12 +1,25 @@
 import { motion } from 'framer-motion'
+import { PREMIUM_EASE } from '../lib/motionConfig'
 
 type AboutSectionProps = {
   aboutParagraphs: string[]
 }
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: PREMIUM_EASE },
+  },
+}
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.13 },
+  },
 }
 
 export function AboutSection({ aboutParagraphs }: AboutSectionProps) {
@@ -16,36 +29,29 @@ export function AboutSection({ aboutParagraphs }: AboutSectionProps) {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
-          }}
+          viewport={{ once: true, margin: '-80px' }}
+          variants={containerVariants}
         >
           <motion.div variants={itemVariants} className="section-header">
-            <span className="section-label">ABOUT</span>
+            <span className="section-label">About</span>
             <h2 className="section-title">Builder at heart.</h2>
           </motion.div>
 
-          <div className="about-content">
-            <motion.div variants={itemVariants} className="about-paragraphs">
-              {aboutParagraphs.map((paragraph, i) => (
-                <motion.p key={`about-p-${i}`} variants={itemVariants}>
-                  {paragraph}
-                </motion.p>
-              ))}
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="about-focus-box">
-              <span className="micro-label" style={{ marginBottom: '8px', display: 'block' }}>
-                CURRENT FOCUS
-              </span>
-              <p>
-                Sim Racing Wheel + Force Feedback — tuning feel, fixing input mapping, and pushing
-                the build further.
-              </p>
-            </motion.div>
+          <div className="about-paragraphs">
+            {aboutParagraphs.map((paragraph, i) => (
+              <motion.p key={`about-p-${i}`} variants={itemVariants}>
+                {paragraph}
+              </motion.p>
+            ))}
           </div>
+
+          <motion.div variants={itemVariants} className="about-focus">
+            <span className="about-focus-label">Current focus</span>
+            <p>
+              Sim Racing Wheel + Force Feedback — tuning feel, fixing input mapping, and
+              pushing the build further.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>

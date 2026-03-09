@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Mail } from 'lucide-react'
+import { PREMIUM_EASE } from '../lib/motionConfig'
 
 type HeroProps = {
   name: string
@@ -14,72 +16,114 @@ type HeroProps = {
   onContact: () => void
 }
 
-const scrollTo = (id: string) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
-
 export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: HeroProps) {
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
+  const scrollCueRef = useRef<HTMLDivElement>(null)
+
+  // Hide scroll cue once user starts scrolling
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 80 && scrollCueRef.current) {
+        scrollCueRef.current.style.opacity = '0'
+        scrollCueRef.current.style.transition = 'opacity 500ms ease'
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+      transition: { staggerChildren: 0.14, delayChildren: 0.1 },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+    hidden: { opacity: 0, y: 18 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: PREMIUM_EASE },
+    },
   }
 
   return (
     <section id="home" className="cover-section">
       <motion.div
+        className="cover-inner"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
       >
+        {/* Micro label */}
+        <motion.p variants={itemVariants} className="cover-micro">
+          Pranav Emmadi / Index
+        </motion.p>
+
+        {/* Profile photo — softly rounded rectangle */}
         <motion.img
           variants={itemVariants}
           src={profileImageSrc}
-          alt={`${name} profile photo`}
+          alt="Pranav Emmadi"
           className="cover-photo"
           onError={(e) => {
             ;(e.currentTarget as HTMLImageElement).style.display = 'none'
           }}
         />
 
+        {/* Name */}
         <motion.h1 variants={itemVariants} className="cover-name">
           {name}
         </motion.h1>
 
-        <motion.p variants={itemVariants} className="cover-subtitle">
-          Robotics Builder
-        </motion.p>
-
+        {/* Socials */}
         <motion.div variants={itemVariants} className="cover-socials">
-          <a href={links.linkedin} target="_blank" rel="noreferrer" className="cover-social-link">
-            <Linkedin size={16} /> LinkedIn
+          <a
+            href={links.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="cover-social-link"
+            aria-label="LinkedIn"
+          >
+            <Linkedin size={15} aria-hidden="true" />
+            LinkedIn
           </a>
-          <a href={links.github} target="_blank" rel="noreferrer" className="cover-social-link">
-            <Github size={16} /> GitHub
+          <a
+            href={links.github}
+            target="_blank"
+            rel="noreferrer"
+            className="cover-social-link"
+            aria-label="GitHub"
+          >
+            <Github size={15} aria-hidden="true" />
+            GitHub
           </a>
-          <button type="button" className="cover-social-link" onClick={() => scrollTo('blog')}>
+          <button
+            type="button"
+            className="cover-social-link"
+            onClick={() =>
+              document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })
+            }
+            aria-label="Jump to blog"
+          >
             Blog
           </button>
-          <a href={`mailto:${contactEmail}`} className="cover-social-link">
-            <Mail size={16} /> Email
+          <a
+            href={`mailto:${contactEmail}`}
+            className="cover-social-link"
+            aria-label="Send email"
+          >
+            <Mail size={15} aria-hidden="true" />
+            Email
           </a>
         </motion.div>
       </motion.div>
 
-      <div className="cover-scroll-cue" aria-hidden="true">
-        <div className="cover-scroll-dot" />
-        <div className="cover-scroll-dot" />
-        <div className="cover-scroll-dot" />
+      {/* Scroll cue — animated vertical line */}
+      <div ref={scrollCueRef} className="cover-scroll-cue" aria-hidden="true">
+        <div className="cover-scroll-line" />
       </div>
     </section>
   )

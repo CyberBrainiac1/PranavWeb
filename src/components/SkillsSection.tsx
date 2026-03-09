@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion'
+import { PREMIUM_EASE } from '../lib/motionConfig'
 import { skillModules } from '../data/skills'
 
+
+
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: PREMIUM_EASE } },
 }
 
 export function SkillsSection() {
@@ -13,21 +16,21 @@ export function SkillsSection() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '-80px' }}
           variants={{
             hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
           }}
         >
           <motion.div variants={itemVariants} className="section-header">
-            <span className="section-label">SKILLS</span>
-            <h2 className="section-title">Core tools &amp; disciplines.</h2>
+            <span className="section-label">Skills</span>
+            <h2 className="section-title">Core tools and habits.</h2>
           </motion.div>
 
           <div className="skills-grid">
             {skillModules.map((module) => (
               <motion.div key={module.id} variants={itemVariants}>
-                <p className="skills-group-label">{module.label}</p>
+                <span className="skills-group-label">{module.label}</span>
                 <p className="skills-group-title">{module.title}</p>
                 <ul className="skills-list">
                   {module.items.map((item) => (

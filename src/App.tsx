@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { GlobalBackground } from './components/GlobalBackground'
+import { HomeSectionIndicator } from './components/SectionIndicator'
 import { Hero } from './components/Hero'
 import { AboutSection } from './components/AboutSection'
 import { FeaturedProjectSection } from './components/FeaturedProjectSection'
@@ -9,18 +10,11 @@ import { BlogPreviewSection } from './components/BlogPreviewSection'
 import { SkillsSection } from './components/SkillsSection'
 import { TimelineSection } from './components/TimelineSection'
 import { ContactSection } from './components/ContactSection'
-import { Navbar } from './components/Navbar'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
 import { DevSettingsPage } from './components/DevSettingsPage'
-import { AppErrorBoundary } from './components/AppErrorBoundary'
 import { profileInfo } from './data/profile'
 import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
-
-const navItems = [
-  { path: '/home', label: 'Home' },
-  { path: '/blog', label: 'Blog' },
-]
 
 type ContactStatus = {
   kind: 'idle' | 'sending' | 'success' | 'error'
@@ -46,32 +40,15 @@ function BlogPostRoute({ onBackToBlog }: { onBackToBlog: () => void }) {
 
 function FooterMinimal({ name, onHiddenTap }: { name: string; onHiddenTap: () => void }) {
   return (
-    <footer
-      style={{
-        borderTop: '1px solid var(--hairline-subtle)',
-        padding: '40px',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>
-        © {new Date().getFullYear()} {name}
+    <footer className="footer-minimal">
+      <p className="footer-copy">
+        &copy; {new Date().getFullYear()} {name}
       </p>
       <button
         type="button"
         onClick={onHiddenTap}
-        style={{
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '12px',
-          color: 'var(--text-muted)',
-          fontFamily: 'var(--font-mono)',
-          letterSpacing: '0.06em',
-        }}
+        className="footer-hidden-btn"
+        aria-label="Hidden settings"
       >
         built with care
       </button>
@@ -79,23 +56,23 @@ function FooterMinimal({ name, onHiddenTap }: { name: string; onHiddenTap: () =>
   )
 }
 
-function HomePage({
+function HomeExperiencePage({
   profile,
   onSubmit,
   status,
   sending,
+  onNavigateToBlog,
 }: {
   profile: RenderProfile
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
   status: ContactStatus
   sending: boolean
+  onNavigateToBlog: () => void
 }) {
-  const navigate = useNavigate()
-
   return (
     <>
-      <GlobalBackground />
-      <Navbar items={navItems} currentPath="/home" onNavigate={(path) => navigate(path)} />
+      {/* Cover — first screen only: name, photo, socials */}
+      <HomeSectionIndicator />
       <Hero
         name={profile.name}
         location={profile.location}
@@ -104,7 +81,7 @@ function HomePage({
         links={profile.links}
         contactEmail={profile.contactEmail}
         onOpenProjects={() => {}}
-        onOpenBlog={() => navigate('/blog')}
+        onOpenBlog={onNavigateToBlog}
         onOpenSkills={() => {}}
         onContact={() =>
           document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
@@ -178,8 +155,7 @@ function App() {
     if (!contactServiceKey) {
       setContactStatus({
         kind: 'error',
-        message:
-          'Contact form is not available right now. Please use email or LinkedIn below.',
+        message: 'Contact form is not available right now. Please use email or LinkedIn.',
       })
       return
     }
@@ -194,7 +170,7 @@ function App() {
     if (botcheck) return
 
     setContactSending(true)
-    setContactStatus({ kind: 'sending', message: 'Sending now...' })
+    setContactStatus({ kind: 'sending', message: 'Sending...' })
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -209,13 +185,10 @@ function App() {
           botcheck: '',
         }),
       })
-
       const result = (await response.json()) as { success?: boolean; message?: string }
-
       if (!response.ok || !result.success) {
         throw new Error(result.message || 'The message did not send.')
       }
-
       form.reset()
       setContactStatus({ kind: 'success', message: 'Message sent. Thanks for reaching out.' })
     } catch (error) {
@@ -231,7 +204,7 @@ function App() {
     }
   }
 
-  const handleHiddenDevTap = () => {
+  const handleHiddenTap = () => {
     const now = Date.now()
     if (now - hiddenDevTapTimeRef.current > HIDDEN_DEV_TAP_WINDOW_MS) {
       hiddenDevTapCountRef.current = 0
@@ -245,35 +218,57 @@ function App() {
   }
 
   return (
-    <AppErrorBoundary>
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route
-          path="/home"
-          element={
-            <>
-              <HomePage
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Fixed background layers — always visible */}
+      <GlobalBackground />
+
+      <main>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route
+            path="/home"
+            element={
+              <HomeExperiencePage
                 profile={renderProfile}
                 onSubmit={handleContactSubmit}
                 status={contactStatus}
                 sending={contactSending}
+                onNavigateToBlog={() => navigate('/blog')}
               />
-              <FooterMinimal name={renderProfile.name} onHiddenTap={handleHiddenDevTap} />
-            </>
+            }
+          />
+          <Route
+            path="/blog"
+            element={
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <BlogIndexPage onOpenPost={(slug) => navigate(`/blog/${slug}`)} />
+              </div>
+            }
+          />
+          <Route
+            path="/blog/:slug"
+            element={
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <BlogPostRoute onBackToBlog={() => navigate('/blog')} />
+              </div>
+            }
+          />
+          <Route path="/dev" element={<DevSettingsPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+
+      {/* Footer — only on home page */}
+      <Routes>
+        <Route
+          path="/home"
+          element={
+            <FooterMinimal name={renderProfile.name} onHiddenTap={handleHiddenTap} />
           }
         />
-        <Route
-          path="/blog"
-          element={<BlogIndexPage onOpenPost={(slug) => navigate(`/blog/${slug}`)} />}
-        />
-        <Route
-          path="/blog/:slug"
-          element={<BlogPostRoute onBackToBlog={() => navigate('/blog')} />}
-        />
-        <Route path="/dev" element={<DevSettingsPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={null} />
       </Routes>
-    </AppErrorBoundary>
+    </div>
   )
 }
 
