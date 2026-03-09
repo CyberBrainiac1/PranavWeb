@@ -1,14 +1,6 @@
-import { Menu } from 'lucide-react'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import { cn } from '../lib/utils'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from './ui/sheet'
 
 type NavItem = {
   path: string
@@ -22,66 +14,85 @@ type NavbarProps = {
 }
 
 export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
+  const [mobileOpen, setMobileOpen] = useState(false)
+
   const isActive = (path: string) => {
-    if (path === '/') {
-      return currentPath === '/'
-    }
+    if (path === '/') return currentPath === '/'
     return currentPath.startsWith(path)
   }
 
+  const handleNav = (path: string) => {
+    onNavigate(path)
+    setMobileOpen(false)
+  }
+
   return (
-    <header className="site-nav">
-      <div className="flex items-center justify-between gap-3">
-        <div className="space-y-1">
+    <header className="site-nav" role="banner">
+      <div className="flex w-full items-center justify-between gap-3">
+        <div>
           <p className="nav-micro-label">NAV / INDEX</p>
-          <p className="nav-brand">Pranav Emmadi</p>
+          <button
+            type="button"
+            onClick={() => handleNav('/home')}
+            className="btn-reset nav-brand"
+          >
+            Pranav Emmadi
+          </button>
         </div>
 
-        <nav className="hidden items-center gap-4 lg:flex">
+        <nav className="hidden items-center gap-5 lg:flex" aria-label="Main navigation">
           {items.map((item) => (
             <button
               key={item.path}
               type="button"
-              onClick={() => onNavigate(item.path)}
-              className={cn(
-                'nav-text-link',
-                isActive(item.path) && 'is-active',
-              )}
+              onClick={() => handleNav(item.path)}
+              className={cn('nav-text-link', isActive(item.path) && 'is-active')}
             >
               {item.label}
             </button>
           ))}
         </nav>
 
-        <Sheet>
-          <SheetTrigger className="inline-flex rounded-md border border-sky-200/25 p-2 text-sky-100 lg:hidden">
-            <Menu size={18} />
-            <span className="sr-only">Open menu</span>
-          </SheetTrigger>
-          <SheetContent side="right">
-            <SheetHeader>
-              <SheetTitle>Navigation</SheetTitle>
-              <SheetDescription>NAV / INDEX</SheetDescription>
-            </SheetHeader>
-            <div className="flex flex-col gap-2 pt-2">
-              {items.map((item) => (
-                <SheetClose asChild key={item.path}>
-                  <button
-                    type="button"
-                    onClick={() => onNavigate(item.path)}
-                    className={cn(
-                      'w-full rounded-md border border-sky-200/20 px-3 py-2 text-left text-sm text-slate-100',
-                      isActive(item.path) && 'border-sky-200/70 text-sky-100',
-                    )}
-                  >
-                    {item.label}
-                  </button>
-                </SheetClose>
-              ))}
-            </div>
-          </SheetContent>
-        </Sheet>
+        <button
+          type="button"
+          className="mobile-nav-btn lg:hidden"
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open navigation menu"
+        >
+          <Menu size={18} />
+        </button>
       </div>
+
+      {mobileOpen ? (
+        <>
+          <div className="mobile-nav-overlay" onClick={() => setMobileOpen(false)} />
+          <div className="mobile-nav-panel" role="dialog" aria-label="Navigation menu">
+            <div className="mobile-nav-header">
+              <p className="nav-micro-label">NAV / INDEX</p>
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                className="mobile-nav-btn"
+                aria-label="Close navigation menu"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <nav aria-label="Main navigation">
+              {items.map((item) => (
+                <button
+                  key={item.path}
+                  type="button"
+                  onClick={() => handleNav(item.path)}
+                  className={cn('mobile-nav-link', isActive(item.path) && 'is-active')}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </>
+      ) : null}
     </header>
   )
 }

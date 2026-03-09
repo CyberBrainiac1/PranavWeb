@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { LabelTag } from './LabelTag'
 
 type SectionProps = {
   id: string
@@ -8,26 +7,25 @@ type SectionProps = {
   title: string
   subtitle?: string
   children: ReactNode
+  narrow?: boolean
 }
 
-export function Section({ id, label, title, subtitle, children }: SectionProps) {
+export function Section({ id, label, title, subtitle, children, narrow }: SectionProps) {
   return (
     <motion.section
       id={id}
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="section-shell relative"
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className={narrow ? 'page-shell-narrow' : 'page-shell'}
     >
-      <div className="relative z-[1] space-y-4">
-        <LabelTag text={label} />
-        <div className="space-y-2">
-          <h2 className="section-title">{title}</h2>
-          {subtitle ? <p className="section-subtitle">{subtitle}</p> : null}
-        </div>
-        {children}
-      </div>
+      <div className="section-label section-label-row">{label}</div>
+      <h2 className={subtitle ? 'section-heading-with-sub' : 'section-heading'}>{title}</h2>
+      {subtitle ? (
+        <p className="section-subtitle">{subtitle}</p>
+      ) : null}
+      {children}
     </motion.section>
   )
 }
