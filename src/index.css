@@ -1853,3 +1853,190 @@ a {
   border-color: var(--accent-blue);
   background: var(--accent-blue-softer);
 }
+
+/* ═══════════════════════════════════════
+   SECTION-AS-PAGE SYSTEM
+   ═══════════════════════════════════════ */
+
+.section-page {
+  width: 100%;
+}
+
+.section-page-counter {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent-blue);
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.section-page-heading {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  min-height: 1.2em;
+}
+
+/* The blinking cursor injected by react-type-animation */
+.section-page-heading .type-cursor {
+  color: var(--accent-blue);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.section-page-sep {
+  height: 2px;
+  width: 48px;
+  background: linear-gradient(90deg, var(--accent-blue), transparent);
+  border-radius: 2px;
+  margin-bottom: 28px;
+}
+
+.section-page-body {
+  min-height: 120px;
+}
+
+.section-page-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line-subtle);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.section-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: color 180ms ease;
+  max-width: 45%;
+  text-align: left;
+}
+
+.section-nav-btn:hover {
+  color: var(--text-secondary);
+}
+
+.section-nav-btn.is-next {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* Section nav list in sidebar */
+.section-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.section-nav-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease;
+  line-height: 1.4;
+}
+
+.section-nav-item:hover {
+  color: var(--text-secondary);
+  background: var(--glass-subtle);
+}
+
+.section-nav-item.is-active {
+  color: var(--accent-blue);
+  background: var(--accent-blue-softer);
+  font-weight: 500;
+}
+
+/* Section card grid (overview mode) */
+.project-overview-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.section-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.section-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--glass-subtle);
+  border: 1px solid var(--line-subtle);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 180ms ease, background 180ms ease;
+  width: 100%;
+}
+
+.section-card:hover {
+  border-color: var(--accent-blue-soft);
+  background: var(--accent-blue-softer);
+}
+
+.section-card-index {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-blue);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.section-card-title {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex: 1;
+  line-height: 1.35;
+}
+
+.section-card-arrow {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.section-card:hover .section-card-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* react-type-animation cursor override — match accent-blue */
+.type-cursor {
+  color: var(--accent-blue) !important;
+}

@@ -40,8 +40,8 @@ function BlogPostRoute({ onBackToBlog }: { onBackToBlog: () => void }) {
 }
 
 function ProjectDetailRoute() {
-  const { slug = '' } = useParams()
-  return <ProjectDetailPage slug={slug} />
+  const { slug = '', section } = useParams()
+  return <ProjectDetailPage slug={slug} section={section} />
 }
 
 function FooterMinimal({ name, onHiddenTap }: { name: string; onHiddenTap: () => void }) {
@@ -262,6 +262,14 @@ function App() {
           <Route path="/dev" element={<DevSettingsPage />} />
           <Route
             path="/projects/:slug"
+            element={
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <ProjectDetailRoute />
+              </div>
+            }
+          />
+          <Route
+            path="/projects/:slug/:section"
             element={
               <div style={{ position: 'relative', zIndex: 1 }}>
                 <ProjectDetailRoute />

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import Tilt from 'react-parallax-tilt'
 import { projects } from '../data/projects'
 import { PREMIUM_EASE } from '../lib/motionConfig'
 
@@ -118,37 +119,51 @@ export function HorizontalProjectsSection() {
           <div className="horiz-viewport">
             <div ref={trackRef} className="horiz-track">
               {projects.map((project, i) => (
-                <article key={project.id} className="horiz-panel">
-                  <p className="horiz-panel-index">{String(i + 1).padStart(2, '0')}</p>
-                  <span className={`horiz-panel-status${project.featured ? ' featured' : ''}`}>
-                    {project.status}
-                  </span>
-                  <h3 className="horiz-panel-title">{project.name}</h3>
-                  <p className="horiz-panel-summary">{project.summary}</p>
-                  <div className="horiz-panel-tags">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="tag-chip">{tag}</span>
-                    ))}
-                  </div>
-                  <div className="horiz-panel-footer">
-                    <button
-                      type="button"
-                      className="horiz-panel-open"
-                      onClick={() => navigate(`/projects/${project.slug ?? project.id}`)}
-                    >
-                      Details <ArrowRight size={13} aria-hidden="true" />
-                    </button>
-                    {project.links && project.links.length > 0 && (
-                      <div className="horiz-panel-links">
-                        {project.links.slice(0, 1).map((link) => (
-                          <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="horiz-panel-link">
-                            {link.label} &rarr;
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </article>
+                <Tilt
+                  key={project.id}
+                  tiltMaxAngleX={isMobile ? 0 : 6}
+                  tiltMaxAngleY={isMobile ? 0 : 6}
+                  glareEnable={!isMobile}
+                  glareMaxOpacity={0.07}
+                  glareColor="rgba(77,141,255,0.8)"
+                  glarePosition="all"
+                  glareBorderRadius="16px"
+                  scale={1.015}
+                  transitionSpeed={600}
+                  style={{ transformStyle: 'preserve-3d', flexShrink: 0 }}
+                >
+                  <article className="horiz-panel">
+                    <p className="horiz-panel-index">{String(i + 1).padStart(2, '0')}</p>
+                    <span className={`horiz-panel-status${project.featured ? ' featured' : ''}`}>
+                      {project.status}
+                    </span>
+                    <h3 className="horiz-panel-title">{project.name}</h3>
+                    <p className="horiz-panel-summary">{project.summary}</p>
+                    <div className="horiz-panel-tags">
+                      {project.tags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="tag-chip">{tag}</span>
+                      ))}
+                    </div>
+                    <div className="horiz-panel-footer">
+                      <button
+                        type="button"
+                        className="horiz-panel-open"
+                        onClick={() => navigate(`/projects/${project.slug ?? project.id}`)}
+                      >
+                        Details <ArrowRight size={13} aria-hidden="true" />
+                      </button>
+                      {project.links && project.links.length > 0 && (
+                        <div className="horiz-panel-links">
+                          {project.links.slice(0, 1).map((link) => (
+                            <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="horiz-panel-link">
+                              {link.label} &rarr;
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                </Tilt>
               ))}
             </div>
           </div>
