@@ -29,7 +29,6 @@ export function BlogPreviewSection() {
         >
           <motion.div variants={itemVariants} className="section-header">
             <span className="section-label">Writing</span>
-            <h2 className="section-title">Build logs and notes.</h2>
           </motion.div>
 
           <div className="blog-preview-list">

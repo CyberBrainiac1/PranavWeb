@@ -71,10 +71,17 @@ export function FeaturedProjectSection() {
                 <button
                   type="button"
                   className="btn-primary"
+                  onClick={() => navigate(`/projects/${feat.slug ?? feat.id}`)}
+                >
+                  Full details
+                  <ArrowRight size={15} aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  className="btn-outline"
                   onClick={() => navigate('/blog/diy-force-feedback-wheel-build-log')}
                 >
                   Read build log
-                  <ArrowRight size={15} aria-hidden="true" />
                 </button>
                 {feat.links?.slice(0, 1).map((link) => (
                   <a
