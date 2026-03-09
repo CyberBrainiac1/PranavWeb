@@ -37,6 +37,9 @@ const navItems = [
 
 const scrollRouteOrder = navItems.map((item) => item.path)
 
+// Scroll-based route navigation thresholds:
+// 88% down means user has scrolled nearly to bottom before auto-advancing
+// 10% up means user is near top and scrolling up to go back
 const DOWN_THRESHOLD = 0.88
 const UP_THRESHOLD = 0.1
 const NAV_COOLDOWN_MS = 950
@@ -265,7 +268,7 @@ function ContactPage({
           <p>
             Best way to reach me is this form. You can also use the direct links below.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="contact-links-col">
             <a className="contact-link" href={`mailto:${profile.contactEmail}`}>
               <Mail size={16} /> Email
             </a>
@@ -286,7 +289,7 @@ function ContactPage({
               <Github size={16} /> GitHub
             </a>
           </div>
-          <p style={{ fontSize: 14, fontFamily: 'var(--font-sans)' }}>
+          <p className="contact-small-note">
             Based near San Jose. I usually reply fastest through email.
           </p>
         </div>
@@ -307,7 +310,7 @@ function ContactPage({
               name="message"
               required
               placeholder="Message"
-              style={{ minHeight: 120, resize: 'vertical' }}
+              rows={5}
             />
           </label>
 
@@ -317,7 +320,6 @@ function ContactPage({
             type="submit"
             className="btn-primary"
             disabled={sending}
-            style={{ alignSelf: 'flex-start' }}
           >
             {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
             {sending ? 'Sending...' : 'Send Message'}
@@ -325,11 +327,11 @@ function ContactPage({
 
           {status.kind !== 'idle' ? (
             <div className={`contact-status ${status.kind === 'success' ? 'contact-status-success' : 'contact-status-error'}`}>
-              <p style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500 }}>
+              <p className="contact-status-heading">
                 {status.kind === 'success' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
                 {status.kind === 'success' ? 'Message sent' : 'Send failed'}
               </p>
-              <p style={{ marginTop: 4, fontSize: 13 }}>{status.message}</p>
+              <p className="contact-status-detail">{status.message}</p>
             </div>
           ) : null}
         </form>
@@ -674,24 +676,24 @@ function App() {
       </main>
 
       <footer className="site-footer">
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <div className="footer-row">
           <p>© {new Date().getFullYear()} {renderProfile.name}</p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="footer-links">
             <button
               type="button"
               onClick={() => navigate('/blog')}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
+              className="footer-blog-link"
             >
               Blog
             </button>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>Build · Iterate · Test</p>
+            <p className="footer-tagline">Build · Iterate · Test</p>
           </div>
         </div>
-        <div style={{ marginTop: 8, textAlign: 'right' }}>
+        <div className="footer-bottom-row">
           <button
             type="button"
             onClick={handleHiddenDevTap}
-            style={{ appearance: 'none', background: 'transparent', padding: 0, border: 'none', fontSize: 11, color: 'var(--border-stronger)', cursor: 'default' }}
+            className="footer-hidden-btn"
             aria-label="Hidden settings access"
           >
             built with care

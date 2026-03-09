@@ -12,10 +12,10 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
   if (!post) {
     return (
       <section className="page-shell-narrow">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="blog-not-found">
           <p className="micro-label">/blog/{slug}</p>
           <h2>Post Not Found</h2>
-          <p style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'var(--text-secondary)' }}>
+          <p className="section-subtitle">
             This post does not exist in the current build.
           </p>
           <button type="button" className="btn-outline" onClick={onBackToBlog}>
@@ -45,7 +45,7 @@ export function BlogPostPage({ slug, onBackToBlog }: BlogPostPageProps) {
         <div className="blog-post-meta">
           <span>{formatBlogDate(post.date)}</span>
           <span className="blog-meta-divider">|</span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+          <span className="blog-post-meta-reading">
             <Clock3 size={14} /> {post.readingMinutes} min read
           </span>
         </div>

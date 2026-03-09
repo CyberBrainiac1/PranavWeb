@@ -20,12 +20,10 @@ export function Section({ id, label, title, subtitle, children, narrow }: Sectio
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className={narrow ? 'page-shell-narrow' : 'page-shell'}
     >
-      <div className="section-label" style={{ marginBottom: 12 }}>{label}</div>
-      <h2 style={{ marginBottom: subtitle ? 8 : 24 }}>{title}</h2>
+      <div className="section-label section-label-row">{label}</div>
+      <h2 className={subtitle ? 'section-heading-with-sub' : 'section-heading'}>{title}</h2>
       {subtitle ? (
-        <p style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 32 }}>
-          {subtitle}
-        </p>
+        <p className="section-subtitle">{subtitle}</p>
       ) : null}
       {children}
     </motion.section>

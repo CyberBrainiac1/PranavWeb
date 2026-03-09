@@ -34,8 +34,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
           <button
             type="button"
             onClick={() => handleNav('/home')}
-            className="nav-brand"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            className="btn-reset nav-brand"
           >
             Pranav Emmadi
           </button>
@@ -68,7 +67,7 @@ export function Navbar({ items, currentPath, onNavigate }: NavbarProps) {
         <>
           <div className="mobile-nav-overlay" onClick={() => setMobileOpen(false)} />
           <div className="mobile-nav-panel" role="dialog" aria-label="Navigation menu">
-            <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+            <div className="mobile-nav-header">
               <p className="nav-micro-label">NAV / INDEX</p>
               <button
                 type="button"

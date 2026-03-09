@@ -24,11 +24,11 @@ export function BlogIndexPage({ onOpenPost }: BlogIndexPageProps) {
             <h3 onClick={() => onOpenPost(post.slug)}>{post.title}</h3>
             <p>{post.summary}</p>
             {post.tags.length ? (
-              <div className="blog-list-tags">
+              <ul className="blog-list-tags" aria-label="Tags">
                 {post.tags.map((tag) => (
-                  <span key={tag} className="tag">{tag}</span>
+                  <li key={tag} className="tag">{tag}</li>
                 ))}
-              </div>
+              </ul>
             ) : null}
             <button type="button" className="blog-index-open" onClick={() => onOpenPost(post.slug)}>
               Read post <ArrowRight size={15} />
