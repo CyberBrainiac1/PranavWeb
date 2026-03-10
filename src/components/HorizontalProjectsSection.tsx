@@ -1,27 +1,35 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
 import Tilt from 'react-parallax-tilt'
-import { projects } from '../data/projects'
+import { projects, type Project } from '../data/projects'
 import { PREMIUM_EASE } from '../lib/motionConfig'
+import { ProjectDetailsDialog } from './ProjectDetailsDialog'
 
 /** Proportion of remaining distance to travel per animation frame (0–1).
- *  Lower = smoother/slower convergence; higher = snappier. */
-const LERP_FACTOR = 0.09
+ *  Higher = snappier / more responsive to scroll input. */
+const LERP_FACTOR = 0.14
+
+/** Minimum wrapper height in vh units — ensures enough scroll runway
+ *  for the horizontal track animation even with few panels. */
+const MIN_WRAPPER_VH = 250
+
+/** Display label override for project statuses shown on cards. */
+const STATUS_DISPLAY: Record<string, string> = {
+  featured: 'in progress',
+}
+
+function displayStatus(status: string): string {
+  return STATUS_DISPLAY[status] ?? status
+}
 
 /**
  * Linear interpolation — moves `current` toward `target` by `factor` each frame.
- * @param current - Current animated position
- * @param target  - Destination position
- * @param factor  - Interpolation weight (0 = no movement, 1 = instant snap)
  */
 function lerp(current: number, target: number, factor: number): number {
   return current + (target - current) * factor
 }
 
 export function HorizontalProjectsSection() {
-  const navigate = useNavigate()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const currentXRef = useRef(0)
@@ -29,6 +37,18 @@ export function HorizontalProjectsSection() {
   const rafRef = useRef<number>(0)
   const [isMobile, setIsMobile] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  const handleOpenProject = (project: Project) => {
+    setSelectedProject(project)
+    setDialogOpen(true)
+  }
+
+  const handleDialogChange = (open: boolean) => {
+    setDialogOpen(open)
+    if (!open) setSelectedProject(null)
+  }
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)')
@@ -89,8 +109,8 @@ export function HorizontalProjectsSection() {
   }, [isMobile, prefersReducedMotion, computeTargetX])
 
   const panelCount = projects.length
-  const SCROLL_PER_PANEL_VH = 55
-  const wrapperVH = Math.max(350, panelCount * SCROLL_PER_PANEL_VH)
+  const SCROLL_PER_PANEL_VH = 40
+  const wrapperVH = Math.max(MIN_WRAPPER_VH, panelCount * SCROLL_PER_PANEL_VH)
   const wrapperHeight = isMobile ? 'auto' : `${wrapperVH}vh`
 
   return (
@@ -132,10 +152,21 @@ export function HorizontalProjectsSection() {
                   transitionSpeed={600}
                   style={{ transformStyle: 'preserve-3d', flexShrink: 0 }}
                 >
-                  <article className="horiz-panel">
+                  <article
+                    className="horiz-panel horiz-panel-clickable"
+                    onClick={() => handleOpenProject(project)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        handleOpenProject(project)
+                      }
+                    }}
+                  >
                     <p className="horiz-panel-index">{String(i + 1).padStart(2, '0')}</p>
                     <span className={`horiz-panel-status${project.featured ? ' featured' : ''}`}>
-                      {project.status}
+                      {displayStatus(project.status)}
                     </span>
                     <h3 className="horiz-panel-title">{project.name}</h3>
                     <p className="horiz-panel-summary">{project.summary}</p>
@@ -145,17 +176,20 @@ export function HorizontalProjectsSection() {
                       ))}
                     </div>
                     <div className="horiz-panel-footer">
-                      <button
-                        type="button"
-                        className="horiz-panel-open"
-                        onClick={() => navigate(`/projects/${project.slug ?? project.id}`)}
-                      >
-                        Details <ArrowRight size={13} aria-hidden="true" />
-                      </button>
+                      <span className="horiz-panel-open">
+                        View details
+                      </span>
                       {project.links && project.links.length > 0 && (
                         <div className="horiz-panel-links">
                           {project.links.slice(0, 1).map((link) => (
-                            <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="horiz-panel-link">
+                            <a
+                              key={link.label}
+                              href={link.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="horiz-panel-link"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               {link.label} &rarr;
                             </a>
                           ))}
@@ -169,6 +203,12 @@ export function HorizontalProjectsSection() {
           </div>
         </div>
       </div>
+
+      <ProjectDetailsDialog
+        project={selectedProject}
+        open={dialogOpen}
+        onOpenChange={handleDialogChange}
+      />
     </section>
   )
 }

@@ -4,7 +4,7 @@ import { GlobalBackground } from './components/GlobalBackground'
 import { HomeSectionIndicator } from './components/SectionIndicator'
 import { Hero } from './components/Hero'
 import { AboutSection } from './components/AboutSection'
-import { FeaturedProjectSection } from './components/FeaturedProjectSection'
+
 import { HorizontalProjectsSection } from './components/HorizontalProjectsSection'
 import { BlogPreviewSection } from './components/BlogPreviewSection'
 import { SkillsSection } from './components/SkillsSection'
@@ -94,7 +94,6 @@ function HomeExperiencePage({
         }
       />
       <AboutSection aboutParagraphs={profile.aboutParagraphs} />
-      <FeaturedProjectSection />
       <HorizontalProjectsSection />
       <BlogPreviewSection />
       <SkillsSection />

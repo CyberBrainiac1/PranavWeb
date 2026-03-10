@@ -571,6 +571,20 @@ a {
   border-color: var(--line-stronger);
 }
 
+.horiz-panel-clickable {
+  cursor: pointer;
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.horiz-panel-clickable:hover {
+  box-shadow: 0 0 24px rgba(77, 141, 255, 0.12);
+}
+
+.horiz-panel-clickable:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
 /* Featured / first panel gets slightly more visual weight */
 .horiz-panel:first-child {
   width: clamp(300px, 36vw, 500px);
