@@ -125,10 +125,16 @@ export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: H
       <div
         ref={scrollCueRef}
         className="cover-scroll-cue cover-scroll-cue-clickable"
-        aria-hidden="true"
+        aria-label="Go to About section"
         onClick={() => navigate('/about')}
         role="button"
-        tabIndex={-1}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            navigate('/about')
+          }
+        }}
       >
         <div className="cover-scroll-line" />
       </div>
