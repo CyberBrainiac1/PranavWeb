@@ -9,6 +9,19 @@ import { ProjectDetailsDialog } from './ProjectDetailsDialog'
  *  Higher = snappier / more responsive to scroll input. */
 const LERP_FACTOR = 0.14
 
+/** Minimum wrapper height in vh units — ensures enough scroll runway
+ *  for the horizontal track animation even with few panels. */
+const MIN_WRAPPER_VH = 250
+
+/** Display label override for project statuses shown on cards. */
+const STATUS_DISPLAY: Record<string, string> = {
+  featured: 'in progress',
+}
+
+function displayStatus(status: string): string {
+  return STATUS_DISPLAY[status] ?? status
+}
+
 /**
  * Linear interpolation — moves `current` toward `target` by `factor` each frame.
  */
@@ -97,7 +110,7 @@ export function HorizontalProjectsSection() {
 
   const panelCount = projects.length
   const SCROLL_PER_PANEL_VH = 40
-  const wrapperVH = Math.max(250, panelCount * SCROLL_PER_PANEL_VH)
+  const wrapperVH = Math.max(MIN_WRAPPER_VH, panelCount * SCROLL_PER_PANEL_VH)
   const wrapperHeight = isMobile ? 'auto' : `${wrapperVH}vh`
 
   return (
@@ -153,7 +166,7 @@ export function HorizontalProjectsSection() {
                   >
                     <p className="horiz-panel-index">{String(i + 1).padStart(2, '0')}</p>
                     <span className={`horiz-panel-status${project.featured ? ' featured' : ''}`}>
-                      {project.status === 'featured' ? 'in progress' : project.status}
+                      {displayStatus(project.status)}
                     </span>
                     <h3 className="horiz-panel-title">{project.name}</h3>
                     <p className="horiz-panel-summary">{project.summary}</p>
