@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Mail } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { PREMIUM_EASE } from '../lib/motionConfig'
 
 type HeroProps = {
@@ -19,6 +20,7 @@ type HeroProps = {
 export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: HeroProps) {
   const profileImageSrc = `${import.meta.env.BASE_URL}PFP.jpg`
   const scrollCueRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   // Hide scroll cue once user starts scrolling
   useEffect(() => {
@@ -103,9 +105,7 @@ export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: H
           <button
             type="button"
             className="cover-social-link"
-            onClick={() =>
-              document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onClick={() => navigate('/writing')}
             aria-label="Jump to blog"
           >
             Blog
@@ -121,8 +121,15 @@ export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: H
         </motion.div>
       </motion.div>
 
-      {/* Scroll cue — animated vertical line */}
-      <div ref={scrollCueRef} className="cover-scroll-cue" aria-hidden="true">
+      {/* Scroll cue — navigates to About section */}
+      <div
+        ref={scrollCueRef}
+        className="cover-scroll-cue cover-scroll-cue-clickable"
+        aria-hidden="true"
+        onClick={() => navigate('/about')}
+        role="button"
+        tabIndex={-1}
+      >
         <div className="cover-scroll-line" />
       </div>
     </section>
