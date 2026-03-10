@@ -1,61 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 const SECTIONS = [
-  { id: 'home',     label: 'Cover'    },
-  { id: 'about',    label: 'About'    },
-  { id: 'projects', label: 'Projects' },
-  { id: 'blog',     label: 'Writing'  },
-  { id: 'skills',   label: 'Skills'   },
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'contact',  label: 'Contact'  },
+  { path: '/',         label: 'Cover'    },
+  { path: '/about',    label: 'About'    },
+  { path: '/projects', label: 'Projects' },
+  { path: '/writing',  label: 'Writing'  },
+  { path: '/skills',   label: 'Skills'   },
+  { path: '/timeline', label: 'Timeline' },
+  { path: '/contact',  label: 'Contact'  },
 ]
 
 /**
  * Tiny floating section indicator with dots — desktop only.
- * Rendered only within the HomeExperiencePage, so it's always on /home.
- * Uses IntersectionObserver to highlight the most visible section.
+ * Navigates between section routes with page transitions.
  */
 export function HomeSectionIndicator() {
-  const [activeId, setActiveId] = useState('home')
-
-  useEffect(() => {
-    const observers: IntersectionObserver[] = []
-
-    SECTIONS.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (!el) return
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveId(id)
-            }
-          })
-        },
-        // Sweet spot: section must occupy the middle 35% of viewport to be "active"
-        { rootMargin: '-30% 0px -60% 0px', threshold: 0 },
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
-
-    return () => observers.forEach((o) => o.disconnect())
-  }, [])
+  const navigate = useNavigate()
+  const location = useLocation()
+  const activePath = location.pathname
 
   return (
     <nav
       className="section-indicator"
       aria-label="Page sections"
     >
-      {SECTIONS.map(({ id, label }) => (
+      {SECTIONS.map(({ path, label }) => (
         <button
-          key={id}
+          key={path}
           type="button"
-          aria-label={`Jump to ${label}`}
+          aria-label={`Go to ${label}`}
           title={label}
-          onClick={() =>
-            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-          }
+          onClick={() => navigate(path)}
           style={{
             background: 'none',
             border: 'none',
@@ -67,7 +42,7 @@ export function HomeSectionIndicator() {
             pointerEvents: 'all',
           }}
         >
-          <span className={`section-indicator-dot${activeId === id ? ' active' : ''}`} />
+          <span className={`section-indicator-dot${activePath === path ? ' active' : ''}`} />
         </button>
       ))}
     </nav>

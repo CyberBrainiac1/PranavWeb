@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate, useParams, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { GlobalBackground } from './components/GlobalBackground'
 import { HomeSectionIndicator } from './components/SectionIndicator'
 import { Hero } from './components/Hero'
@@ -14,6 +15,7 @@ import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
 import { DevSettingsPage } from './components/DevSettingsPage'
 import { ProjectDetailPage } from './components/ProjectDetailPage'
+import { PageTransition } from './components/PageTransition'
 import { profileInfo } from './data/profile'
 import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
 
@@ -62,54 +64,12 @@ function FooterMinimal({ name, onHiddenTap }: { name: string; onHiddenTap: () =>
   )
 }
 
-function HomeExperiencePage({
-  profile,
-  onSubmit,
-  status,
-  sending,
-  onNavigateToBlog,
-}: {
-  profile: RenderProfile
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void
-  status: ContactStatus
-  sending: boolean
-  onNavigateToBlog: () => void
-}) {
-  return (
-    <>
-      {/* Cover — first screen only: name, photo, socials */}
-      <HomeSectionIndicator />
-      <Hero
-        name={profile.name}
-        location={profile.location}
-        introText={profile.heroIntroText}
-        aboutParagraphs={profile.aboutParagraphs}
-        links={profile.links}
-        contactEmail={profile.contactEmail}
-        onOpenProjects={() => {}}
-        onOpenBlog={onNavigateToBlog}
-        onOpenSkills={() => {}}
-        onContact={() =>
-          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-        }
-      />
-      <AboutSection aboutParagraphs={profile.aboutParagraphs} />
-      <HorizontalProjectsSection />
-      <BlogPreviewSection />
-      <SkillsSection />
-      <TimelineSection />
-      <ContactSection
-        onSubmit={onSubmit}
-        status={status}
-        sending={sending}
-        profile={profile}
-      />
-    </>
-  )
-}
+/** Routes that show the section indicator dots */
+const SECTION_ROUTES = ['/', '/about', '/projects', '/writing', '/skills', '/timeline', '/contact']
 
 function App() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [contactStatus, setContactStatus] = useState<ContactStatus>({
     kind: 'idle',
     message: '',
@@ -227,68 +187,133 @@ function App() {
       {/* Fixed background layers — always visible */}
       <GlobalBackground />
 
+      {/* Section indicator — only on section routes */}
+      {SECTION_ROUTES.includes(location.pathname) && <HomeSectionIndicator />}
+
       <main>
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route
-            path="/home"
-            element={
-              <HomeExperiencePage
-                profile={renderProfile}
-                onSubmit={handleContactSubmit}
-                status={contactStatus}
-                sending={contactSending}
-                onNavigateToBlog={() => navigate('/blog')}
-              />
-            }
-          />
-          <Route
-            path="/blog"
-            element={
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <BlogIndexPage onOpenPost={(slug) => navigate(`/blog/${slug}`)} />
-              </div>
-            }
-          />
-          <Route
-            path="/blog/:slug"
-            element={
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <BlogPostRoute onBackToBlog={() => navigate('/blog')} />
-              </div>
-            }
-          />
-          <Route path="/dev" element={<DevSettingsPage />} />
-          <Route
-            path="/projects/:slug"
-            element={
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <ProjectDetailRoute />
-              </div>
-            }
-          />
-          <Route
-            path="/projects/:slug/:section"
-            element={
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <ProjectDetailRoute />
-              </div>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            {/* Section pages — each section is its own route */}
+            <Route
+              path="/"
+              element={
+                <PageTransition pageKey="home">
+                  <Hero
+                    name={renderProfile.name}
+                    location={renderProfile.location}
+                    introText={renderProfile.heroIntroText}
+                    aboutParagraphs={renderProfile.aboutParagraphs}
+                    links={renderProfile.links}
+                    contactEmail={renderProfile.contactEmail}
+                    onOpenProjects={() => navigate('/projects')}
+                    onOpenBlog={() => navigate('/writing')}
+                    onOpenSkills={() => navigate('/skills')}
+                    onContact={() => navigate('/contact')}
+                  />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <PageTransition pageKey="about">
+                  <AboutSection aboutParagraphs={renderProfile.aboutParagraphs} />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <PageTransition pageKey="projects">
+                  <HorizontalProjectsSection />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/writing"
+              element={
+                <PageTransition pageKey="writing">
+                  <BlogPreviewSection />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/skills"
+              element={
+                <PageTransition pageKey="skills">
+                  <SkillsSection />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/timeline"
+              element={
+                <PageTransition pageKey="timeline">
+                  <TimelineSection />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageTransition pageKey="contact">
+                  <ContactSection
+                    onSubmit={handleContactSubmit}
+                    status={contactStatus}
+                    sending={contactSending}
+                    profile={renderProfile}
+                  />
+                </PageTransition>
+              }
+            />
+
+            {/* Existing non-section routes */}
+            <Route
+              path="/home"
+              element={<Navigate to="/" replace />}
+            />
+            <Route
+              path="/blog"
+              element={
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <BlogIndexPage onOpenPost={(slug) => navigate(`/blog/${slug}`)} />
+                </div>
+              }
+            />
+            <Route
+              path="/blog/:slug"
+              element={
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <BlogPostRoute onBackToBlog={() => navigate('/blog')} />
+                </div>
+              }
+            />
+            <Route path="/dev" element={<DevSettingsPage />} />
+            <Route
+              path="/projects/:slug"
+              element={
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <ProjectDetailRoute />
+                </div>
+              }
+            />
+            <Route
+              path="/projects/:slug/:section"
+              element={
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <ProjectDetailRoute />
+                </div>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AnimatePresence>
       </main>
 
-      {/* Footer — only on home page */}
-      <Routes>
-        <Route
-          path="/home"
-          element={
-            <FooterMinimal name={renderProfile.name} onHiddenTap={handleHiddenTap} />
-          }
-        />
-        <Route path="*" element={null} />
-      </Routes>
+      {/* Footer — only on section routes */}
+      {SECTION_ROUTES.includes(location.pathname) && (
+        <FooterMinimal name={renderProfile.name} onHiddenTap={handleHiddenTap} />
+      )}
     </div>
   )
 }
