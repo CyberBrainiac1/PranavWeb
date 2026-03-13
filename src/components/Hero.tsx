@@ -100,16 +100,6 @@ export function Hero({ name, links, contactEmail = 'emmadipranav@gmail.com' }: H
             <Github size={15} aria-hidden="true" />
             GitHub
           </a>
-          <button
-            type="button"
-            className="cover-social-link"
-            onClick={() =>
-              document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })
-            }
-            aria-label="Jump to blog"
-          >
-            Blog
-          </button>
           <a
             href={`mailto:${contactEmail}`}
             className="cover-social-link"

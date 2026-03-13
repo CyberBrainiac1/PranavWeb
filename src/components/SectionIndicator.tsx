@@ -4,10 +4,6 @@ const SECTIONS = [
   { id: 'home',     label: 'Cover'    },
   { id: 'about',    label: 'About'    },
   { id: 'projects', label: 'Projects' },
-  { id: 'blog',     label: 'Writing'  },
-  { id: 'skills',   label: 'Skills'   },
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'contact',  label: 'Contact'  },
 ]
 
 /**
