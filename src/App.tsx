@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { GlobalBackground } from './components/GlobalBackground'
 import { HomeSectionIndicator } from './components/SectionIndicator'
@@ -6,21 +6,12 @@ import { Hero } from './components/Hero'
 import { AboutSection } from './components/AboutSection'
 
 import { HorizontalProjectsSection } from './components/HorizontalProjectsSection'
-import { BlogPreviewSection } from './components/BlogPreviewSection'
-import { SkillsSection } from './components/SkillsSection'
-import { TimelineSection } from './components/TimelineSection'
-import { ContactSection } from './components/ContactSection'
 import { BlogIndexPage } from './components/blog/BlogIndexPage'
 import { BlogPostPage } from './components/blog/BlogPostPage'
 import { DevSettingsPage } from './components/DevSettingsPage'
 import { ProjectDetailPage } from './components/ProjectDetailPage'
 import { profileInfo } from './data/profile'
 import { loadRuntimeConfig, RUNTIME_CONFIG_EVENT } from './lib/runtimeConfig'
-
-type ContactStatus = {
-  kind: 'idle' | 'sending' | 'success' | 'error'
-  message: string
-}
 
 type RenderProfile = {
   name: string
@@ -64,16 +55,8 @@ function FooterMinimal({ name, onHiddenTap }: { name: string; onHiddenTap: () =>
 
 function HomeExperiencePage({
   profile,
-  onSubmit,
-  status,
-  sending,
-  onNavigateToBlog,
 }: {
   profile: RenderProfile
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void
-  status: ContactStatus
-  sending: boolean
-  onNavigateToBlog: () => void
 }) {
   return (
     <>
@@ -87,34 +70,18 @@ function HomeExperiencePage({
         links={profile.links}
         contactEmail={profile.contactEmail}
         onOpenProjects={() => {}}
-        onOpenBlog={onNavigateToBlog}
+        onOpenBlog={() => {}}
         onOpenSkills={() => {}}
-        onContact={() =>
-          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-        }
+        onContact={() => {}}
       />
       <AboutSection aboutParagraphs={profile.aboutParagraphs} />
       <HorizontalProjectsSection />
-      <BlogPreviewSection />
-      <SkillsSection />
-      <TimelineSection />
-      <ContactSection
-        onSubmit={onSubmit}
-        status={status}
-        sending={sending}
-        profile={profile}
-      />
     </>
   )
 }
 
 function App() {
   const navigate = useNavigate()
-  const [contactStatus, setContactStatus] = useState<ContactStatus>({
-    kind: 'idle',
-    message: '',
-  })
-  const [contactSending, setContactSending] = useState(false)
   const [runtimeConfig, setRuntimeConfig] = useState(loadRuntimeConfig)
   const hiddenDevTapCountRef = useRef(0)
   const hiddenDevTapTimeRef = useRef(0)
@@ -151,64 +118,6 @@ function App() {
     },
   }
 
-  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (contactSending) return
-
-    const contactServiceKey = runtimeConfig.contactServiceKey.trim()
-
-    if (!contactServiceKey) {
-      setContactStatus({
-        kind: 'error',
-        message: 'Contact form is not available right now. Please use email or LinkedIn.',
-      })
-      return
-    }
-
-    const form = event.currentTarget
-    const data = new FormData(form)
-    const name = String(data.get('name') ?? '').trim()
-    const email = String(data.get('email') ?? '').trim()
-    const message = String(data.get('message') ?? '').trim()
-    const botcheck = String(data.get('botcheck') ?? '').trim()
-
-    if (botcheck) return
-
-    setContactSending(true)
-    setContactStatus({ kind: 'sending', message: 'Sending...' })
-
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: contactServiceKey,
-          from_name: name,
-          email,
-          subject: `Portfolio message from ${name || 'Visitor'}`,
-          message,
-          botcheck: '',
-        }),
-      })
-      const result = (await response.json()) as { success?: boolean; message?: string }
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || 'The message did not send.')
-      }
-      form.reset()
-      setContactStatus({ kind: 'success', message: 'Message sent. Thanks for reaching out.' })
-    } catch (error) {
-      setContactStatus({
-        kind: 'error',
-        message:
-          error instanceof Error
-            ? error.message
-            : 'Could not send right now. Try again in a minute.',
-      })
-    } finally {
-      setContactSending(false)
-    }
-  }
-
   const handleHiddenTap = () => {
     const now = Date.now()
     if (now - hiddenDevTapTimeRef.current > HIDDEN_DEV_TAP_WINDOW_MS) {
@@ -235,10 +144,6 @@ function App() {
             element={
               <HomeExperiencePage
                 profile={renderProfile}
-                onSubmit={handleContactSubmit}
-                status={contactStatus}
-                sending={contactSending}
-                onNavigateToBlog={() => navigate('/blog')}
               />
             }
           />
